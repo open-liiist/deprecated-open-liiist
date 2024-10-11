@@ -1,0 +1,26 @@
+services:
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the frontend directory to the container (live reloading)
+      - ./frontend:/app
+      # separate host node_modules from container node_modules
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:8000
+
+  search-service:
+    build: 
+      context: ./search-service
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    environment:
+      - SEARCH_SERVICE_PORT=4001
