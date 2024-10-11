@@ -1,0 +1,32 @@
+{
+	"name": "auth-service",
+	"version": "1.0.0",
+	"description": "Authentication microservice for GrocyGo",
+	"main": "main.js",
+	"scripts": {
+		"start": "npx tsc && node dist/main.js",
+		"test": "test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gabref/grocygo.git#main"
+	},
+	"keywords": [
+		"grocery",
+		"economy"
+	],
+	"author": "gabref",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/gabref/grocygo/issues"
+	},
+	"homepage": "https://github.com/gabref/grocygo/tree/main#readme",
+	"devDependencies": {
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.7.5",
+		"express": "^4.21.1"
+	}
+}
