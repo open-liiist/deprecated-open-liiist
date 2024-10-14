@@ -1,14 +1,14 @@
 services:
 
-  frontend:
+  web-client:
     build: 
-      context: ./frontend
+      context: ./web-client
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      # Mount the frontend directory to the container (live reloading)
-      - ./frontend:/app
+      # Mount the web-client directory to the container (live reloading)
+      - ./web-client:/app
       # separate host node_modules from container node_modules
       - /app/node_modules
     command: npm run dev

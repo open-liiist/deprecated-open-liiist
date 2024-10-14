@@ -9,6 +9,12 @@ export default function Home() {
 
 				<div className="flex space-x-4">
 					<a
+						href="/sign-in"
+						className="bg-white text-blue-500 font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-gray-100 transition"
+					>
+						Sign In
+					</a>
+					<a
 						href="/create-list"
 						className="bg-white text-blue-500 font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-gray-100 transition"
 					>
