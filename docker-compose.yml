@@ -24,3 +24,54 @@ services:
       - "4001:4001"
     environment:
       - SEARCH_SERVICE_PORT=4001
+
+  scraping-service:
+    build: 
+      context: ./scraping-service
+      dockerfile: Dockerfile
+    depends_on:
+      - product-receiver-service
+    volumes:
+      - ./scraping-service:/app
+
+  product-receiver-service:
+    build: 
+      context: ./product-receiver-service
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    environment:
+      - DATA_RECEIVER_SERVICE_PORT=3002
+      - DATABASE_URL=postgres://user:postgrespw@db:5432/appdb
+    volumes:
+      - ./product-receiver-service:/app
+
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      PGUSER: user
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: appdb
+    healthcheck:
+      test: "pg_isready -h db"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata: 
