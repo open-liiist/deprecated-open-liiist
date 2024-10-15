@@ -8,22 +8,12 @@ type SessionData = {
 	user: { id: number },
 }
 
-export async function fetchPost(endpoint: string, body: object) {
-	return fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(body),
-	});
-}
-
 export async function verifyToken(input: string): Promise<SessionData | null> {
 	try {
-		const res = await fetchPost('/api/verify', { token: input });
+		const res = await fetchClient.post('/auth/verify', { token: input });
 		if (res.status >= 400)
 			return null;
-		const payload = await res.json();
+		const payload = (await res.json()).data;
 		return payload as SessionData;
 	} catch (error) {
 		logger.error(error);
@@ -39,10 +29,10 @@ export async function getSession() {
 
 export async function register(email: string, password: string) {
 	try {
-		const res = await fetchPost('/api/register', { email, password });
+		const res = await fetchClient.post('/auth/register', { email, password });
 		if (res.status >= 400)
 			return null;
-		const user = await res.json() as User;
+		const user = (await res.json()).data as User;
 		return user;
 	} catch (error) {
 		logger.error(error);
@@ -52,12 +42,12 @@ export async function register(email: string, password: string) {
 
 export async function login(email: string, password: string) {
 	try {
-		const res = await fetchPost('/api/login', { email, password });
+		const res = await fetchClient.post('/auth/login', { email, password });
 		if (res.status >= 400) {
 			logger.warn(`could not log user, statusCode: ${res.status}`)
 			return null;
 		}
-		const { accessToken, refreshToken, user } = await res.json();
+		const { accessToken, refreshToken, user } = (await res.json()).data;
 		return {
 			accessToken,
 			refreshToken,
