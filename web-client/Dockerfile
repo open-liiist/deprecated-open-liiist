@@ -1,19 +1,59 @@
-FROM node:20
+FROM node:22-alpine as base
+RUN apk add --no-cache g++ make py3-pip libc6-compat
 
 WORKDIR /app
-
 COPY package*.json ./
-
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN npm install && npm install typescript -g
-RUN npm install axios
-
-COPY . .
-
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+FROM base as builder
+WORKDIR /app
+COPY . .
+RUN npm run build
+
+FROM base as production
+WORKDIR /app
+
+ENV NODE_ENV=production
+RUN npm ci
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+USER nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/public ./public
+
+CMD npm start
+
+FROM base as dev
+ENV NODE_ENV=development
+
+RUN npm install 
+COPY . .
+CMD npm run dev
+
+# ========================================
+
+# FROM node:20
+#
+# WORKDIR /app
+#
+# COPY package*.json ./
+
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+# RUN npm install && npm install typescript -g
+#
+# COPY . .
+#
+# ENV NODE_ENV=development
+# EXPOSE 3000
+#
+# CMD ["npm", "run", "dev"]
+
+# ========================================
 
 # FROM node:20 AS deps
 # WORKDIR /app

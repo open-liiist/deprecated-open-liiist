@@ -29,6 +29,7 @@ export function UserProvider({
 
 	useEffect(() => {
 		setUser(initialUser);
+		console.log("===== USER =====", initialUser);
 	}, [initialUser]);
 
 	return (

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FormEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CircleIcon, Home, LogOut } from 'lucide-react';
 import {
@@ -11,7 +11,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-// import { useRouter } from 'next/navigation';
 import { useUser } from '@/services/auth';
 import { signOut } from '../(login)/actions';
 import { useRouter } from '@/i18n/routing';

@@ -31,14 +31,14 @@ function display_help {
 if [ $# -gt 0 ]; then
   if [ "$1" == "npm" ]; then
     shift 1
-    docker-compose run --rm app npm "$@"
+    docker compose run --rm app npm "$@"
   elif [ "$1" == "node" ]; then
     shift 1
-    docker-compose run --rm app node "$@"
+    docker compose run --rm app node "$@"
   elif [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
     display_help
   else
-    docker-compose -f docker/dev/docker-compose.yml "$@"
+    docker compose -f docker/dev/docker-compose.yml "$@"
   fi
 else
   display_help

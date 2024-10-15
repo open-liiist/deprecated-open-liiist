@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { loginUser, registerUser } from "../services/auth";
-import { clearRefreshTokens, generateAccessToken, revokeRefreshToken, verifyRefreshToken } from "../services/jwt";
+import { clearRefreshTokens, generateAccessToken, revokeRefreshToken, verifyAccessToken, verifyRefreshToken } from "../services/jwt";
 import { ApiError } from "../utils/apiError";
 import { ApiResponse } from "../utils/apiResponse";
 
@@ -31,8 +31,8 @@ export class AuthController {
 		const { token } = req.body;
 
 		try {
-			await verifyRefreshToken(token);
-			res.status(200).json(ApiResponse.success('Token is valid'));
+			const payload = verifyAccessToken(token);
+			res.status(200).json(ApiResponse.success('Token is valid', { user: { id: payload.userId }}));
 		} catch (err) {
 			next(ApiError.unauthorized('Invalid or expired token'));
 		}
@@ -46,6 +46,7 @@ export class AuthController {
 			const newAccessToken = generateAccessToken(payload.userId);
 			res.status(200).json(ApiResponse.success('token refreshed', { accessToken: newAccessToken }));
 		} catch (err) {
+			if (err instanceof ApiError) next(err);
 			next(ApiError.unauthorized('Invalid or expired refresh token'));
 		}
 	}

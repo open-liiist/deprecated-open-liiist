@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { APP_HOME, APP_LOGIN, authRoutes, privateRoutes, publicRoutes } from './routes';
 import { verifyToken } from './services/auth/session';
+import environment from './config/environment';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -74,7 +75,7 @@ class RouteHandler {
 }
 
 export async function middleware(request: NextRequest) {
-	const accessToken = request.cookies.get('accessToken');
+	const accessToken = request.cookies.get(environment.cookies.access);
 
 	if (!accessToken || !accessToken.value)
 		return new RouteHandler(request).handleRedirection(false);

@@ -1,24 +1,24 @@
+import environment from "@/config/environment";
 import { User } from "@/types/user";
 import { cookies } from "next/headers";
+import { fetchPost, getSession } from "./auth/session";
+import logger from "@/config/logger";
 
 export async function getUser(): Promise<User | null> {
-	const sessionCookie = cookies().get('accessToken');
-	if (!sessionCookie || !sessionCookie.value) 
+	const sessionCookie = cookies().get(environment.cookies.access);
+	if (sessionCookie === undefined)
 		return null
-
-	// const res = await fetch('/api/auth/verify', {
-	// 	method: 'POST',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 	},
-	// 	body: JSON.stringify({ token: sessionCookie.value }),
-	// });
-	// if (!res.ok) return null;
-	// const payload = await res.json();
-	const payload = {
-		id: '1',
-		email: 'ciao@ciao.com',
-		name: 'John Doe',
-	}
+	const session = await getSession();
+	if (!session)
+		return null;
+	logger.info(`===== SESSION COOKIE ===== \n ${session.user.id}`);
+	const res = await fetchPost('/api/user', { 
+		userId: session.user.id, 
+		token: sessionCookie.value 
+	});
+	logger.info(`===== USER RES ===== \n ${res.ok} - ${res.status}`);
+	if (!res.ok)
+		return null;
+	const payload = await res.json();
 	return payload as User;
 }

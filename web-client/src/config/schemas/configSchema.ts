@@ -5,6 +5,10 @@ export const configSchema = z.object({
 	isProduction: z.boolean(),
 	isDevelopment: z.boolean(),
 	isTest: z.boolean(),
+	cookies: z.object({
+		access: z.string().default('grocygo-access_token'),
+		refresh: z.string().default('grocygo-refresh_token'),
+	}),
 	appPort: z.number().min(1).max(65535),
 	apiBaseUrl: z.string().url().default('http://localhost:3001'),
 	frontendUrl: z.string().url().default('http://localhost:3000'),

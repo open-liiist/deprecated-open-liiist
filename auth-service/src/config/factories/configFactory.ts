@@ -6,14 +6,10 @@ export const configFactory = (overrides: Partial<Config>): Config => {
 		isProduction: process.env.NODE_ENV === 'production',
 		isDevelopment: process.env.NODE_ENV === 'development',
 		isTest: process.env.NODE_ENV === 'test',
-		cookies: {
-			access: process.env.COOKIE_ACCESS,
-			refresh: process.env.COOKIE_REFRESH,
-		},
-		appPort: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : 3000,
-		apiBaseUrl: process.env.API_BASE_URL,
-		jwtSecret: process.env.JWT_SECRET,
-		jwtExpiration: process.env.JWT_EXPIRATION
+		appPort: process.env.AUTH_SERVICE_PORT ? parseInt(process.env.AUTH_SERVICE_PORT, 10) : 4000,
+		databaseURL: process.env.AUTH_DATABASE_URL,
+		accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+		refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
 	}
 
 	const mergedConfig = { ...envConfig, ...overrides }

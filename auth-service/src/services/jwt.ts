@@ -1,14 +1,12 @@
+import environment from '../config/environment';
 import { ApiError } from '../utils/apiError';
 import prisma from './prisma';
 import jwt from 'jsonwebtoken';
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
-
 export function generateAccessToken(userId: string) {
 	return jwt.sign(
 		{ userId },
-		ACCESS_TOKEN_SECRET,
+		environment.accessTokenSecret,
 		{ expiresIn: '1d' }
 	);
 }
@@ -16,8 +14,8 @@ export function generateAccessToken(userId: string) {
 export function generateRefreshToken(userId: string) {
 	return jwt.sign(
 		{ userId },
-		REFRESH_TOKEN_SECRET,
-		{ expiresIn: '1m' }
+		environment.refreshTokenSecret,
+		{ expiresIn: '30d' }
 	);
 }
 
@@ -34,13 +32,13 @@ export async function saveRefreshToken(userId: string, refreshToken: string) {
 	});
 }
 
-export async function verifyAccessToken(token: string) {
-	return jwt.verify(token, ACCESS_TOKEN_SECRET);
+export function verifyAccessToken(token: string) {
+	return jwt.verify(token, environment.accessTokenSecret) as { userId: string };
 }
 
 export async function verifyRefreshToken(token: string) {
 	try {
-		const payload = jwt.verify(token, REFRESH_TOKEN_SECRET) as { userId: string };
+		const payload = jwt.verify(token, environment.refreshTokenSecret) as { userId: string };
 		const storedToken = await prisma.refreshToken.findFirst({
 			where: {
 				token,
@@ -48,7 +46,7 @@ export async function verifyRefreshToken(token: string) {
 			}
 		});
 		if (!storedToken)
-			throw ApiError.unauthorized('Invalid refresh token');
+			throw ApiError.unauthorized('Invalid refresh token - not found');
 		if (new Date(storedToken.expiryDate) < new Date())
 			throw ApiError.unauthorized('Refresh token expired');
 
@@ -59,7 +57,7 @@ export async function verifyRefreshToken(token: string) {
 }
 
 export async function revokeRefreshToken(token: string) {
-	const payload = jwt.verify(token, REFRESH_TOKEN_SECRET) as { userId: string };
+	const payload = jwt.verify(token, environment.refreshTokenSecret) as { userId: string };
 	await prisma.refreshToken.deleteMany({
 		where: {
 			token,
@@ -69,7 +67,7 @@ export async function revokeRefreshToken(token: string) {
 }
 
 export async function clearRefreshTokens(token: string) {
-	const payload = jwt.verify(token, REFRESH_TOKEN_SECRET) as { userId: string };
+	const payload = jwt.verify(token, environment.refreshTokenSecret) as { userId: string };
 	await prisma.refreshToken.deleteMany({
 		where: {
 			userId: payload.userId

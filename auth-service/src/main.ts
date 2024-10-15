@@ -2,6 +2,7 @@ import { Server } from 'node:http';
 import express from 'express';
 import { init } from './config/init';
 import { logger } from './utils/logger';
+import environment from './config/environment';
 
 function onListening(server: Server) {
 	const addr = server.address();
@@ -26,7 +27,7 @@ function unexpectedErrorHandler (error: unknown) {
 };
 
 function main() {
-	const port = process.env.AUTH_SERVICE_PORT || 4000;
+	const port = environment.appPort;
 	const server = init(express());
 	server.listen(port);
 	server.on('listening', () => onListening(server));

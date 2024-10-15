@@ -1,51 +1,100 @@
-import axios from 'axios';
 import environment from '@/config/environment';
-import { cookies } from 'next/headers';
+import logger from '@/config/logger';
 
-const axiosInstance = axios.create({
-	baseURL: environment.apiBaseUrl,
-	timeout: 10000,
-	headers: {
-		'Content-Type': 'application/json',
-	},
-});
+interface CustomRequestInit extends RequestInit {
+	_retry?: boolean;
+}
 
-axiosInstance.interceptors.request.use(
-	(config) => {
-		const sessionCookie = cookies().get('accessToken');
-		if (sessionCookie && sessionCookie.value) {
-			config.headers['Authorization'] = `Bearer ${sessionCookie.value}`;
+class FetchClient {
+	private static instance: FetchClient;
+	private baseURL: string;
+	private timeout: number;
+	private headers: Record<string, string>;
+
+	private constructor() {
+		this.baseURL = environment.apiBaseUrl;
+		this.timeout = 10000;
+		this.headers = {
+			'Content-Type': 'application/json',
 		}
-		return config;
-	},
-	(error) => Promise.reject(error)
-);
-
-axiosInstance.interceptors.response.use(
-	(response) => response,
-	async (error) => {
-		const originalRequest = error.config;
-		if (error.response.status === 401 && !originalRequest._retry) {
-			originalRequest._retry = true;
-			const refreshToken = cookies().get('refreshToken');
-			try {
-				const { data } = await axiosInstance.post('/auth/refresh', {
-					token: refreshToken?.value
-				})
-				cookies().set('accessToken', data.access_token, {
-					expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-					httpOnly: true,
-					secure: true,
-					sameSite: 'lax',
-				});
-				axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-				return axiosInstance(originalRequest);
-			} catch (refreshError) {
-				return Promise.reject(refreshError);
-			}
-		}
-		return Promise.reject(error);
 	}
-);
 
-export { axiosInstance };
+	public static getInstance(): FetchClient {
+		if (!FetchClient.instance) {
+			FetchClient.instance = new FetchClient();
+		}
+		return FetchClient.instance;
+	}
+
+	private async handleRequest(url: string, options: CustomRequestInit = {}, accessToken?: string):
+		Promise<Response> 
+	{
+		const headers: Record<string, string> = {
+			...this.headers,
+			...(options.headers as Record<string, string>),
+		}
+
+		if (accessToken) {
+			headers['Authorization'] = `Bearer ${accessToken}`;
+			this.headers = headers;
+		}
+
+		const config: CustomRequestInit = {
+			...options,
+			headers,
+		};
+
+		try {
+			const response = await fetch(`${this.baseURL}${url}`, config);
+
+			// handle 401 for token refresh
+			// if (response.status === 401 && !config._retry) {
+			// 	config._retry = true;
+			// 	const refreshToken = cookies().get(environment.cookies.refresh);
+			// 	if (refreshToken?.value) {
+			// 		const refreshResponse = await this.post('/auth/refresh', {
+			// 			token: refreshToken.value,
+			// 		});
+			//
+			// 		if (refreshResponse.ok) {
+			// 			const { accessToken } = await refreshResponse.json();
+			// 			cookies().set(environment.cookies.access, accessToken, {
+			// 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+			// 				httpOnly: true,
+			// 				secure: true,
+			// 				sameSite: 'lax',
+			// 			});
+			// 			headers['Authorization'] = `Bearer ${accessToken}`;
+			// 			return fetch(`${this.baseURL}${url}`, { ...config, headers });
+			// 		}
+				// }
+			// }
+
+			return response;
+		} catch (error) {
+			logger.error(error);
+			return Promise.reject(error);
+		}
+	}
+
+	public async post(url: string, body: object, accessToken?: string): Promise<Response> {
+		const options: RequestInit = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body),
+		};
+		return this.handleRequest(url, options, accessToken);
+	}
+
+	public async get(url: string, accessToken?: string): Promise<Response> {
+		const options: RequestInit = {
+			method: 'GET',
+			headers: this.headers,
+		};
+		return this.handleRequest(url, options, accessToken);
+	}
+}
+
+const fetchClient = FetchClient.getInstance();
+
+export { fetchClient };

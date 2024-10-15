@@ -1,5 +1,6 @@
 'use server'
 
+import logger from "@/config/logger";
 import { ActionState, validatedAction, validatedActionWithUser } from "@/services/auth/middleware";
 import { clearSessionUser, login, register, setSession } from "@/services/auth/session";
 import { getUser } from "@/services/user";
@@ -35,7 +36,6 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 });
 
 const signUpSchema = z.object({
-	name: z.string().min(3).max(100),
 	email: z.string().email().min(3).max(255),
 	password: z.string().min(8).max(100),
 });
@@ -59,7 +59,7 @@ export async function signOut() {
 	if (!user) {
 		return;
 	}
-	clearSessionUser();
+	await clearSessionUser();
 }
 
 const updatePasswordSchema = z.object({

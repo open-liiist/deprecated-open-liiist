@@ -1,25 +1,30 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
+import { logger } from '../utils/logger';
+import environment from '../config/environment';
 
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
 	const authHeader = req.headers['authorization'];
-	const token = authHeader && authHeader.split(' ')[1];
-	if (!token) {
+	logger.debug(`authHeader: <${authHeader}>`);
+	let token = authHeader && authHeader.split(' ')[1];
+	if (token === undefined || token === '') {
+		logger.error("Token is undefined");
 		res.sendStatus(401);
-		return ;
+		return;
 	}
-	jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
-		if (err) {
-			console.log("Gone wrong", err);
-			return res.sendStatus(403);
-		}
-		console.log({"decoded: ": decoded });
-		// req.user = decoded;
+	logger.debug(`Token: <${token}>`)
+	try {
+		logger.debug(`ACCESS_TOKEN_SECRET: <${environment.accessTokenSecret}>`)
+		const decoded = jwt.verify(token, environment.accessTokenSecret)
+		console.log({ "decoded: ": decoded });
 		if (typeof decoded === 'object') {
-			req.user = decoded as { userId: string, roleId: string };
+			req.user = decoded as { userId: string };
 		}
 		next();
-	});
+		return ;
+	} catch (err) {
+		logger.error(`Error verifying token: ${err}`);
+		res.sendStatus(403);
+		return ;
+	}
 }

@@ -1,6 +1,7 @@
 import { User } from '@/types/user';
 import { z } from 'zod';
 import { getUser } from '../user';
+import logger from '@/config/logger';
 
 export type ActionState = {
 	error?: string,
@@ -41,6 +42,7 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
 		if (!user) {
 			throw new Error('User is not authenticated');
 		}
+		logger.info(`====== USER AUTHENTICATED ===== ${user.email}`)
 
 		const result = schema.safeParse(Object.fromEntries(formData));
 		if (!result.success) {
