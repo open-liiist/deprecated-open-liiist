@@ -7,8 +7,11 @@ COPY package*.json ./
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm install && npm install typescript -g
+RUN npm install axios
 
 COPY . .
+
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
 

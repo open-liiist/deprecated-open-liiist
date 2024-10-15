@@ -3,6 +3,7 @@ import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { APP_HOME, APP_LOGIN, authRoutes, privateRoutes, publicRoutes } from './routes';
+import { verifyToken } from './services/auth/session';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -73,16 +74,15 @@ class RouteHandler {
 }
 
 export async function middleware(request: NextRequest) {
-	const sessionCookie = request.cookies.get('session');
+	const accessToken = request.cookies.get('accessToken');
 
-	// TODO: Check if the session is valid
-	const isLoggedIn = !!sessionCookie;
+	if (!accessToken || !accessToken.value)
+		return new RouteHandler(request).handleRedirection(false);
 
-	const routeHandler = new RouteHandler(request);
-	return routeHandler.handleRedirection(isLoggedIn);
+	const user = await verifyToken(accessToken.value);
+
+	return new RouteHandler(request).handleRedirection(!!user);
 }
-
-// export default createMiddleware(routing);
 
 export const config = {
 	// Match only internationalized pathnames

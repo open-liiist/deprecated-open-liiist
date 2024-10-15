@@ -2,7 +2,7 @@ import { User } from "@/types/user";
 import { cookies } from "next/headers";
 
 export async function getUser(): Promise<User | null> {
-	const sessionCookie = cookies().get('session');
+	const sessionCookie = cookies().get('accessToken');
 	if (!sessionCookie || !sessionCookie.value) 
 		return null
 

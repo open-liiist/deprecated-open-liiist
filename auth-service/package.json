@@ -4,7 +4,9 @@
 	"description": "Authentication microservice for GrocyGo",
 	"main": "main.js",
 	"scripts": {
-		"start": "npx tsc && node dist/main.js",
+		"start": "npm run db:sync && node dist/main.js",
+		"dev": "npx tsc && node dist/main.js",
+		"db:sync": "npx prisma db push",
 		"test": "test"
 	},
 	"repository": {
@@ -22,11 +24,22 @@
 	},
 	"homepage": "https://github.com/gabref/grocygo/tree/main#readme",
 	"devDependencies": {
+		"prisma": "^5.20.0",
 		"typescript": "^5.6.3"
 	},
 	"dependencies": {
+		"@prisma/client": "^5.20.0",
+		"@types/bcrypt": "^5.0.2",
+		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
+		"@types/jsonwebtoken": "^9.0.7",
 		"@types/node": "^22.7.5",
-		"express": "^4.21.1"
+		"bcrypt": "^5.1.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.21.1",
+		"jsonwebtoken": "^9.0.2",
+		"pino": "^9.4.0",
+		"pino-pretty": "^11.2.2"
 	}
 }

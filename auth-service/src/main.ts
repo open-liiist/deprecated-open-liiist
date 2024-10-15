@@ -1,20 +1,37 @@
+import { Server } from 'node:http';
 import express from 'express';
+import { init } from './config/init';
+import { logger } from './utils/logger';
 
-const app = express();
-const port = process.env.AUTH_SERVICE_PORT || 4000;
+function onListening(server: Server) {
+	const addr = server.address();
+	const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`;
+	logger.info(`Listening on ${bind}`);
+}
 
-app.use(express.json());
+function exitHandler (server?: Server) {
+    if (server) {
+        server.close(() => {
+            console.info("Server closed");
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
+};
 
-app.post('/login', (req, res) => {
-	const { username, password } = req.body;
+function unexpectedErrorHandler (error: unknown) {
+    console.error(error);
+    exitHandler();
+};
 
-	if (username === 'admin' && password === 'admin') {
-		res.status(200).json({ token: 'admin_token', message: 'Login successful' });
-	} else {
-		res.status(401).json({ message: 'Invalid credentials' });
-	}
-});
+function main() {
+	const port = process.env.AUTH_SERVICE_PORT || 4000;
+	const server = init(express());
+	server.listen(port);
+	server.on('listening', () => onListening(server));
+	process.on('uncaughtException', unexpectedErrorHandler);
+	process.on('unhandledRejection', unexpectedErrorHandler);
+}
 
-app.listen(port, () => {
-	console.log(`Auth service running on port ${port}`);
-});
+main();

@@ -1,10 +1,9 @@
 'use server'
 
 import { ActionState, validatedAction, validatedActionWithUser } from "@/services/auth/middleware";
-import { setSession } from "@/services/auth/session";
+import { clearSessionUser, login, register, setSession } from "@/services/auth/session";
 import { getUser } from "@/services/user";
 import { User } from "@/types/user";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -16,15 +15,16 @@ const signInSchema = z.object({
 export const signIn = validatedAction(signInSchema, async (data, formData) => {
 	const { email, password } = data;
 
-	// make axios call to sign ino
+	const foundUser = await login(email, password);
 
-	if (email === "") {
+	if (!foundUser) {
 		return { error: "Invalid email or password. Please try again." } as ActionState;
 	}
 
-	const foundUser: User = { id: "1", email, name: "John Doe", avatar: null };
-
-	await setSession(foundUser)
+	await setSession(foundUser.user, {
+		accessToken: foundUser.accessToken,
+		refreshToken: foundUser.refreshToken
+	});
 
 	const redirectTo = formData.get('redirect') as string | null;
 	if (redirectTo) {
@@ -41,30 +41,25 @@ const signUpSchema = z.object({
 });
 
 export const signUp = validatedAction(signUpSchema, async (data) => {
-	const { email, password, name } = data;
+	const { email, password } = data;
 
-	// make axios call to sign up
+	const newUser = await register(email, password);
 
-	if (email === "") {
+	if (!newUser) {
 		return { error: "Failed to create user. Please try again." } as ActionState;
 	}
 
-	const newUser: User = { id: "1", email, name, avatar: null };
-
-	await setSession(newUser);
+	await setSession(newUser, null);
 
 	redirect("/profile");
 });
 
 export async function signOut() {
-	console.log("======= SIGN OUT (1) ========");
 	const user = (await getUser()) as User;
 	if (!user) {
 		return;
 	}
-	// TODO: make axios call to sign out
-	console.log("======= SIGN OUT (2) ========");
-	cookies().delete('session');
+	clearSessionUser();
 }
 
 const updatePasswordSchema = z.object({
