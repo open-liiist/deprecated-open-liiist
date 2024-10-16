@@ -93,7 +93,18 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8090:8080
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    network_mode: host
+    ports:
+      - 3003:3003
+    volumes:
+      - ./data:/app/data
+    environment:
+      - UPTIME_KUMA_PORT=${UPTIME_KUMA_PORT}
 
 volumes:
   pgdata: 
