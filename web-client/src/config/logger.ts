@@ -1,3 +1,14 @@
+/*
+	Purpose: Logger class for logging messages to the console.
+	Usage:
+		const logger = require('./logger');
+		logger.info('This is an info message');
+		logger.debug('This is a debug message');
+		logger.warn('This is a warning message');
+		logger.error('This is an error message');
+	created because pino and winston were giving issues with nextjs version
+*/
+
 class Logger {
 	level: string;
 

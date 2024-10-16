@@ -6,8 +6,15 @@ import { APP_HOME, APP_LOGIN, authRoutes, privateRoutes, publicRoutes } from './
 import { verifyToken } from './services/auth/session';
 import environment from './config/environment';
 
+/*
+	https://next-intl-docs.vercel.app/
+*/
 const intlMiddleware = createMiddleware(routing);
 
+/*
+	Redirect users based on their authentication status and based on 
+	the routes configured in src/routes.ts
+*/
 class RouteHandler {
 	private req: NextRequest
 	private locale: string

@@ -2,6 +2,11 @@ import development from './environments/development'
 import production from './environments/production'
 import test from './environments/test'
 
+/*
+	environment global variable that simplifies and makes secure 
+	the access to the environment variables
+*/
+
 const env = process.env.NODE_ENV || 'development'
 
 const environments = {

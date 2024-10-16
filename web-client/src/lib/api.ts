@@ -5,6 +5,9 @@ interface CustomRequestInit extends RequestInit {
 	_retry?: boolean;
 }
 
+/*
+	class to handle fetch requests
+*/
 class FetchClient {
 	private static instance: FetchClient;
 	private baseURL: string;

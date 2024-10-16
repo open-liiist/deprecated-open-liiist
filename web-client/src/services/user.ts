@@ -5,6 +5,9 @@ import { getSession } from "./auth/session";
 import logger from "@/config/logger";
 import { fetchClient } from "@/lib/api";
 
+/*
+	get user info for react context
+*/
 export async function getUser(): Promise<User | null> {
 	const sessionCookie = cookies().get(environment.cookies.access);
 	if (sessionCookie === undefined)
@@ -12,12 +15,12 @@ export async function getUser(): Promise<User | null> {
 	const session = await getSession();
 	if (!session)
 		return null;
-	logger.info(`===== SESSION COOKIE ===== \n ${session.user.id}`);
+	logger.debug(`===== SESSION COOKIE ===== \n ${session.user.id}`);
 	const res = await fetchClient.get(
 		`/users/${session.user.id}`, 
 		sessionCookie.value
 	);
-	logger.info(`===== USER RES ===== \n ${res.ok} - ${res.status}`);
+	logger.debug(`===== USER RES ===== \n ${res.ok} - ${res.status}`);
 	if (!res.ok)
 		return null;
 	const payload = (await res.json()).data;
