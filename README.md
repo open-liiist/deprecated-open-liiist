@@ -49,6 +49,7 @@ Create a `.env` file for each service, for example in `services/auth-service/.en
 DATABASE_URL=postgres://user:password@db:5432/authdb
 ```
 
+
 ### Running Tests
 Each microservice has its own tests. To run them:
 1. Navigate to the service directory.
