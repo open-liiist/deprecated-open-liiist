@@ -56,3 +56,18 @@ Each microservice has its own tests. To run them:
    ```bash
    npm test
    ```
+
+## HTTPS and TLS
+
+For that, i'm using traefik, just exploring, we can change the tool later.
+
+Anyhow, you will need for local development some local certificates, for that use [mkcert](https://github.com/FiloSottile/mkcert),
+once you installed it, run:
+
+```bash
+# If it's the firt install of mkcert, run
+mkcert -install
+
+# Generate certificate for domain "docker.localhost", "domain.local" and their sub-domains
+mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "domain.local" "*.domain.local"
+```

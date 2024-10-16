@@ -92,12 +92,13 @@ services:
   adminer:
     image: adminer
     restart: always
+    command: php -S [::]:8090 -t /var/www/html
     ports:
-      - 8090:8080
+      - 8090:8090
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
-    restart: always
+    restart: unless-stopped
     network_mode: host
     ports:
       - 3003:3003
@@ -105,6 +106,21 @@ services:
       - ./data:/app/data
     environment:
       - UPTIME_KUMA_PORT=${UPTIME_KUMA_PORT}
+
+  traefik:
+    image: docker.io/library/traefik:v3.1.6
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      # enable dashboard, don't do in production
+      - "8080:8080"
+    volumes:
+      - /run/docker.sock:/run/docker.sock:ro
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/conf.d/:/etc/traefik/conf.d/:ro
+      - ./certs/:/var/traefik/certs/:rw
 
 volumes:
   pgdata: 
