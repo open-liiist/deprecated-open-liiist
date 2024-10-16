@@ -15,7 +15,11 @@ services:
       - /app/.next
     command: npm run dev
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - API_BASE_URL=${API_BASE_URL}
+      - NAME_COOKIE_ACCESS=${NAME_COOKIE_ACCESS}
+      - NAME_COOKIE_REFRESH=${NAME_COOKIE_REFRESH}
 
   auth-service:
     build: 
@@ -27,8 +31,10 @@ services:
       db:
         condition: service_healthy
     environment:
-      - AUTH_SERVICE_PORT=4000
-      - AUTH_DATABASE_URL=postgres://user:postgrespw@db:5432/authdb
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
+      - AUTH_DATABASE_URL=${AUTH_DATABASE_URL}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
 
   search-service:
     build: 
@@ -37,7 +43,7 @@ services:
     ports:
       - "4001:4001"
     environment:
-      - SEARCH_SERVICE_PORT=4001
+      - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
 
   scraping-service:
     build: 
@@ -47,6 +53,8 @@ services:
       - product-receiver-service
     volumes:
       - ./scraping-service:/app
+    environment:
+      - PRODUCT_RECEIVER_BASE_URL=${PRODUCT_RECEIVER_BASE_URL}
 
   product-receiver-service:
     build: 
@@ -58,8 +66,8 @@ services:
     ports:
       - "3002:3002"
     environment:
-      - DATA_RECEIVER_SERVICE_PORT=3002
-      - DATABASE_URL=postgres://user:postgrespw@db:5432/appdb
+      - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
+      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - ./product-receiver-service:/app
 

@@ -7,8 +7,8 @@ export const configFactory = (overrides: Partial<Config>): Config => {
 		isDevelopment: process.env.NODE_ENV === 'development',
 		isTest: process.env.NODE_ENV === 'test',
 		cookies: {
-			access: process.env.COOKIE_ACCESS,
-			refresh: process.env.COOKIE_REFRESH,
+			access: process.env.NAME_COOKIE_ACCESS,
+			refresh: process.env.NAME_COOKIE_REFRESH,
 		},
 		appPort: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : 3000,
 		apiBaseUrl: process.env.API_BASE_URL,
