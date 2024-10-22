@@ -1,6 +1,7 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
 # Declaration of dictionaries and lists 
 
@@ -37,27 +38,29 @@ product_info = {
 # 		print(product_info)
 
 driver = webdriver.Firefox()
-driver.get("https://oasitigre.it/it/negozi-volantini.html") 
+# driver.get("https://oasitigre.it/it/negozi-volantini.html") 
 
-time.sleep(4)
-driver.find_element(By.ID, "CybotCookiebotDialogBodyButtonDecline").click()
-understan why it can't find the button
-driver.find_element(By.XPATH, '/html/body/main/div[2]/div[1]/div[3]/div[1]/div[1]/div[3]').click()
-time.sleep(3)
-driver.find_element(By.CLASS_NAME, 'button button--blue conferma').click()
-
-shop_info.update(name = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[1]/b').text)
-shop_info.update(street = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[2]').text)
-shop_info.update(working_hours = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/div/p/b').text)
+# time.sleep(4)
+# driver.find_element(By.ID, "CybotCookiebotDialogBodyButtonDecline").click()
+# # understan why it can't find the button
+# driver.find_element(By.XPATH, '/html/body/main/div[2]/div[1]/div[3]/div[1]/div[1]/div[3]').click()
+# time.sleep(3)
+# driver.find_element(By.CLASS_NAME, 'button button--blue conferma').click()
+# shop_info.update(name = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[1]/b').text)
+# shop_info.update(street = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[2]').text)
+# shop_info.update(working_hours = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/div/p/b').text)
 
 for x in categories_url:
 	driver.get(x)
+	driver.maximize_window()
 	time.sleep(5)
 	micro_cate = len(driver.find_elements(By.XPATH, '/html/body/main/div[1]/div[2]/div[2]/div'))
 	for k in range(2, micro_cate):
 		n_cards = len(driver.find_elements(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
 		for n in range(1, n_cards):
-			product_info.update(name = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[2]/div/div[2]/div/div/div[1]/div[{n}]/div/div[3]/div[2]/h4').text)
+			if (n == 6):
+				driver.find_element(By.XPATH, f"/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[3]").click()
+			product_info.update(name = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[3]/div[2]/h4').text)
 			print(product_info["name"])
 
 driver.close()
