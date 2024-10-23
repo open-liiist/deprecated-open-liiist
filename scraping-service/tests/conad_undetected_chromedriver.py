@@ -24,14 +24,22 @@ if __name__ == "__main__":
 	time.sleep(2)
 	driver.find_element(By.XPATH, '//*[@id="modal-onboarding-wrapper"]/div[2]/div[5]/button').click()
 	time.sleep(10)
-	driver.get("https://spesaonline.conad.it/c/frutta-fresca--0101")
+	driver.get("https://spesaonline.conad.it/c/--0102")
 	time.sleep(2)
 	n_cards = len(driver.find_elements(By.XPATH, '//*[@id="#top"]/div/div[2]/div[2]/div[4]/div'))
+	products = []
 	for card in range(n_cards + 1):
 		try:
 			title = driver.find_element(By.XPATH, f'//*[@id="#top"]/div/div[2]/div[2]/div[4]/div[{card + 1}]/div/div[1]/div[1]/div[2]/a/div[2]/h3').text
 			product_price = driver.find_element(By.XPATH, f'//*[@id="#top"]/div/div[2]/div[2]/div[4]/div[{card + 1}]/div/div[1]/div[1]/div[2]/div[1]/div[3]').text
-			print(f"Product title: {title} {product_price}")
+			quantity = driver.find_element(By.XPATH, f'//*[@id="#top"]/div/div[2]/div[2]/div[4]/div[{card + 1}]/div/div[1]/div[1]/div[2]/div[1]/div[1]/b').text
+			product = {
+				"title": title,
+                "price": product_price,
+				"quantity": quantity
+			}
+			
+			print(f"Product title: {title} {product_price} {quantity}")
 		except Exception as e:
 			print(f"Error could be due to a promo card or a different layout.")
 		

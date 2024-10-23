@@ -32,20 +32,24 @@ print(shop_info)
 # ]
 
 driver.get("https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Frutta-Fresca.html")
-time.sleep(5)
-info = BeautifulSoup(driver.page_source, "html.parser")
-# n_cards = (info.find_element(By.Xpath, f'/html/body/main/div[1]/div[2]/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div/div[3]/div[3]/p'))
-# print(n_cards)
-n_cards = info.find_all('div', class_='swiper-slide product-card-no-p swiper-slide-active')
-tittle = n_cards[0].find('a', class_='product-link product-link-title').text
-img_url = n_cards[0].find('a', class_='product-link product-link-img')
-sub_title = n_cards[0].find('div', class_='productSubTitle').text
-new_price = n_cards[0].find('div', class_='oldPrice').text
-old_price = n_cards[0].find('div', class_='newPrice').text
-print(tittle)
-print(img_url)
-print(sub_title)
-print(new_price)
-print(old_price)
+time.sleep(3)
+# info = BeautifulSoup(driver.page_source, "html.parser")
+n_cards = len(driver.find_elements(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[2]/div/div[2]/div/div/div[1]/div'))
+print(n_cards)
+for i in range(n_cards):
+	pass
+# cards = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[2]/div/div[2]/div/div/div[1]/div')
+
+# n_cards = info.find_all('div', class_='swiper-slide product-card-no-p swiper-slide-active')
+# tittle = n_cards[0].find('a', class_='product-link product-link-title').text
+# img_url = n_cards[0].find('a', class_='product-link product-link-img')
+# sub_title = n_cards[0].find('div', class_='productSubTitle').text
+# new_price = n_cards[0].find('div', class_='oldPrice').text
+# old_price = n_cards[0].find('div', class_='newPrice').text
+# print(tittle)
+# print(img_url)
+# print(sub_title)
+# print(new_price)
+# print(old_price)
 
 driver.close()
