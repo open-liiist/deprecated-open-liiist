@@ -1,9 +1,4 @@
-import time
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-
-# Declaration of dictionaries and lists 
+# Declaration of dictionaries and lists
 
 shop_info = {
 	"name" : "tigre",
@@ -11,64 +6,156 @@ shop_info = {
 	"working_hours": "2"
 }
 
-categories_url = [
-	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Frutta-Fresca.html",
-]
-
-# categories_url = [
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Frutta-Fresca.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Frutta-Pronta-da-mangiare.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Aglio-Peperoncino-Odori.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Funghi-Olive-Capperi.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Ortaggi.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Verdura-Fresca.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Verdura-Lavata-o-Tagliata.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Frutta-Secca-Disidratata.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Legumi-e-Cereali-secchi.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Barrette-Snack-Polpa-frutta.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Condimenti-Spezie-Farine.html",
-# 	"https://oasitigre.it/it/spesa/reparti/Frutta-e-Verdura/Piatti-Pronti.html"
-# ]
-
-driver = webdriver.Firefox()
-# driver.get("https://oasitigre.it/it/negozi-volantini.html") 
-# time.sleep(4)
-# driver.find_element(By.ID, "CybotCookiebotDialogBodyButtonDecline").click()
-# # understan why it can't find the button
-# driver.find_element(By.XPATH, '/html/body/main/div[2]/div[1]/div[3]/div[1]/div[1]/div[3]').click()
-# time.sleep(3)
-# driver.find_element(By.CLASS_NAME, 'button button--blue conferma').click()
-# shop_info.update(name = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[1]/b').text)
-# shop_info.update(street = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[2]').text)
-# shop_info.update(working_hours = driver.find_element(By.XPATH, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/div/p/b').text)
-for x in categories_url:
-	driver.get(x)
-	driver.maximize_window()
-	time.sleep(5)
-	micro_cate = len(driver.find_elements(By.XPATH, '/html/body/main/div[1]/div[2]/div[2]/div'))
-	active = 1
-	for k in range(2, micro_cate + 1):
-		if (active == 1):
-			try:
-				element = driver.find_element(By.XPATH, f"/html/body/main/div[1]/div[2]/div[2]/div[{k}]")
-				driver.execute_script('arguments[0].scrollIntoView(true)', element)
-			except:
-				active = 0
-		n_cards = len(driver.find_elements(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div'))
-		active_1 = 1
-	for n in range(1, n_cards):
-		name = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[3]/div[2]/h4').text
-		image_element = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[3]/div[1]/a/img')
-		img_url = image_element.get_attribute("src")
-		description = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[3]/div[3]/p').text
-		new_price = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[4]/div[1]/div[2]/p').text
-		old_price = driver.find_element(By.XPATH, f'/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[1]/div[{n}]/div/div[4]/div[1]/div[1]/p').text
-		print(name, description, new_price, old_price)
-		if (active_1 == 1):
-			try:
-				driver.find_element(By.XPATH, f"/html/body/main/div[1]/div[2]/div[2]/div[{k}]/div/div[2]/div/div/div[3]").click()
-			except:		
-				active_1 = 0
-		print("\n")
-
-driver.close()
+categories_dict = {
+	"Frutta-e-Verdura": [
+		"Frutta-Fresca",
+		"Frutta-Pronta-da-mangiare",
+		"Aglio-Peperoncino-Odori",
+		"Funghi-Olive-Capperi",
+        "Ortaggi",
+        "Verdura-Fresca",
+        "Verdura-Lavata-o-Tagliata",
+        "Frutta-Secca-Disidratata",
+        "Legumi-e-Cereali-secchi",
+        "Barrette-Snack-Polpa-frutta",
+        "Condimenti-Spezie-Farine",
+        "Piatti-Pronti"
+    ],
+    "Carne-e-Pesce": [
+        "Bovino",
+        "Ovino-Avicunicolo",
+        "Pollo-Tacchino",
+        "Speciali",
+        "Suino",
+        "Frutti-di-Mare",
+        "Pesci-Interi-Tranci-Filetti",
+        "Pesci-Salati-o-Confezionati",
+        "Carne-Pronta",
+        "Carne-Pronta-a-Cuocere",
+        "Pesce-Cotto",
+        "Pesce-Pronto-a-Cuocere",
+        "Sushi"
+    ],
+    "Forno-e-Gastronomia": [
+        "Dolci-Pasticceria",
+        "Pane-Panini",
+        "Pizza-Focacce-Rustici",
+        "Taralli-Freselle-Grissini",
+        "Pasta-Fresca",
+        "Piatti-Pronti",
+        "Sughi-Condimenti",
+        "Formaggi-Freschissimi",
+        "Formaggi-Freschi",
+        "Formaggi-Semistagionati",
+        "Formaggi-Stagionati",
+        "Insaccati",
+        "Salumi"
+    ],
+    "Prodotti-da-Frigo": [
+        "Formaggi-Confezionati",
+        "Salumi-Confezionati",
+        "Latte-Fresco",
+        "Latte-uht",
+        "Panna-fresca-Burro",
+        "Panna-Besciamella-uht",
+        "Yogurt",
+        "Pasta-Fresca",
+        "Uova-Lievito-Sfoglie",
+        "Gastronomia",
+        "Snack-Merende-Dessert"
+    ],
+    "Surgelati": [
+        "Gelati",
+        "Gelati-Vaschetta",
+        "Torte-Dessert",
+        "Carne-Surgelata",
+        "Pesce-Surgelato",
+        "Piatti-Sughi-surgelati",
+        "Pizze-Dolci-surgelati",
+        "Verdura-Surgelata"
+    ],
+    "Dispensa-Salata": [
+        "Conserve-Animali",
+        "Conserve-Vegetali",
+        "Olive-Sottolio-Sottaceto",
+        "Passate-Sughi-Dadi",
+        "Sale-Olio-Aceto",
+        "Salse-Spezie",
+        "Pasta-Riso",
+        "Primi-piatti-Zuppe",
+        "Alimenti-No-Glutine",
+        "Cibi-Etnici",
+        "Snack-Salati-Patatine",
+        "Sostituti-Pane"
+    ],
+    "Dispensa-Dolce": [
+        "Caffè",
+        "Orzo-Solubili",
+        "Tè-Infusi-Tisane",
+        "Caramelle-Cioccolate",
+        "Cereali",
+        "Fette-Spalmabili",
+        "Pasticcini-Biscotti",
+        "Torte-Merendine",
+        "Farine-Zucchero-Lievito",
+        "Preparazione-Dolci",
+        "Dolci-no-Glutine",
+        "Sostituti-Pasto-Integratori"
+    ],
+    "Bevande-e-Bollicine": [
+        "Acqua-Preparati",
+        "Bibite-gassate",
+        "Succhi-Frutta",
+        "Tè-Integratori-Energy-drink",
+        "Aperitivi",
+        "Birre",
+        "Spumanti-Champagne",
+        "Liquori",
+        "Vini-Esteri-Liquorosi",
+        "Vini-Tavola",
+        "Vini-Bianchi",
+        "Vini-Rosati",
+        "Vini-Rossi"
+    ],
+    "Infanzia": [
+        "Biscotti-Pastine-Farine",
+        "Latte-Infanzia",
+        "Liofilizzati-Infusi",
+        "Omogeneizzati",
+        "Snack-Pouch-Merendine",
+        "Cura-Baby",
+        "Detergenti-Polveri",
+        "Pannolini-Salviette",
+        "Biberon-Prime-pappe",
+        "Calze-Bimbo",
+        "Puericultura-varie"
+    ],
+    "Cura-Casa": [
+        "Ammorbidenti-Additivi",
+        "Detersivi-Bucato",
+        "Stiro-Guardaroba",
+        "Cottura-Conservazione",
+        "Monouso-Carta-Casa",
+        "Party-Regalo-Pic-Nic",
+        "Sapone-Piatti",
+        "Accessori-Pulizia-casa",
+        "Deo-ambiente-Insetticidi",
+        "Detergenti-Casa",
+        "Brico-Giardino",
+        "Cancelleria"
+    ],
+    "Cura-Persona-e-Animali": [
+        "Epilazione-Rasatura",
+        "Igiene-Orale",
+        "Deodoranti-Accessori",
+        "Detergenti-Igiene-intima",
+        "Shampoo-Acconciatura",
+        "Trattamenti-Creme-Protettive",
+        "Calze-Collant",
+        "Carta-Igienica-Fazzoletti",
+        "Incontinenza-Assorbenti",
+        "Sanitaria-Parafarmacia",
+        "Accessori",
+        "Alimentazione"
+    ]
+}
