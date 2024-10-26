@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search-service
+  template:
+    metadata:
+      labels:
+        app: search-service
+    spec:
+      containers:
+        - name: search-service
+          image: ghcr.io/fchieric/search-service:latest
+          ports:
+            - containerPort: 4001
+          env:
+            - name: SEARCH_SERVICE_PORT
+              value: "4001"
+      imagePullSecrets:
+        - name: ghcr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-service
+spec:
+  selector:
+    app: search-service
+  ports:
+    - protocol: TCP
+      port: 4001
+      targetPort: 4001
+  type: ClusterIP
+

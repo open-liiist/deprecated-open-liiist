@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scraping-service
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: scraping-service
+        spec:
+          containers:
+            - name: scraping-service
+              image: ghcr.io/fchieric/scraping-service:latest
+              env:
+                - name: PRODUCT_RECEIVER_BASE_URL
+                  value: "http://product-receiver-service:3002"
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: ghcr-secret
+

@@ -5,12 +5,11 @@ services:
       context: ./web-client
       target: dev
       dockerfile: Dockerfile
+    image: ghcr.io/fchieric/web-client:latest
     ports:
       - "3000:3000"
     volumes:
-      # Mount the web-client directory to the container (live reloading)
       - ./web-client:/app
-      # separate host node_modules from container node_modules
       - /app/node_modules
       - /app/.next
     command: npm run dev
@@ -25,6 +24,7 @@ services:
     build: 
       context: ./auth-service
       dockerfile: Dockerfile
+    image: ghcr.io/fchieric/auth-service:latest
     ports:
       - "4000:4000"
     depends_on:
@@ -40,6 +40,7 @@ services:
     build: 
       context: ./search-service
       dockerfile: Dockerfile
+    image: ghcr.io/fchieric/search-service:latest
     ports:
       - "4001:4001"
     environment:
@@ -49,6 +50,7 @@ services:
     build: 
       context: ./scraping-service
       dockerfile: Dockerfile
+    image: ghcr.io/fchieric/scraping-service:latest
     depends_on:
       - product-receiver-service
     volumes:
@@ -60,6 +62,7 @@ services:
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
+    image: ghcr.io/fchieric/product-receiver-service:latest
     depends_on:
       db:
         condition: service_healthy
@@ -121,6 +124,6 @@ services:
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
-
+      
 volumes:
   pgdata: 
