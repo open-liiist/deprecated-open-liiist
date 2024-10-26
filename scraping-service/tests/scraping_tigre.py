@@ -1,13 +1,14 @@
 import time
 import sys
-from selenium import webdriver
+import undetected_chromedriver as uc
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utility_tigre import shop_info, categories_dict 
-import undetected_chromedriver as uc
+
+# Manages the search in the page
 
 def wait_for_element(driver, xpath):
 	try:
@@ -50,21 +51,24 @@ def find_and_send_info(driver, n_cards, k):
 
 # Get to a shop and save the information that we need
 
-def get_the_shop_info(driver):
-	driver.get("https://oasitigre.it/it/negozi-volantini.html") 
+def get_the_shop_info(driver, k):
+	driver.get("https://oasitigre.it/it/negozi-volantini.html")
+	driver.maximize_window()
 	time.sleep(4)
 	try:
 		cookie_button = wait_for_element(driver, "//button[@id='CybotCookiebotDialogBodyButtonDecline']")
 		cookie_button.click()
 	except:
 		pass
-	# understan why it can't find the button
-	# wait_for_element(driver, '/html/body/main/div[2]/div[1]/div[3]/div[1]/div[1]/div[3]').click()
-	# time.sleep(3)
-	# driver.find_element(By.CLASS_NAME, 'button button--blue conferma').click()
-	shop_info.update(name = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[1]/b').text)
-	shop_info.update(street = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[2]').text)
-	shop_info.update(working_hours = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/div/p/b').text)
+	wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{k}]/div[1]/div[3]').click()
+	time.sleep(3)
+	wait = WebDriverWait(driver, 20)
+	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "html body#negozi-volantini-ccaaa01f77.negozi-volantini.base.page.basicpage.headermarketing div.popup.conferma-cambio-negozio.no-ordine div.popup-card div.button-container button.button.button--blue.conferma")))
+	input_box = driver.find_element(By.CSS_SELECTOR, "html body#negozi-volantini-ccaaa01f77.negozi-volantini.base.page.basicpage.headermarketing div.popup.conferma-cambio-negozio.no-ordine div.popup-card div.button-container button.button.button--blue.conferma")
+	input_box.click()
+	shop_info.update(name = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{k}]/div[1]/div[2]/p[1]/b').text)
+	shop_info.update(street = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{k}]/div[1]/div[2]/p[2]').text)
+	shop_info.update(working_hours = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{k}]/div[1]/div[2]/div/p/b').text)
 
 # def change_shop_location(driver, location):
 # 	# id = currentposition insert text location
@@ -83,7 +87,6 @@ def get_the_shop_info(driver):
 
 # 	driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ENTER)
 # 	time.sleep(3)
-
 
 # selezione oasi tigre in location passata come parametro, seleziona il primo negozio trovato
 def change_shop_location(driver, location):
@@ -115,18 +118,16 @@ def change_already_selected_shop(driver, location):
 	change_shop_location(driver, location)
 
 if __name__ == "__main__":
-	# driver = webdriver.Firefox()
 	driver = uc.Chrome(
 		use_subprocess=False,
 	)
-
-	change_shop_location(driver, "Roma")
-	change_already_selected_shop(driver, "San benedetto del tronto")
-	# # get_the_shop_info(driver)
+	# change_shop_location(driver, "Roma")
+	# change_already_selected_shop(driver, "San benedetto del tronto")
+	# Just add a for to make all shops
+	get_the_shop_info(driver, 8)
 	for category, items in categories_dict.items():
 		for item in items:
 			driver.get(f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html")
-			driver.maximize_window()
 			time.sleep(5)
 			micro_cate = len(wait_for_elements(driver, '/html/body/main/div[1]/div[2]/div[2]/div'))
 			active = 1
