@@ -1,13 +1,13 @@
 import time
 import sys
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utility_tigre import shop_info, categories_dict 
-
-# Waits for an element or elements to be present on the page
+import undetected_chromedriver as uc
 
 def wait_for_element(driver, xpath):
 	try:
@@ -66,10 +66,63 @@ def get_the_shop_info(driver):
 	shop_info.update(street = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/p[2]').text)
 	shop_info.update(working_hours = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[8]/div[1]/div[2]/div/p/b').text)
 
+# def change_shop_location(driver, location):
+# 	# id = currentposition insert text location
+# 	driver.get("https://oasitigre.it/it/spesa.html") 
+# 	driver.find_element(By.CLASS_NAME, 'ritira-in-negozio-main-page').click()
+
+# 	from selenium.webdriver.support import expected_conditions as EC
+
+# 	wait = WebDriverWait(driver, 10)
+# 	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".pac-target-input")))
+# 	form = driver.find_element(By.CLASS_NAME, 'box-ricerca-negozio')
+# 	input_box = form.find_element(By.CLASS_NAME, "pac-target-input")
+# 	input_box.click() 
+# 	input_box.send_keys(location)
+# 	# send the form by clicking the send key on the keyboard
+
+# 	driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ENTER)
+# 	time.sleep(3)
+
+
+# selezione oasi tigre in location passata come parametro, seleziona il primo negozio trovato
+def change_shop_location(driver, location):
+	driver.get("https://oasitigre.it/it/spesa.html") 
+	driver.find_element(By.CLASS_NAME, 'ritira-in-negozio-main-page').click()
+
+	wait = WebDriverWait(driver, 20)
+	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")))
+	input_box = driver.find_element(By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")
+	input_box.click()
+	input_box.send_keys(location)
+	time.sleep(2)
+	input_box.send_keys(Keys.ENTER)
+	time.sleep(3)
+	available_shops = driver.find_elements(By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")
+	if len(available_shops) == 0:
+		print('No shops found')
+		return
+	available_shops[0].click()
+	time.sleep(2)
+	driver.find_element(By.CLASS_NAME, "scegliDopo").click()
+	print('Search performed')	
+	time.sleep(10)
+
+# cancella cookies in caso sia gia stata selezionato un negozio precedentemente
+def change_already_selected_shop(driver, location):
+	# remove cookies orderActivatedOasiOT
+	driver.delete_all_cookies()
+	change_shop_location(driver, location)
 
 if __name__ == "__main__":
-	driver = webdriver.Firefox()
-	# get_the_shop_info(driver)
+	# driver = webdriver.Firefox()
+	driver = uc.Chrome(
+		use_subprocess=False,
+	)
+
+	change_shop_location(driver, "Roma")
+	change_already_selected_shop(driver, "San benedetto del tronto")
+	# # get_the_shop_info(driver)
 	for category, items in categories_dict.items():
 		for item in items:
 			driver.get(f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html")
