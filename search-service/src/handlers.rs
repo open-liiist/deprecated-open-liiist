@@ -1,4 +1,3 @@
-use crate::models::ProductResult;
 use crate::models::{SearchQuery, SearchResponse};
 use crate::search::{fetch_lowest_price, fetch_most_similar};
 use crate::AppState;

@@ -5,6 +5,7 @@ import net from 'node:net'
 const router = express.Router();
 
 type ProductData = {
+	name_id: string;
 	full_name: string;
 	name: string;
 	description: string;
@@ -16,6 +17,14 @@ type ProductData = {
 		lng: number;
 	};
 };
+
+function generateNameId(fullName: string) {
+	return fullName
+		.toLowerCase()                          // Convert to lowercase
+		.replace(/[^a-z0-9\s]/g, '')            // Remove special characters except spaces
+		.replace(/\s+/g, '_')                   // Replace spaces with underscores
+		.replace(/_+$/g, '');                   // Remove trailing underscores (if any)
+}
 
 function sendToLogstash(productData: ProductData): Promise<void> {
 	return new Promise((resolve, reject) => {
@@ -44,27 +53,47 @@ router.post('/product', async (req: Request, res: Response) => {
 	try {
 		const { full_name, name, description, price, discount, localization } = req.body;
 
+		const name_id = generateNameId(full_name);
+
 		const prismaTransaction = await prisma.$transaction(async (prisma) => {
-			const product = await prisma.product.create({
-				data: {
-					full_name,
-					name,
-					description,
-					price,
-					discount,
+			const product = await prisma.product.upsert({
+				where: { name_id },
+				create: {
+					name_id, full_name, name, description, discount,
+					current_price: price,
 					localization: {
-						create: {
-							grocery: localization.grocery,
-							lat: localization.lat,
-							lng: localization.long,
-						},
-					},
+						connectOrCreate: {
+							where: {
+								grocery_lat_lng: {
+									grocery: localization.grocery,
+									lat: localization.lat,
+									lng: localization.long,
+								}
+							},
+							create: {
+								grocery: localization.grocery,
+								lat: localization.lat,
+								lng: localization.long,
+							}
+						}
+					}
 				},
+				update: {
+					full_name, name, description, discount,
+					current_price: price,
+				}
+			});
+
+			await prisma.productHistory.create({
+				data: {
+					productId: product.id,
+					price, discount
+				}
 			});
 
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
-				full_name, name, description, price, discount,
+				full_name, name, description, price, discount, name_id,
 				localization: {
 					grocery: localization.grocery,
 					lat: localization.lat,
