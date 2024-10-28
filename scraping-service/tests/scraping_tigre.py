@@ -49,45 +49,6 @@ def find_and_send_info(driver, n_cards, micro_cate):
 			except:		
 				active_1 = 0
 
-# Get to a shop and save the information that we need
-
-def get_the_shop_info(driver, n_shop):
-	driver.get("https://oasitigre.it/it/negozi-volantini.html")
-	driver.maximize_window()
-	time.sleep(4)
-	try:
-		cookie_button = wait_for_element(driver, "//button[@id='CybotCookiebotDialogBodyButtonDecline']")
-		cookie_button.click()
-	except:
-		pass
-	wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{n_shop}]/div[1]/div[3]').click()
-	time.sleep(3)
-	wait = WebDriverWait(driver, 20)
-	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "html body#negozi-volantini-ccaaa01f77.negozi-volantini.base.page.basicpage.headermarketing div.popup.conferma-cambio-negozio.no-ordine div.popup-card div.button-container button.button.button--blue.conferma")))
-	input_box = driver.find_element(By.CSS_SELECTOR, "html body#negozi-volantini-ccaaa01f77.negozi-volantini.base.page.basicpage.headermarketing div.popup.conferma-cambio-negozio.no-ordine div.popup-card div.button-container button.button.button--blue.conferma")
-	input_box.click()
-	shop_info.update(name = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{n_shop}]/div[1]/div[2]/p[1]/b').text)
-	shop_info.update(street = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{n_shop}]/div[1]/div[2]/p[2]').text)
-	shop_info.update(working_hours = wait_for_element(driver, f'/html/body/main/div[2]/div[1]/div[3]/div[{n_shop}]/div[1]/div[2]/div/p/b').text)
-
-# def change_shop_location(driver, location):
-# 	# id = currentposition insert text location
-# 	driver.get("https://oasitigre.it/it/spesa.html") 
-# 	driver.find_element(By.CLASS_NAME, 'ritira-in-negozio-main-page').click()
-
-# 	from selenium.webdriver.support import expected_conditions as EC
-
-# 	wait = WebDriverWait(driver, 10)
-# 	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".pac-target-input")))
-# 	form = driver.find_element(By.CLASS_NAME, 'box-ricerca-negozio')
-# 	input_box = form.find_element(By.CLASS_NAME, "pac-target-input")
-# 	input_box.click() 
-# 	input_box.send_keys(location)
-# 	# send the form by clicking the send key on the keyboard
-
-# 	driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ENTER)
-# 	time.sleep(3)
-
 # selezione oasi tigre in location passata come parametro, seleziona il primo negozio trovato
 def change_shop_location(driver, location):
 	driver.get("https://oasitigre.it/it/spesa.html") 
@@ -120,10 +81,10 @@ if __name__ == "__main__":
 	driver = uc.Chrome(
 		use_subprocess=False,
 	)
-	# change_shop_location(driver, "Roma")
-	# change_already_selected_shop(driver, "San benedetto del tronto")
+	change_shop_location(driver, "Roma")
+	change_already_selected_shop(driver, "San benedetto del tronto")
 	# Just add a for to make all shops
-	get_the_shop_info(driver, 8)
+	# get_the_shop_info(driver, 8)
 	for category, items in categories_dict.items():
 		for item in items:
 			driver.get(f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html")
