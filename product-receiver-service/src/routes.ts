@@ -11,6 +11,7 @@ type ProductData = {
 	description: string;
 	price: number;
 	discount: number;
+	document_id: string;
 	localization: {
 		grocery: string;
 		lat: number;
@@ -18,8 +19,9 @@ type ProductData = {
 	};
 };
 
-function generateNameId(fullName: string) {
+function sanitizeString(fullName: string) {
 	return fullName
+		.toString()							 	// Convert to string
 		.toLowerCase()                          // Convert to lowercase
 		.replace(/[^a-z0-9\s]/g, '')            // Remove special characters except spaces
 		.replace(/\s+/g, '_')                   // Replace spaces with underscores
@@ -53,7 +55,20 @@ router.post('/product', async (req: Request, res: Response) => {
 	try {
 		const { full_name, name, description, price, discount, localization } = req.body;
 
-		const name_id = generateNameId(full_name);
+		if (!full_name || !description || !price || 
+			!localization || !localization.grocery || !localization.lat || !localization.long) {
+			res.status(400).json({ error: 'Missing required fields' });
+			return;
+		}
+
+		console.log('typeof full_name', typeof full_name);
+
+		if (typeof full_name !== 'string' || typeof description !== 'string' || typeof price !== 'number') {
+			res.status(400).json({ error: 'Invalid data types' });
+			return;
+		}
+
+		const name_id = sanitizeString(full_name);
 
 		const prismaTransaction = await prisma.$transaction(async (prisma) => {
 			const product = await prisma.product.upsert({
@@ -94,11 +109,18 @@ router.post('/product', async (req: Request, res: Response) => {
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
 				full_name, name, description, price, discount, name_id,
+				document_id: `${name_id}_${
+					sanitizeString(localization.grocery)
+				}_${
+					sanitizeString(localization.lat)
+				}_${
+					sanitizeString(localization.long)
+				}`,
 				localization: {
 					grocery: localization.grocery,
 					lat: localization.lat,
 					lng: localization.long,
-				}
+				},
 			}
 
 			try {

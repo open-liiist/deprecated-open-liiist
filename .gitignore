@@ -3,3 +3,4 @@ node_modules
 target
 __pycache__
 data
+test-run-report.json*

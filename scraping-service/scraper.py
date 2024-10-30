@@ -310,7 +310,7 @@ def scrape_ecommerce():
 
 if __name__ == "__main__":
     products = scrape_ecommerce()
+    sleep(15)
     for product in products:
-        sleep(5)
         # Send each product to the data-receiver service
         send_data_to_receiver(product)
