@@ -48,6 +48,7 @@ def find_and_send_info(driver, n_cards, micro_cate):
 				wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()	
 			except:		
 				active_1 = 0
+	return (i)
 
 # selezione oasi tigre in location passata come parametro, seleziona il primo negozio trovato
 def change_shop_location(driver, location):
@@ -58,9 +59,10 @@ def change_shop_location(driver, location):
 	input_box = driver.find_element(By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")
 	input_box.click()
 	input_box.send_keys(location)
-	time.sleep(2)
+	time.sleep(5)
 	input_box.send_keys(Keys.ENTER)
-	time.sleep(3)
+	time.sleep(7)
+	wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")))
 	available_shops = driver.find_elements(By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")
 	if len(available_shops) == 0:
 		print('No shops found')
@@ -68,14 +70,30 @@ def change_shop_location(driver, location):
 	available_shops[0].click()
 	time.sleep(2)
 	driver.find_element(By.CLASS_NAME, "scegliDopo").click()
-	print('Search performed')	
-	time.sleep(10)
+	time.sleep(3)
 
 # cancella cookies in caso sia gia stata selezionato un negozio precedentemente
 def change_already_selected_shop(driver, location):
-	# remove cookies orderActivatedOasiOT
-	driver.delete_all_cookies()
-	change_shop_location(driver, location)
+	wait = WebDriverWait(driver, 20)
+	wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[1]/div/div/header/div/nav/div/div[3]/div[1]/span[3]")))
+	driver.find_element(By.XPATH, "/html/body/div[1]/div/div/header/div/nav/div/div[3]/div[1]/span[3]").click()
+	# wait_for_element(driver, "/html/body/div[1]/div/div/header/div/nav/div/div[3]/div[1]/span[3]").click()
+	wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[3]/div[2]/div[3]/div[3]/div[1]/div[2]/span[2]")))
+	driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[3]/div[3]/div[1]/div[2]/span[2]").click()
+	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")))
+	input_box = driver.find_element(By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")
+	input_box.click()
+	input_box.send_keys(location)
+	time.sleep(5)
+	input_box.send_keys(Keys.ENTER)
+	time.sleep(7)
+	wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")))
+	available_shops = driver.find_elements(By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")
+	if len(available_shops) == 0:
+		print('No shops found')
+		return
+	available_shops[0].click()
+	time.sleep(2)
 
 if __name__ == "__main__":
 	driver = uc.Chrome(
@@ -85,6 +103,7 @@ if __name__ == "__main__":
 	change_already_selected_shop(driver, "San benedetto del tronto")
 	# Just add a for to make all shops
 	# get_the_shop_info(driver, 8)
+	i = 0
 	for category, items in categories_dict.items():
 		for item in items:
 			driver.get(f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html")
@@ -100,6 +119,5 @@ if __name__ == "__main__":
 						active = 0
 				n_cards = len(wait_for_elements(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
 				find_and_send_info(driver, n_cards, micro_cate)
-				print("\n")
 
 	driver.close()
