@@ -1,10 +1,4 @@
-# Declaration of dictionaries and lists
-
-shop_info = {
-	"name" : "tigre",
-	"street": "via",
-	"working_hours": "2"
-}
+# Declaration of dictionaries
 
 categories_dict = {
 	"Frutta-e-Verdura": [
@@ -44,7 +38,7 @@ categories_dict = {
         "Pasta-Fresca",
         "Piatti-Pronti",
         "Sughi-Condimenti",
-        "Formaggi-Freschissimi",
+        "Formaggi--Freschissimi",
         "Formaggi-Freschi",
         "Formaggi-Semistagionati",
         "Formaggi-Stagionati",
@@ -56,7 +50,7 @@ categories_dict = {
         "Salumi-Confezionati",
         "Latte-Fresco",
         "Latte-uht",
-        "Panna-fresca-Burro",
+        "Panna--fresca-Burro",
         "Panna-Besciamella-uht",
         "Yogurt",
         "Pasta-Fresca",
@@ -111,8 +105,8 @@ categories_dict = {
         "Birre",
         "Spumanti-Champagne",
         "Liquori",
-        "Vini-Esteri-Liquorosi",
-        "Vini-Tavola",
+        "Vini--Esteri-Liquorosi",
+        "Vini--Tavola",
         "Vini-Bianchi",
         "Vini-Rosati",
         "Vini-Rossi"
