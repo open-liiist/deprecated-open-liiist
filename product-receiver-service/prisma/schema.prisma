@@ -8,14 +8,27 @@ datasource db {
 }
 
 model Product {
-    id             Int          @id @default(autoincrement())
-    full_name     String
+    id             Int              @id @default(autoincrement())
+    name_id        String           @unique
+    full_name      String
     name           String
     description    String
-    price          Float
+    current_price  Float
     discount       Float
-    localization   Localization @relation(fields: [localizationId], references: [id])
+    localization   Localization     @relation(fields: [localizationId], references: [id])
     localizationId Int
+    created_at     DateTime         @default(now())
+    updated_at     DateTime         @updatedAt
+    history        ProductHistory[]
+}
+
+model ProductHistory {
+    id          Int      @id @default(autoincrement())
+    product     Product  @relation(fields: [productId], references: [id])
+    productId   Int
+    price       Float
+    discount    Float
+    recorded_at DateTime @default(now())
 }
 
 model Localization {
@@ -24,4 +37,6 @@ model Localization {
     lat      Float
     lng      Float
     products Product[]
+
+	@@unique(name: "grocery_lat_lng", [grocery, lat, lng]) // composite unique contraint
 }

@@ -1,0 +1,43 @@
+config:
+  target: "http://localhost:3002" # Target URL
+  phases:
+    - duration: 60      # Run test for 60 seconds
+      arrivalRate: 5   # Start with 10 requests per second and increase as needed
+      rampTo: 10
+      name: Warm up the API
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 500
+      name: Ramp up to peak load
+    - duration: 60
+      arrivalRate: 50
+      name: Sustained peak load
+
+  # Load & configure a couple of useful plugins
+  # https://docs.art/reference/extensions
+  plugins:
+    ensure: {}
+    apdex: {}
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 100
+      - http.response_time.p95: 75
+
+scenarios:
+  - flow:
+      - post:
+          url: "/api/product"
+          json:
+            full_name: "Test Product"
+            name: "Test"
+            description: "This is a test product"
+            price: 19.99
+            discount: 0.15
+            localization:
+              grocery: "Test Grocery Store"
+              lat: 41.9028
+              long: 12.4964
+
