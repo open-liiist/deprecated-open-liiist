@@ -71,9 +71,8 @@ mkcert -install
 
 # Generate certificate for domain "docker.localhost", "domain.local" and their sub-domains
 mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "domain.local" "*.domain.local"
-
+```
 ## Resources
 - [Traefik Docs](https://traefik.io/)
 - [Traefik with Docker configs](https://github.com/ChristianLempa/boilerplates/blob/main/docker-compose/traefik/config/traefik.yaml)
 - [Learn Kubernetes](https://learn.udacity.com/courses/ud615/lessons/c986ef51-ffb5-4821-be4b-358289284f90/concepts/ec269da2-1e35-4a29-bdf8-98176f9adaa2)
-```
