@@ -4,7 +4,9 @@
 # https://www.gros.it/ebsn/api/products?parent_category_id=44979&page=2&page_size=24&sort=&promo=false&new_product=false&hash=w0d0t0
 import requests
 import json
-sys.path.append('../')
+import sys
+
+# sys.path.append('../')
 # from send_data import send_data_to_receiver
 
 # Fetches JSON data from a URL
@@ -29,7 +31,7 @@ def extract_micro_categories(categories):
 	for category in categories["categories"]:
 		categories_tmp = categories
 		if "categories" not in categories_tmp:
-			micro_cate.append(category)
+			micro_categories.append(category)
 		for cat in category["categories"]:
 			if "categories" not in cat:
 				micro_categories.append(cat)
@@ -67,6 +69,15 @@ if __name__ == "__main__":
 			if page > max_pages:
 				break
 
-		with open(f"{category['name']}.json", "w") as outfile:
-			json.dump(products, outfile, indent=4)
-		print(f"{category['name']} saved")
+		print(len(products))
+		# product_data = []
+		for product in products:
+			product_data = {
+				'name': product['name'],
+				'description': product['description'],
+				'weight': f"{product['productInfos']['WEIGHT_SELLING']} {product['productInfos']['WEIGHT_UNIT_SELLING']}",
+				'price': product['price']
+			}
+
+			print(product_data)
+		break
