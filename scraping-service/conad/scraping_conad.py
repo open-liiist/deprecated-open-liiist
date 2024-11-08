@@ -5,7 +5,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+sys.path.append('../')
 from libft import wait_for_element, wait_for_elements
+# from send_data import send_data_to_receiver
 
 # Finds and processes information from product cards in a micro category
 # Returns: The number of processed items

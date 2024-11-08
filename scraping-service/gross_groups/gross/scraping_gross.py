@@ -4,6 +4,8 @@
 # https://www.gros.it/ebsn/api/products?parent_category_id=44979&page=2&page_size=24&sort=&promo=false&new_product=false&hash=w0d0t0
 import requests
 import json
+sys.path.append('../')
+# from send_data import send_data_to_receiver
 
 # Fetches JSON data from a URL
 # Returns: The parsed JSON data if successful, otherwise None
@@ -56,7 +58,7 @@ if __name__ == "__main__":
 			products_url = f"https://www.gros.it/ebsn/api/products?parent_category_id={category_id}&page={page}&page_size=24"
 			print(products_url)
 
-			fetched_products = fetch_data(products_url)
+			fetched_products = fetch_data(products_url, headers)
 			if fetched_products is None or len(fetched_products["products"]) == 0:
 				break
 

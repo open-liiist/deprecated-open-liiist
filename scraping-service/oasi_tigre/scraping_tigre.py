@@ -6,7 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utility_tigre import categories_dict
+sys.path.append('../')
 from libft import wait_for_element, wait_for_elements
+# from send_data import send_data_to_receiver
 
 # Finds and processes information from product cards in a micro category
 # Returns: The number of processed items
@@ -15,6 +17,7 @@ def find_and_send_info(driver, n_cards, micro_cate):
 
 	active = 1
 	processed_items = 0
+	products = []
 	card_selector = f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div[{{card}}]'
 
 	for card in range(1, n_cards + 1):
@@ -28,7 +31,20 @@ def find_and_send_info(driver, n_cards, micro_cate):
 		old_price = wait_for_element(driver, f"{card_xpath}/div/div[4]/div[1]/div[1]/p").text
 
 		processed_items += 1
-		print(name, description, new_price, old_price)
+		products = {
+            "full_name": "",
+            "name": "",
+            "description": "description",
+            "price": new_price,
+            "discount": old_price,
+            "localization": {
+                "grocery": "",
+                "lat": "",
+                "long": ""
+            }
+		}
+		# send_data_to_receiver(product)
+		# print(name, description, new_price, old_price)
 
 		if active == 1:
 			try:
