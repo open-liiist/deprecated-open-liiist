@@ -68,16 +68,24 @@ if __name__ == "__main__":
 			page += 1
 			if page > max_pages:
 				break
-
+		with open(f"{category['name']}.json", "w") as outfile:
+			json.dump(products, outfile, indent=4)
 		print(len(products))
-		# product_data = []
+		product_data = []
 		for product in products:
 			product_data = {
-				'name': product['name'],
-				'description': product['description'],
-				'weight': f"{product['productInfos']['WEIGHT_SELLING']} {product['productInfos']['WEIGHT_UNIT_SELLING']}",
-				'price': product['price']
-			}
-
+			"full_name": product['name'],
+			"img_url": f"{'https://www.gros.it'}{product['mediaURLMedium']}",
+			"description": product['description'],
+			"quantity": f"{product['unitMeasureBase']['umId']} {product['unitMeasureBase']['um']}",
+			"price_for_kg": product['price'],
+			"discounted_price": product['priceDisplay'],
+			# "localization":
+			# {
+			# 	"grocery": "",
+			#	"lat": ,
+			#	"long": 
+			# }
+		}
+			send_data_to_receiver(product_data)
 			print(product_data)
-		break
