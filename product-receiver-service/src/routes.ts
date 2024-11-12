@@ -17,6 +17,8 @@ type ProductData = {
 		lat: number;
 		lng: number;
 	};
+	img_url?: string;
+	price_for_kg?: number;
 };
 
 function sanitizeString(fullName: string) {
@@ -53,7 +55,16 @@ function sendToLogstash(productData: ProductData): Promise<void> {
 router.post('/product', async (req: Request, res: Response) => {
 
 	try {
-		const { full_name, name, description, price, discount, localization } = req.body;
+		const {
+			full_name,
+			name,
+			description,
+			price,
+			discount,
+			localization,
+			img_url,
+			price_for_kg,
+		} = req.body;
 
 		if (!full_name || !description || !price ||
 			!localization || !localization.grocery || !localization.lat || !localization.long) {
@@ -96,6 +107,8 @@ router.post('/product', async (req: Request, res: Response) => {
 				update: {
 					full_name, name, description, discount,
 					current_price: price,
+					image_url: img_url,
+					price_for_kg,
 				}
 			});
 
