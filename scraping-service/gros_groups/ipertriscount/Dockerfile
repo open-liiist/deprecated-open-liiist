@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 # Copy source files
 COPY . .
 
-CMD ["python", "scraper_gross.py"]
+CMD ["python", "scraper_ipertriscount.py"]
 
 # # Install cron and set up the cronjob
 # RUN apt-get update && apt-get install -y cron
