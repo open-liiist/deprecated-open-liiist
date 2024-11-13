@@ -17,15 +17,25 @@ def get_html_from_url(url, headers):
 			exit()
 
 if __name__ == "__main__":
-	url = "https://www.cedigros.com/insegne/itemlist/filter.html?category=26&moduleId=219&Itemid=701&abb249e6156b7eea4b28c92fb743caa0=1&format=raw"
+	generic_url = "https://www.cedigros.com/insegne/itemlist/filter.html?category=26&moduleId=219&Itemid=701&abb249e6156b7eea4b28c92fb743caa0=1&format=raw"
 	headers = {"Accept": "*/*"}
-	response = get_html_from_url(url, headers = headers)
+	response = get_html_from_url(generic_url, headers = headers)
 
 	soup = BeautifulSoup(response.text, 'html.parser')
-	# shop = soup.find_all('small')
-	# for address in shop:
-	# 	print(address.get_text())
-	city = soup.find_all('h5')
-	for city_name in city:
-		print(city_name.get_text())
-	
+	shop = soup.find_all('a', href=True)
+	url_shop_list = []
+	for shop_info in shop:
+		url_shop = f"https://www.cedigros.com{shop_info['href']}"
+		url_shop_list.append(url_shop)
+	url_shop_list_unique = set(url_shop_list)
+	for url in url_shop_list_unique:
+		response = get_html_from_url((url), headers = headers)
+		soup = BeautifulSoup(response.text, 'html.parser')
+		print(soup.prettify())
+		
+		
+		# address = shop_info.find('small')
+		# parts = shop_info.contents
+		# city_name = parts[0].strip()
+		# print(city_name)
+		# print(address.get_text())
