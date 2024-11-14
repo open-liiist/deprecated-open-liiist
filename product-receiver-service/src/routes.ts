@@ -15,7 +15,11 @@ type ProductData = {
 	localization: {
 		grocery: string;
 		lat: number;
-		lng: number;
+		lon: number;
+	};
+	location: {
+		lat: number;
+		lon: number;
 	};
 };
 
@@ -55,7 +59,7 @@ router.post('/product', async (req: Request, res: Response) => {
 	try {
 		const { full_name, name, description, price, discount, localization } = req.body;
 
-		if (!full_name || !description || !price || 
+		if (!full_name || !description || !price ||
 			!localization || !localization.grocery || !localization.lat || !localization.long) {
 			res.status(400).json({ error: 'Missing required fields' });
 			return;
@@ -109,18 +113,16 @@ router.post('/product', async (req: Request, res: Response) => {
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
 				full_name, name, description, price, discount, name_id,
-				document_id: `${name_id}_${
-					sanitizeString(localization.grocery)
-				}_${
-					sanitizeString(localization.lat)
-				}_${
-					sanitizeString(localization.long)
-				}`,
+				document_id: `${name_id}_${sanitizeString(localization.grocery)
+					}_${sanitizeString(localization.lat)
+					}_${sanitizeString(localization.long)
+					}`,
 				localization: {
 					grocery: localization.grocery,
 					lat: localization.lat,
-					lng: localization.long,
+					lon: localization.long,
 				},
+				location: { lat: localization.lat, lon: localization.long },
 			}
 
 			try {
