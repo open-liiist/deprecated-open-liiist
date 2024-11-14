@@ -31,7 +31,9 @@ cd scraping-service
 To start the scraping service and all necessary services (e.g., `product-receiver`, `db`), run:
 
 ```bash
-docker compose build && docker compose up db product-receiver-service scraping-service
+docker compose build
+docker compose up product-receiver-service db elasticsearch logstash -d
+docker compose up scraping-service
 ```
 
 ### How It Works

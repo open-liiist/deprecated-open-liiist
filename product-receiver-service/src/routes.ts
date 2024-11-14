@@ -207,4 +207,27 @@ router.get('/store', async (_: Request, res: Response) => {
 	}
 })
 
+router.get('/store/:grocery/:city', async (req: Request, res: Response) => {
+	try {
+		const { grocery, city } = req.params;
+
+		if (!grocery || !city) {
+			res.status(400).json({ error: 'Missing required fields' });
+			return;
+		}
+
+		const stores = await prisma.localization.findMany({
+			where: {
+				grocery,
+				city
+			}
+		});
+
+		res.status(200).json({ stores });
+	} catch (error) {
+		console.error('Failed to fetch stores', error);
+		res.status(500).json({ error: 'Failed to fetch stores', details: error });
+	}
+})
+
 export default router;
