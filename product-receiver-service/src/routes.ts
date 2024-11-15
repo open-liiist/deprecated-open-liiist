@@ -17,6 +17,8 @@ type ProductData = {
 		lat: number;
 		lng: number;
 	};
+	img_url?: string;
+	price_for_kg?: number;
 };
 
 function sanitizeString(fullName: string) {
@@ -53,9 +55,18 @@ function sendToLogstash(productData: ProductData): Promise<void> {
 router.post('/product', async (req: Request, res: Response) => {
 
 	try {
-		const { full_name, name, description, price, discount, localization } = req.body;
+		const {
+			full_name,
+			name,
+			description,
+			price,
+			discount,
+			localization,
+			img_url,
+			price_for_kg,
+		} = req.body;
 
-		if (!full_name || !description || !price || 
+		if (!full_name || !description || !price ||
 			!localization || !localization.grocery || !localization.lat || !localization.long) {
 			res.status(400).json({ error: 'Missing required fields' });
 			return;
@@ -96,6 +107,8 @@ router.post('/product', async (req: Request, res: Response) => {
 				update: {
 					full_name, name, description, discount,
 					current_price: price,
+					image_url: img_url,
+					price_for_kg,
 				}
 			});
 
@@ -109,13 +122,10 @@ router.post('/product', async (req: Request, res: Response) => {
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
 				full_name, name, description, price, discount, name_id,
-				document_id: `${name_id}_${
-					sanitizeString(localization.grocery)
-				}_${
-					sanitizeString(localization.lat)
-				}_${
-					sanitizeString(localization.long)
-				}`,
+				document_id: `${name_id}_${sanitizeString(localization.grocery)
+					}_${sanitizeString(localization.lat)
+					}_${sanitizeString(localization.long)
+					}`,
 				localization: {
 					grocery: localization.grocery,
 					lat: localization.lat,
@@ -143,5 +153,81 @@ router.post('/product', async (req: Request, res: Response) => {
 		res.status(500).json({ error: 'Failed to save product', details: error });
 	}
 });
+
+router.post('/store', async (req: Request, res: Response) => {
+	try {
+		const {
+			name,
+			lat,
+			long,
+			street,
+			city,
+			working_hours,
+			picks_up_in_shop,
+			zip_code
+		} = req.body;
+
+		if (!name || !lat || !long) {
+			res.status(400).json({ error: 'Missing required fields' });
+			return;
+		}
+
+		if (typeof name !== 'string' || typeof lat !== 'number' || typeof long !== 'number') {
+			res.status(400).json({ error: 'Invalid data types' });
+			return;
+		}
+
+		const store = await prisma.localization.create({
+			data: {
+				grocery: name,
+				lat,
+				lng: long,
+				street,
+				city,
+				working_hours,
+				picks_up_in_store: picks_up_in_shop,
+				zip_code,
+			}
+		});
+
+		res.status(201).json({ message: 'Store saved', store });
+	} catch (error) {
+		console.error('Failed to save store', error);
+		res.status(500).json({ error: 'Failed to save store', details: error });
+	}
+})
+
+router.get('/store', async (_: Request, res: Response) => {
+	try {
+		const stores = await prisma.localization.findMany();
+		res.status(200).json({ stores });
+	} catch (error) {
+		console.error('Failed to fetch stores', error);
+		res.status(500).json({ error: 'Failed to fetch stores', details: error });
+	}
+})
+
+router.get('/store/:grocery/:city', async (req: Request, res: Response) => {
+	try {
+		const { grocery, city } = req.params;
+
+		if (!grocery || !city) {
+			res.status(400).json({ error: 'Missing required fields' });
+			return;
+		}
+
+		const stores = await prisma.localization.findMany({
+			where: {
+				grocery,
+				city
+			}
+		});
+
+		res.status(200).json({ stores });
+	} catch (error) {
+		console.error('Failed to fetch stores', error);
+		res.status(500).json({ error: 'Failed to fetch stores', details: error });
+	}
+})
 
 export default router;
