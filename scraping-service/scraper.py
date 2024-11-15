@@ -1,4 +1,4 @@
-from send_data import send_data_to_receiver
+from send_data import send_data_to_receiver, test_create_store, test_get_all_stores, test_get_store_by_grocery_and_city
 from time import sleep
 
 # Simulate product scraping with hardcoded data
@@ -356,7 +356,23 @@ def scrape_ecommerce():
     
     return products
 
+def test_stores_endpoints():
+    new_store_data = {
+        "name": "SuperMart",
+        "lat": 41.9028,
+        "long": 12.4964,
+        "street": "Via Example, 1",
+        "city": "Rome",
+        "working_hours": "8:00 AM - 10:00 PM",
+        "picks_up_in_shop": True,
+        "zip_code": "00184"
+    }
+    test_create_store(new_store_data)
+    test_get_all_stores()
+    test_get_store_by_grocery_and_city("SuperMart", "Rome")
+
 if __name__ == "__main__":
+    test_stores_endpoints()
     products = scrape_ecommerce()
     sleep(15)
     for product in products:

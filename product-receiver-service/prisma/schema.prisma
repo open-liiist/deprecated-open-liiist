@@ -20,6 +20,8 @@ model Product {
     created_at     DateTime         @default(now())
     updated_at     DateTime         @updatedAt
     history        ProductHistory[]
+    price_for_kg   Float?
+    image_url      String?
 }
 
 model ProductHistory {
@@ -32,11 +34,16 @@ model ProductHistory {
 }
 
 model Localization {
-    id       Int       @id @default(autoincrement())
-    grocery  String
-    lat      Float
-    lng      Float
-    products Product[]
+    id                Int       @id @default(autoincrement())
+    grocery           String
+    lat               Float
+    lng               Float
+    products          Product[]
+    street            String?
+    city              String?
+    zip_code          String?
+    working_hours     String?
+    picks_up_in_store Boolean?
 
-	@@unique(name: "grocery_lat_lng", [grocery, lat, lng]) // composite unique contraint
+    @@unique(name: "grocery_lat_lng", [grocery, lat, lng]) // composite unique contraint
 }
