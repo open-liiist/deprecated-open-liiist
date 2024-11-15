@@ -51,10 +51,11 @@ def geocode(address):
 	else:
 		return None, None, None, None
 
-if __name__ == "__main__":
+def scraping_shop():
 	generic_url = "https://www.cedigros.com/insegne/itemlist/filter.html?category=26&moduleId=219&Itemid=701&abb249e6156b7eea4b28c92fb743caa0=1&format=raw"
 	headers = {"Accept": "*/*"}
 	response = get_html_from_url(generic_url, headers = headers)
+	shop_info_list = []
 
 	soup = BeautifulSoup(response.text, 'html.parser')
 	shop = soup.find_all('a', href=True)
@@ -74,7 +75,7 @@ if __name__ == "__main__":
 			city_name = parts[0].strip()
 		except:
 			print("No location find information find")
-			exit()
+			return(NULL)
 		try:
 			div = soup.find('div', class_="fwPad1x itemAnim")
 			div_info = div.find_all('span', style="float:left; min-height:1.2em; line-height:1.2em")
@@ -86,11 +87,12 @@ if __name__ == "__main__":
 					pass
 		except:
 			print("No working hours information find")
+			return(NULL)
 		if (city_name):
 			lat, lng, city, postal_code = geocode(address)
 			if not lat and lng:
 				print("Geocoding failed.")
-				exit()
+				return(NULL)
 		shop_info = {
 			"name" : "Ipertriscount",
 			"street": {address},
@@ -101,5 +103,9 @@ if __name__ == "__main__":
 			"picks_up_in_shop" "True"
 			"zip_code": {postal_code}
 			}
-		print(shop_info)
-		break
+		shop_info_list.append(shop_info)
+		# print(shop_info)
+	return(shop_info_list)
+
+if __name__ == "__main__":
+	scraping_shop()

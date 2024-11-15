@@ -5,18 +5,22 @@
 import requests
 import json
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 # from send_data import send_data_to_receiver
 from libft import fetch_data, extract_micro_categories
+from scraping_ipertriscount_shop import scraping_shop
 
 
 if __name__ == "__main__":
-	categories_url = "https://www.ipertriscount.it/ebsn/api/category?filtered=false&hash=w0d0t0"
+	categories_url = "https://www.ipertriscountspesaonline.it/ebsn/api/category?filtered=false&hash=w0d0t0"
 	headers = {"Accept": "*/*"}
 	categories = fetch_data(categories_url, headers)
+	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	shop_info = 
+	shop_info_list = []
+	shop_info_list.append(scraping_shop())
+	print(shop_info_list)
 
 	for category in micro_categories:
 		category_id = category["categoryId"]
@@ -24,7 +28,7 @@ if __name__ == "__main__":
 		page = 1
 
 		while True:
-			products_url = f"https://www.ipertriscount.it/ebsn/api/products?parent_category_id={category_id}&page={page}&page_size=24"
+			products_url = f"https://www.ipertriscountspesaonline.it/ebsn/api/products?parent_category_id={category_id}&page={page}&page_size=24"
 			print(products_url)
 
 			fetched_products = fetch_data(products_url, headers)
@@ -36,21 +40,21 @@ if __name__ == "__main__":
 			if page > max_pages:
 				break
 		product_data = []
-		for shop in shop_info:
+		for shop in shop_info_list:
 			for product in products:
 				product_data = {
 				"full_name": product['name'],
-				"img_url": f"{'https://www.ipertriscount.it'}{product['mediaURLMedium']}",
+				"img_url": f"{'https://www.ipertriscountspesaonline.it'}{product['mediaURLMedium']}",
 				"description": product['description'],
 				"quantity": f"{product['unitMeasureBase']['umId']} {product['unitMeasureBase']['um']}",
 				"price_for_kg": product['price'],
 				"discounted_price": product['priceDisplay'],
-				# "localization":
-				# {
-				# 	"grocery": "",
-				#	"lat": ,
-				#	"long": 
-				# }
+				"localization":
+				{
+					"grocery": "",
+					"lat": ,
+					"long": 
+				}
 			}
-				# send_data_to_receiver(product_data)
-				print(product_data)
+		# send_data_to_receiver(product_data)
+			print(product_data)
