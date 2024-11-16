@@ -56,6 +56,7 @@ def scraping_shop():
 	headers = {"Accept": "*/*"}
 	response = get_html_from_url(generic_url, headers = headers)
 	shop_info_list = []
+	shop_name = "ipertriscount"
 
 	soup = BeautifulSoup(response.text, 'html.parser')
 	shop = soup.find_all('a', href=True)
@@ -94,18 +95,19 @@ def scraping_shop():
 				print("Geocoding failed.")
 				return(NULL)
 		shop_info = {
-			"name" : "Ipertriscount",
-			"street": {address},
-			"lat": {lat},
-			"long": {lng},
-			"city": {city},
+			"name" : shop_name,
+			"street": address,
+			"lat": lat,
+			"long": lng,
+			"city": city,
 			"working_hours": f"{working_hours}",
 			"picks_up_in_shop" "True"
-			"zip_code": {postal_code}
+			"zip_code": postal_code
 			}
 		shop_info_list.append(shop_info)
+		break
 		# print(shop_info)
-	return(shop_info_list)
+	return shop_info_list
 
 if __name__ == "__main__":
 	scraping_shop()

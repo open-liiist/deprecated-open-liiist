@@ -18,9 +18,8 @@ if __name__ == "__main__":
 	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	shop_info_list = []
-	shop_info_list.append(scraping_shop())
-	print(shop_info_list)
+	shop_info_list = scraping_shop()
+	# shop_info_list.append(scraping_shop())
 
 	for category in micro_categories:
 		category_id = category["categoryId"]
@@ -29,7 +28,6 @@ if __name__ == "__main__":
 
 		while True:
 			products_url = f"https://www.ipertriscountspesaonline.it/ebsn/api/products?parent_category_id={category_id}&page={page}&page_size=24"
-			print(products_url)
 
 			fetched_products = fetch_data(products_url, headers)
 			if fetched_products is None or len(fetched_products["products"]) == 0:
@@ -41,6 +39,7 @@ if __name__ == "__main__":
 				break
 		product_data = []
 		for shop in shop_info_list:
+			print(shop)
 			for product in products:
 				product_data = {
 				"full_name": product['name'],
@@ -51,9 +50,9 @@ if __name__ == "__main__":
 				"discounted_price": product['priceDisplay'],
 				"localization":
 				{
-					"grocery": "",
-					"lat": ,
-					"long": 
+					"grocery": shop['name'],
+					"lat": shop['lat'],
+					"long": shop['long']
 				}
 			}
 		# send_data_to_receiver(product_data)
