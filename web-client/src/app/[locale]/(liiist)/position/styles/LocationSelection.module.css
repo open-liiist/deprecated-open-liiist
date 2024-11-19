@@ -1,0 +1,63 @@
+/* app/location-selection/styles/LocationSelection.module.css */
+
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.loading {
+    text-align: center;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+.mapContainer {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+}
+
+.supermarketList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.supermarketItem {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.supermarketItem:hover {
+    background-color: #f0f0f0;
+}
+
+.supermarketName {
+    font-weight: bold;
+}
+
+.supermarketAddress {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.manualEntry {
+    margin-top: 20px;
+    background-color: #0070f3;
+    color: white;
+}

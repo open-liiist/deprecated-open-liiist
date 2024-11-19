@@ -18,8 +18,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-	title: "GrocyGo",
-	description: "GrocyGo is a grocery list app for the modern age.",
+	title: "liiist",
+	description: "liiist is a grocery list app for the modern age.",
 };
 
 export default async function RootLayout({
@@ -33,7 +33,7 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-liiist_white`}
 			>
 				<UserProvider userPromise={userPromise}>
 					<NextIntlClientProvider messages={messages}>

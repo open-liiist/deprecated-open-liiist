@@ -1,5 +1,5 @@
 'use client';
-
+//in questo layout va inserito la parte delle mappe
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,24 +14,26 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/services/auth';
 import { signOut } from '../(login)/actions';
 import { useRouter } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
+import SetLocationLink from '@/components/ui/SetLocationLink';
 
 function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { user, setUser } = useUser();
 	const router = useRouter();
+	const pathname = usePathname();
 
 	async function handleSignOut() {
 		setUser(null);
 		await signOut()
 		router.push('/');
 	}
-
 	return (
-		<header className="border-b border-gray-200 bg-gray-300">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+		<header className="border-b border-gray-200 bg-liiist_white">
+			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-between">
+					<SetLocationLink/>
 				<Link href="/" className="flex items-center">
-					<CircleIcon className="h-6 w-6 text-orange-500" />
-					<span className="ml-2 text-xl font-semibold text-gray-900">GrocyGo</span>
+					<span className="ml-2 text-xl font-semibold text-gray-900">liiist</span>
 				</Link>
 				<div className="flex items-center space-x-4">
 					{user && (

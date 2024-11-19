@@ -1,0 +1,42 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.listTitle {
+    margin-bottom: 15px;
+}
+
+.productInput {
+    margin-bottom: 15px;
+}
+
+.budget {
+    margin-bottom: 15px;
+}
+
+.modeToggle {
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.recommendedProducts {
+    margin-top: 30px;
+}

@@ -37,7 +37,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 		redirect(redirectTo);
 	}
 
-	redirect("/app");
+	redirect("/home");
 });
 
 const signUpSchema = z.object({
