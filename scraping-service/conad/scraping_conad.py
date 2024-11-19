@@ -1,3 +1,4 @@
+
 import time
 import sys
 import undetected_chromedriver as uc
@@ -11,19 +12,7 @@ from libft import wait_for_element, wait_for_elements
 
 # Finds product information on a webpage and sends it to a specified function.
 # Returns: The number of products processed successfully.
-
-#  name = wait_for_element(driver,f'/a/div[2]/h3').text
-
-#             image_element = wait_for_element(driver, f'/html/body/main/div/div[2]/div[2]/div[4]/div[{card + 1}]a/div[1]/img')
-
-#             img_url = image_element.get_attribute("src")
-
-#             quantity = wait_for_element(driver, f'/html/body/main/div/div[2]/div[2]/div[4]/div[{card + 1}]div[1]/div[1]/b').text
-
-#             price = wait_for_element(driver, f'/html/body/main/div/div[2]/div[2]/div[4]/div[{card + 1}]div[1]/div[3]').text
-
-#             price_kg = wait_for_element(driver, f'/html/body/main/div/div[2]/div[2]/div[4]/div[{card + 1}]div[1]/div[1]/div').text
-
+ 
 def find_and_send_info(driver, n_cards):
 
 	processed_items = 0
@@ -36,19 +25,12 @@ def find_and_send_info(driver, n_cards):
 			card_element = wait_for_element(driver, card_xpath)
 			driver.execute_script("arguments[0].scrollIntoView(true)", card_element)
 
-			name = wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[2]/h3").text
-			image_element = wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[1]/img")
-			img_url = image_element.get_attribute("src")
-			quantity = wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b").text
-			price = wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[3]").text
-			price_kg = wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div").text
-
 			product_data = {
-				"full_name": name,
-				"img_url": img_url,
-				"quantity": quantity,
-				"price": price,
-				"price_for_kg": price_kg,
+				"full_name": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[2]/h3").text,
+				"img_url": (wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[1]/img")).get_attribute("src"),
+				"quantity": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b").text,
+				"price": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[3]").text,
+				"price_for_kg": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div").text,
 				"localization":
 			{
 				"grocery": "conad",
