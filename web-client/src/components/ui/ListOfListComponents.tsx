@@ -50,16 +50,19 @@ const ListOfListComponents = () => {
                             {error}
                         </div>
                     ) : shoppingLists.length > 0 ? (
-                        <div className="mt-5 ">
-                            {shoppingLists.map((list, index) => (
-                                <ListCard
-								key={list.id}
-								listName={list.name}
-								listBudget={list.budget}
-								onViewList={() => handleListClick(list.id)}
-                                listIndex={index}
-							/>
-                            ))}
+                        <div className="relative">
+                            <div className="mt-5 max-h-[55vh] overflow-y-auto relative">
+                                {shoppingLists.map((list, index) => (
+                                    <ListCard
+						    		key={list.id}
+						    		listName={list.name}
+						    		listBudget={list.budget}
+						    		onViewList={() => handleListClick(list.id)}
+                                    listIndex={index}
+                                    />
+                                ))}
+                            </div>
+                            <div className="w-full h-10 bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
                         </div>
                     ) : (
                         <div className="mt-5 text-center">

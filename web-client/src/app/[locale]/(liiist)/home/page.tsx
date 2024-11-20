@@ -20,12 +20,12 @@ const UserHomepage = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center p-5 bg-liiist_white">
+        <div id="home-page" className="flex flex-col items-center justify-center p-5 bg-liiist_white">
             <div className="w-full max-w-4xl mt-5">
                     <ListOfListComponents/>
-                    <div className="mt-5 flex justify-center">
-                        <Button onClick={handleNewListClick} className="bg-liiist_green text-white border-none p-3 rounded-full cursor-pointer hover:bg-green-600">
-                            <AiOutlinePlus />
+                    <div className="mt-10 flex justify-center">
+                        <Button onClick={handleNewListClick} className=" bg-liiist_green text-white border-none h-15 w-15 rounded-full cursor-pointer hover:bg-green-600">
+                            <AiOutlinePlus className="text-3xl"/>
                         </Button>
                     </div>
             </div>

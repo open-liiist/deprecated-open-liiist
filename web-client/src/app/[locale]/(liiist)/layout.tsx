@@ -33,7 +33,7 @@ function Header() {
 			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-between">
 					<SetLocationLink/>
 				<Link href="/" className="flex items-center">
-					<span className="ml-2 text-xl font-semibold text-gray-900">liiist</span>
+					<span className="ml-2 text-2xl font-semibold text-gray-900">liiist</span>
 				</Link>
 				<div className="flex items-center space-x-4">
 					{user && (

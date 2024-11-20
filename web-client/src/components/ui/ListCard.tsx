@@ -6,12 +6,12 @@ import { FaArrowRight } from "react-icons/fa6";
 
 const ListCard = ({listName, listBudget, onViewList, listIndex }) => {
 
-    const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#28536B", "#6EEB83"];
+    const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
     const backgroundColor = colors[listIndex % colors.length];
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <div className="flex justify-between mb-6 bg-gray-50 rounded-xl text-liiist_black">
+        <div className="flex justify-between mb-6 bg-gray-50 rounded-xl text-liiist_black " >
             <div
                 className="mb-4 w-full rounded-s-xl  cursor-pointer transition-colors duration-300 hover:bg-gray-200"
                 style={{ backgroundColor: isHovered ? "#e2e8f0" : backgroundColor }}
