@@ -10,36 +10,38 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):
 
-    for i in range(max_retries):
-        try:
-            element = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, xpath))
-            )
-            return element
-        except (NoSuchElementException, TimeoutException) as e:
-            print(f"Error finding element: {xpath} (Retry {i+1}/{max_retries}): {e}")
-            time.sleep(retry_delay)
+	for i in range(max_retries):
+		try:
+			element = WebDriverWait(driver, 10).until(
+				EC.presence_of_element_located((By.XPATH, xpath))
+			)
+			return element
+		except (NoSuchElementException, TimeoutException) as e:
+			print(f"Error finding element: {xpath} (Retry {i+1}/{max_retries}): {e}")
+			time.sleep(retry_delay)
+			sys.exit(1)
 
-    print(f"Failed to find element in {xpath} after {max_retries} retries.")
-    sys.exit(1)
+	print(f"Failed to find element in {xpath} after {max_retries} retries.")
+	return NULL
 
 # Waits for multiple elements to appear on the page
 # Returns: A list of WebElements if found, otherwise an empty list
 
 def wait_for_elements(driver, xpath, max_retries=3, retry_delay=5):
 
-    for i in range(max_retries):
-        try:
-            elements = WebDriverWait(driver, 10).until(
-                EC.presence_of_all_elements_located((By.XPATH, xpath))
-            )
-            return elements
-        except (NoSuchElementException, TimeoutException) as e:
-            print(f"Error finding elements: {xpath} (Retry {i+1}/{max_retries}): {e}")
-            time.sleep(retry_delay)
+	for i in range(max_retries):
+		try:
+			elements = WebDriverWait(driver, 10).until(
+				EC.presence_of_all_elements_located((By.XPATH, xpath))
+			)
+			return elements
+		except (NoSuchElementException, TimeoutException) as e:
+			print(f"Error finding elements: {xpath} (Retry {i+1}/{max_retries}): {e}")
+			time.sleep(retry_delay)
+			sys.exit(1)
 
-    print(f"Failed to find elements in {xpath} after {max_retries} retries.")
-    sys.exit(1)
+	print(f"Failed to find elements in {xpath} after {max_retries} retries.")
+	return NULL
 
 # Fetches JSON data from a URL
 # Returns: The parsed JSON data if successful, otherwise None
@@ -58,12 +60,12 @@ def fetch_data(url, headers):
 
 def extract_micro_categories(categories):
 
-    def extract_micro_categories_recursive(category):
+	def extract_micro_categories_recursive(category):
 		
-        if "categories" not in category:
-            yield category
-        else:
-            for sub_category in category["categories"]:
-                yield from extract_micro_categories_recursive(sub_category)
+		if "categories" not in category:
+			yield category
+		else:
+			for sub_category in category["categories"]:
+				yield from extract_micro_categories_recursive(sub_category)
 
-    return list(extract_micro_categories_recursive(categories))
+	return list(extract_micro_categories_recursive(categories))

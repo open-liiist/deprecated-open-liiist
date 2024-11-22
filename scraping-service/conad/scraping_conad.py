@@ -38,6 +38,15 @@ def find_and_send_info(driver, n_cards):
 				# "long": 
 			}
 			}
+			# /html/body/main/div/div[2]/div[2]/div[4]/section/div/div[2]/div[1] inculata, se c'è questo il div[4] diventa div[5] da gestire con un if, più semplice del previsto
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[1]/div/div/div/div[2] data fine offerta
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/a/div[2]/h3 full_name
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/a/div[1]/img img
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b quantity
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[1] price without discount
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div price_for_kg
+			# /html/body/main/div/div[2]/div[2]/div[5]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2] discount price
+			# /html/body/main/div/div[2]/div[2]/div[4]/div[{{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2] discount price with the card
 			processed_items += 1
 
 		except Exception as e:
