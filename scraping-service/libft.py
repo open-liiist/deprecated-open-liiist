@@ -1,12 +1,35 @@
+import sys
 import json
+import time
 import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 
 # Waits for a single element to appear on the page.
 # Returns: The WebElement if found, otherwise None.
+
+def wait_for_element_conad(driver, xpath, max_retries=3, retry_delay=5):
+
+	for i in range(max_retries):
+		try:
+			element = WebDriverWait(driver, 10).until(
+				EC.presence_of_element_located((By.XPATH, xpath))
+			)
+			if element:
+				return element
+			else:
+				print(f"Element not found within 10 seconds: {xpath}")
+				time.sleep(retry_delay)
+		except Exception as e:
+			print(f"Error finding element: {xpath}: {e}")
+			time.sleep(retry_delay)
+
+	print(f"Failed to find element in {xpath} after {max_retries} retries.")
+	return None
 
 def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):
 
@@ -19,10 +42,9 @@ def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):
 		except (NoSuchElementException, TimeoutException) as e:
 			print(f"Error finding element: {xpath} (Retry {i+1}/{max_retries}): {e}")
 			time.sleep(retry_delay)
-			sys.exit(1)
 
 	print(f"Failed to find element in {xpath} after {max_retries} retries.")
-	return NULL
+	return None
 
 # Waits for multiple elements to appear on the page
 # Returns: A list of WebElements if found, otherwise an empty list
@@ -38,10 +60,9 @@ def wait_for_elements(driver, xpath, max_retries=3, retry_delay=5):
 		except (NoSuchElementException, TimeoutException) as e:
 			print(f"Error finding elements: {xpath} (Retry {i+1}/{max_retries}): {e}")
 			time.sleep(retry_delay)
-			sys.exit(1)
 
 	print(f"Failed to find elements in {xpath} after {max_retries} retries.")
-	return NULL
+	return None
 
 # Fetches JSON data from a URL
 # Returns: The parsed JSON data if successful, otherwise None

@@ -39,7 +39,6 @@ if __name__ == "__main__":
 				break
 		product_data = []
 		for shop in shop_info_list:
-			print(shop)
 			for product in products:
 				product_data = {
 				"full_name": product['name'],
@@ -55,5 +54,7 @@ if __name__ == "__main__":
 					"long": shop['long']
 				}
 			}
+			# with open(f"{product['name']}.json", 'w') as file:
+			# 	json.dump(product_data, file)
 		# send_data_to_receiver(product_data)
 			print(product_data)

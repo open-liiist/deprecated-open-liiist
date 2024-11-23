@@ -1,5 +1,6 @@
 import time
 import sys
+import json
 import undetected_chromedriver as uc
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -49,6 +50,8 @@ def find_and_send_info(driver, n_cards, micro_cate, shop_list):
 				"long": shop['long']
 			}
 		}
+		# with open(f"{product_data['full_name']}.json", 'w') as file:
+		# 	json.dump(product_data, file)
 		# send_data_to_receiver(product)
 		print(product_data)
 
