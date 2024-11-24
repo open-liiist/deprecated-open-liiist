@@ -17,6 +17,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        noto: ['var(--font-noto_Sans)'], // Definisci `Noto Sans` per essere utilizzato con Tailwind
+        sans: ['var(--font-noto_Sans)'],
+      },
     },
   },
   plugins: [],

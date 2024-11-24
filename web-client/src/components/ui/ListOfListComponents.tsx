@@ -9,6 +9,9 @@ const ListOfListComponents = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+    // Simuliamo l'ID dell'utente per ora.
+    const userId = "12345";
+
 	useEffect(() => {
         fetchShoppingLists();
     }, []);
@@ -18,12 +21,16 @@ const ListOfListComponents = () => {
         setError(null);
         try {
             // Chiamata API per recuperare le liste di spesa dell'utente
-            const response = await fetch("/api/shopping-lists");
+            const response = await fetch(`/api/shopping-lists?userId=${userId}&t=${new Date().getTime()}`, {
+                headers: {
+                    "Cache-Control": "no-cache"
+                }});
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
-            setShoppingLists(data.lists);
+            console.log("data fetched from list", data);
+            setShoppingLists(data);
         } catch (err) {
             setError("Failed to fetch shopping lists");
         } finally {
@@ -32,8 +39,27 @@ const ListOfListComponents = () => {
     };
 
 	const handleListClick = (listId) => {
-        router.push(`/supermarket/${listId}`);
+        router.push(`/shopping-list/${listId}`);
 	}
+
+    const handleDeleteList = async (listId) => {
+        if (confirm("Sei sicuro di voler eliminare questa lista?")) {
+            try {
+                const response = await fetch(`/api/shopping-lists/${listId}`, {
+                    method: "DELETE",
+                });
+                if (response.ok) {
+                    setShoppingLists((prevLists) =>
+                        prevLists.filter((list) => list.id !== listId),
+                    );
+                } else {
+                    console.error("Errore durante l'eliminazione della lista");
+                }
+            } catch (err) {
+                console.error("Errore nella chiamata API:", err);
+            }
+        }
+    };
 
 	return (
 		<div>
@@ -54,11 +80,12 @@ const ListOfListComponents = () => {
                             <div className="mt-5 max-h-[55vh] overflow-y-auto relative">
                                 {shoppingLists.map((list, index) => (
                                     <ListCard
-						    		key={list.id}
-						    		listName={list.name}
-						    		listBudget={list.budget}
-						    		onViewList={() => handleListClick(list.id)}
-                                    listIndex={index}
+                                        key={list.id}
+						    		    listName={list.name}
+						    		    listBudget={list.budget}
+						    		    onViewList={() => handleListClick(list.id)}
+                                        listIndex={index}
+                                        delateList={() => handleDeleteList(list.id)}
                                     />
                                 ))}
                             </div>

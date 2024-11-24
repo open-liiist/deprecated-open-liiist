@@ -16,6 +16,7 @@ import { signOut } from '../(login)/actions';
 import { useRouter } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import SetLocationLink from '@/components/ui/SetLocationLink';
+import {noto_Sans} from "@/components/ui/fonts"
 
 function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,10 +31,10 @@ function Header() {
 	}
 	return (
 		<header className="border-b border-gray-200 bg-liiist_white">
-			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-between">
+			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-around">
 					<SetLocationLink/>
-				<Link href="/" className="flex items-center">
-					<span className="ml-2 text-2xl font-semibold text-gray-900">liiist</span>
+				<Link href="/" className="mx-auto">
+					<span className={`${noto_Sans.className} ml-2 text-2xl font-semibold text-gray-900 font-noto`}>liiist</span>
 				</Link>
 				<div className="flex items-center space-x-4">
 					{user && (

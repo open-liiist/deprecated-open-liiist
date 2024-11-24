@@ -4,7 +4,7 @@ import {FaTrashAlt} from "react-icons/fa"
 import { FaArrowRight } from "react-icons/fa6";
 
 
-const ListCard = ({listName, listBudget, onViewList, listIndex }) => {
+const ListCard = ({listName, listBudget, onViewList, listIndex, delateList }) => {
 
     const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
     const backgroundColor = colors[listIndex % colors.length];
@@ -34,10 +34,26 @@ const ListCard = ({listName, listBudget, onViewList, listIndex }) => {
             </div>
             <div className="w-1/6 bg-gray-50 rounded-e-xl border-l-2 border-dashed border-gray-500 flex flex-col justify-evenly items-center">
                     <div>
-                        <FaTrashAlt className="hover:scale-125 flex justify-center items-center w-full" />
+                        <FaTrashAlt 
+                            className="hover:scale-125 flex justify-center items-center w-full"
+                            role = "button"
+                            onClick={delateList}
+                            onKeyPress={(e) => {
+                               if (
+                                   e.key === "Enter" ||
+                                   e.key === " "
+                               ) {
+                                   delateList();
+                               }
+                        }}
+                        aria-label={`Delete shopping list ${listName}`}
+                        />
                     </div>
                     <div onClick={onViewList} className="bg-gray-50 flex justify-center items-center w-full">
-                        <FaArrowRight className="hover:scale-125"/>
+                        <FaArrowRight
+                            className="hover:scale-125"
+                            
+                        />
                     </div>
                 </div>
         </div>

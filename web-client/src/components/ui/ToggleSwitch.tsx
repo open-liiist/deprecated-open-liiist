@@ -25,3 +25,4 @@ export const ToggleSwitch = ({ checked, onChange, labels }: ToggleSwitchProps) =
         </div>
     );
 };
+

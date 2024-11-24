@@ -56,7 +56,7 @@ input:checked + .slider:before {
 
 .activeLabel {
     font-weight: bold;
-    color: #0070f3;
+    color: #384000;
 }
 
 .inactiveLabel {

@@ -1,0 +1,60 @@
+{
+    "supermarkets": [
+        {
+            "id": 1,
+            "name": "Supermercato1",
+            "street": "Via Roma 1",
+            "city": "Milano",
+            "pickup_available": true,
+            "working_hours": "8:00 - 20:00",
+            "products": [
+                {
+                    "id": 1,
+                    "full_name": "Pasta Spaghetti Barilla 500g",
+                    "img_url": "http://esempio.com/img/pasta.jpg",
+                    "description": "Pasta di semola di grano duro.",
+                    "quantity": 1,
+                    "price": 1.5,
+                    "discounted_price": null
+                },
+                {
+                    "id": 2,
+                    "full_name": "Latte Intero 1L",
+                    "img_url": "http://esempio.com/img/latte.jpg",
+                    "description": "Latte intero fresco.",
+                    "quantity": 1,
+                    "price": 1.2,
+                    "discounted_price": 1.0
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Supermercato2",
+            "street": "Corso Venezia 10",
+            "city": "Milano",
+            "pickup_available": false,
+            "working_hours": "9:00 - 21:00",
+            "products": [
+                {
+                    "id": 1,
+                    "full_name": "Tonno in scatola 3x80g",
+                    "img_url": "http://esempio.com/img/tonno.jpg",
+                    "description": "Tonno al naturale.",
+                    "quantity": 1,
+                    "price": 2.0,
+                    "discounted_price": 1.8
+                },
+                {
+                    "id": 2,
+                    "full_name": "Pane Integrale 500g",
+                    "img_url": "http://esempio.com/img/pane.jpg",
+                    "description": "Pane integrale fresco.",
+                    "quantity": 1,
+                    "price": 1.0,
+                    "discounted_price": null
+                }
+            ]
+        }
+    ]
+}

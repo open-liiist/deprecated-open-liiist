@@ -3,7 +3,8 @@ import { Nunito } from 'next/font/google';
 import {Oswald} from 'next/font/google';
 
 export const noto_Sans = Noto_Sans_JP({
-	subsets: ['latin']	
+	subsets: ['vietnamese'],
+	variable: '--font-noto_Sans'
 });
 
 export const nunito = Nunito({
