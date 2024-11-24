@@ -1,9 +1,9 @@
-requests
-python-dotenv
-selenium
-undetected-chromedriver
-time
-sys
-json
 re
+sys
+time
+json
 geocoder
+requests
+selenium
+python-dotenv
+undetected-chromedriver

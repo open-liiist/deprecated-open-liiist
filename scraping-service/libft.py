@@ -12,23 +12,18 @@ from selenium.common.exceptions import TimeoutException
 # Waits for a single element to appear on the page.
 # Returns: The WebElement if found, otherwise None.
 
-def wait_for_element_conad(driver, xpath, max_retries=3, retry_delay=5):
+def wait_for_element_conad(driver, xpath, max_retries=2, retry_delay=2):
 
 	for i in range(max_retries):
 		try:
-			element = WebDriverWait(driver, 10).until(
+			element = WebDriverWait(driver, 5).until(
 				EC.presence_of_element_located((By.XPATH, xpath))
 			)
-			if element:
-				return element
-			else:
-				print(f"Element not found within 10 seconds: {xpath}")
-				time.sleep(retry_delay)
+			return element
 		except Exception as e:
-			print(f"Error finding element: {xpath}: {e}")
 			time.sleep(retry_delay)
+			pass
 
-	print(f"Failed to find element in {xpath} after {max_retries} retries.")
 	return None
 
 def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):

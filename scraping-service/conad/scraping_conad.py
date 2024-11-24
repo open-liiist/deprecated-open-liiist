@@ -25,32 +25,44 @@ def find_and_send_info(driver, n_cards, advertising):
 
 		card_element = wait_for_element(driver, card_xpath)
 		driver.execute_script("arguments[0].scrollIntoView(true)", card_element)
+		wait = WebDriverWait(driver, 3)
 
-		product_data = {
-			"full_name": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[2]/h3").text,
-			"img_url": (wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[1]/img")).get_attribute("src"),
-			"quantity": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b").text,
-			"price": (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[3]").text),
-			"price_for_kg": wait_for_element(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div").text,
-			"discounted_price": None,
-			"localization":
-		{
-			"grocery": "conad",
-			# "lat": ,
-			# "long": 
-		}
-		}
-		if (product_data["price"] == None):
-			product_data["discounted_price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]").text
-			product_data["discounted_price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]").text
-		if (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span") != None):
-			product_data["discounted_price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2]").text
-		processed_items += 1
+		try:
+			wait.until(EC.visibility_of_element_located((By.XPATH, f'{card_xpath}/div/a/span')))
+			continue
+		except:
+			pass
 
-		print(product_data, "\n")
+		try:
+			product_data = {
+				"full_name": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[2]/h3").text,
+				"img_url": (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/a/div[1]/img")).get_attribute("src"),
+				"quantity": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b").text,
+				"price": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[3]").text,
+				"price_for_kg": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div").text,
+				"discounted_price": None,
+				"localization":
+			{
+				"grocery": "conad",
+				# "lat": ,
+				# "long": 
+			}
+			}
+			if (product_data["price"] == ""):
+				product_data["price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]").text
+				product_data["discounted_price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]").text
+			try:
+				product_data["discounted_price"] = (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2]")).text
+			except:
+				pass
+			processed_items += 1
+			print(product_data, "\n")
+		except Exception as e:
+			print(f"Error finding element: {card_xpath}: {e}")
+
 	return processed_items
 
-# Find only the products without a discount
+# Find all the products
 
 if __name__ == "__main__":
 
@@ -90,13 +102,16 @@ if __name__ == "__main__":
 
 	wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="modal-onboarding-wrapper"]/div[2]/div[5]/button')))
 	driver.find_element(By.XPATH, '//*[@id="modal-onboarding-wrapper"]/div[2]/div[5]/button').click()
-	# /html/body/div[34]/div[2]/iframe captha 
-	time.sleep(60)
+	try:
+		wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[34]/div[2]/iframe')))
+		time.sleep(60)
+	except:
+		time.sleep(3)
 
-	driver.get("https://spesaonline.conad.it/c/--0101")
+	driver.get("https://spesaonline.conad.it/c/--0102")
 	time.sleep(5)
 
-	if (wait_for_element(driver, "/html/body/main/div/div[2]/div[2]/div[4]/section") == None):
+	if (wait_for_element_conad(driver, "/html/body/main/div/div[2]/div[2]/div[4]/section") == None):
 		advertising = 4
 	else:
 		advertising = 5
