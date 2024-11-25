@@ -4,10 +4,16 @@ import {FaTrashAlt} from "react-icons/fa"
 import { FaArrowRight } from "react-icons/fa6";
 
 
-const ListCard = ({listName, listBudget, onViewList, listIndex, delateList }) => {
+const ListCard = ({listName, listBudget, onViewList, createdAt, delateList, calculate }) => {
 
     const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
-    const backgroundColor = colors[listIndex % colors.length];
+    const createdDate = new Date(createdAt);
+    const minute = createdDate.getMinutes();
+    var lastDigit = minute % 10;
+    if(lastDigit > 5){
+        lastDigit = lastDigit - 5;
+    }
+    const backgroundColor = colors[lastDigit % colors.length];
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -49,7 +55,7 @@ const ListCard = ({listName, listBudget, onViewList, listIndex, delateList }) =>
                         aria-label={`Delete shopping list ${listName}`}
                         />
                     </div>
-                    <div onClick={onViewList} className="bg-gray-50 flex justify-center items-center w-full">
+                    <div onClick={calculate} className="bg-gray-50 flex justify-center items-center w-full">
                         <FaArrowRight
                             className="hover:scale-125"
                             

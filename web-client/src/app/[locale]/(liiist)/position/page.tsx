@@ -7,6 +7,7 @@ import locationStyles from "./styles/LocationSelection.module.css";
 import { Map, getUserLocation } from "@/components/map/Map";
 import { Marker, Autocomplete } from "@react-google-maps/api";
 
+
 const LocationSelectionPage = () => {
     const router = useRouter();
     const [userLocation, setUserLocation] = useState(null);

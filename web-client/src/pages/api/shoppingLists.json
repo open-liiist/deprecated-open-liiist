@@ -1,92 +1,117 @@
 [
   {
-    "id": "4e4d7b21-92a1-404c-a2be-5547b43ea056",
-    "name": "spesa per san giulio",
+    "id": "157ec4ba-429b-46a7-89b8-5f745f47af3d",
+    "name": "liiista",
     "products": [
       {
-        "name": "torta di carne",
+        "name": "pane",
+        "quantity": 1
+      },
+      {
+        "name": "focaccia",
+        "quantity": 1
+      },
+      {
+        "name": "maiale",
+        "quantity": 1
+      },
+      {
+        "name": "cacca",
+        "quantity": 1
+      },
+      {
+        "name": "spacchio di mati",
+        "quantity": 1
+      },
+      {
+        "name": "lana",
         "quantity": 1
       }
     ],
-    "budget": "15",
-    "mode": "savings",
+    "budget": "45",
+    "mode": "convenience",
     "userId": "12345",
-    "createdAt": "2024-11-23T21:29:19.322Z",
-    "updatedAt": "2024-11-23T21:29:19.322Z"
+    "createdAt": "2024-11-24T20:29:54.090Z",
+    "updatedAt": "2024-11-24T20:29:54.090Z"
   },
   {
-    "id": "08bbe41a-86ae-4783-890f-1cba49f9ad73",
-    "name": "vdfvfd",
+    "id": "d57202f8-8717-4125-9871-13981596bc34",
+    "name": "nome lista",
     "products": [
       {
-        "name": "cdc",
+        "name": "caccona",
         "quantity": 1
       }
     ],
     "budget": "12",
     "mode": "savings",
     "userId": "12345",
-    "createdAt": "2024-11-24T15:01:41.216Z",
-    "updatedAt": "2024-11-24T15:01:41.216Z"
+    "createdAt": "2024-11-24T20:52:57.522Z",
+    "updatedAt": "2024-11-24T20:52:57.522Z"
   },
   {
-    "id": "1cc7c681-9c31-4809-a1c5-9e5fb51ad2c6",
-    "name": "hyy",
+    "id": "f2b8f09f-1e6b-4200-8aee-57cfdcb79732",
+    "name": "liiista",
     "products": [
       {
-        "name": "hy",
+        "name": "pane",
+        "quantity": 1
+      },
+      {
+        "name": "focaccia",
+        "quantity": 1
+      },
+      {
+        "name": "maiale",
+        "quantity": 1
+      },
+      {
+        "name": "cacca",
+        "quantity": 1
+      },
+      {
+        "name": "spacchio di mati",
+        "quantity": 1
+      },
+      {
+        "name": "lana",
         "quantity": 1
       }
     ],
-    "budget": "1",
+    "budget": "45",
     "mode": "convenience",
     "userId": "12345",
-    "createdAt": "2024-11-24T15:01:55.962Z",
-    "updatedAt": "2024-11-24T15:01:55.962Z"
+    "createdAt": "2024-11-25T14:15:48.302Z",
+    "updatedAt": "2024-11-25T14:15:48.302Z"
   },
   {
-    "id": "d39fbb84-1d59-4fb1-9f02-8903ddf6102d",
-    "name": "hyhy",
+    "id": "62a0986d-a6a4-43ab-9763-c4ca926530cb",
+    "name": "lista 4",
     "products": [
       {
-        "name": "12",
+        "name": "cane",
         "quantity": 1
       }
     ],
-    "budget": "25",
+    "budget": "23",
     "mode": "convenience",
     "userId": "12345",
-    "createdAt": "2024-11-24T15:02:11.534Z",
-    "updatedAt": "2024-11-24T15:02:11.534Z"
+    "createdAt": "2024-11-25T14:16:20.256Z",
+    "updatedAt": "2024-11-25T14:16:20.256Z"
   },
   {
-    "id": "2e20c10c-8fe4-4413-9a8f-b4b8194b4862",
-    "name": "dd",
+    "id": "e738a2fc-9c14-4637-b9f5-c34548140ba6",
+    "name": "lista di melanzana",
     "products": [
       {
-        "name": "cd",
-        "quantity": 1
+        "name": "cane",
+        "quantity": 6
       }
     ],
-    "budget": "58",
+    "budget": "45",
     "mode": "convenience",
     "userId": "12345",
-    "createdAt": "2024-11-24T15:02:31.001Z",
-    "updatedAt": "2024-11-24T15:02:31.001Z"
-  },
-  {
-    "id": "066baff7-5680-47bf-a532-e1696ec44b4e",
-    "name": "vdfvvv",
-    "products": [
-      {
-        "name": "fv",
-        "quantity": 1
-      }
-    ],
-    "budget": "2626",
-    "mode": "convenience",
-    "userId": "12345",
-    "createdAt": "2024-11-24T15:02:52.629Z",
-    "updatedAt": "2024-11-24T15:02:52.629Z"
+    "createdAt": "2024-11-25T15:25:37.850Z",
+    "updatedAt": "2024-11-25T15:25:37.850Z"
   }
 ]

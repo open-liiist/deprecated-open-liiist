@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "./button"
 import ListCard from "./ListCard";
+import { handleCalculate } from "@/services/shoppingListService";
 
 const ListOfListComponents = () => {
 	const router = useRouter();
 	const [shoppingLists, setShoppingLists] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const [error, setError] = useState<string | null>(null);
+    
 
     // Simuliamo l'ID dell'utente per ora.
     const userId = "12345";
@@ -78,14 +80,24 @@ const ListOfListComponents = () => {
                     ) : shoppingLists.length > 0 ? (
                         <div className="relative">
                             <div className="mt-5 max-h-[55vh] overflow-y-auto relative">
-                                {shoppingLists.map((list, index) => (
+                                {shoppingLists.map((list) => (
                                     <ListCard
                                         key={list.id}
 						    		    listName={list.name}
 						    		    listBudget={list.budget}
 						    		    onViewList={() => handleListClick(list.id)}
-                                        listIndex={index}
+                                        createdAt={list.createdAt}
                                         delateList={() => handleDeleteList(list.id)}
+                                        calculate={() => handleCalculate(
+                                            list.name,
+                                            list.products,
+                                            list.budget,
+                                            list.mode,
+                                            "12345",
+                                            router,
+                                            setIsLoading,
+                                            setError
+                                        )}
                                     />
                                 ))}
                             </div>

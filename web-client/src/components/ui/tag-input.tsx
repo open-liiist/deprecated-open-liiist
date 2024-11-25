@@ -80,7 +80,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500 italic">No tags added yet.</p>
+                    <p className="text-gray-500 pl-2">No tags added yet.</p>
                 )}
             </div>
         </div>
