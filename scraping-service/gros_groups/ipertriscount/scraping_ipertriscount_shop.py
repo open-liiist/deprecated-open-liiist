@@ -105,7 +105,6 @@ def scraping_shop():
 			"zip_code": postal_code
 			}
 		shop_info_list.append(shop_info)
-		break
 		# print(shop_info)
 	return shop_info_list
 
