@@ -48,3 +48,21 @@ export const handleCalculate = async (
 	  setIsLoading(false);
 	}
   };
+
+  export const handleCalculate2 = async (
+	listId: string | null,
+	listTitle: string,
+	products: { name: string; quantity: number }[],
+	budget: string,
+	mode: string,
+	userId: string,
+	router: any,  // Puoi specificare un tipo più preciso se lo desideri
+  ) => {
+  
+	  const route = mode === "savings" ? "/savings-mode" : "/convenience-mode";
+	  router.push(
+		`${route}?id=${listId}&listTitle=${listTitle}&budget=${budget}&products=${JSON.stringify(
+		  products,
+		)}`
+	  );
+  };

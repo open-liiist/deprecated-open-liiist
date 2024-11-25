@@ -30,11 +30,11 @@ function Header() {
 		router.push('/');
 	}
 	return (
-		<header className="border-b border-gray-200 bg-liiist_white">
+		<header className=" border-b-2 border-dashed border-gray-500 bg-liiist_white">
 			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-around">
-					<SetLocationLink/>
-				<Link href="/" className="mx-auto">
-					<span className={`${noto_Sans.className} ml-2 text-2xl font-semibold text-gray-900 font-noto`}>liiist</span>
+				<SetLocationLink/>
+				<Link href="/home" className="mx-auto">
+					<span className={`${noto_Sans.className} text-2xl font-semibold text-liiist_black font-noto`}>liiist</span>
 				</Link>
 				<div className="flex items-center space-x-4">
 					{user && (
@@ -76,7 +76,7 @@ function Header() {
 					) : (
 						<Button
 							asChild
-							className="bg-black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full"
+							className="bg-liiist_black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full"
 						>
 							<Link href="/sign-up">Sign Up</Link>
 						</Button>

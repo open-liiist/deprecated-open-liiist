@@ -89,7 +89,7 @@ const NewListPage = () => {
     
     return (
         <div id="new-list-base" className="max-w-full w-full flex justify-center p-5 text-liiist_black">
-            <div id="new-list-card" className="max-w-4xl w-full mt-5 flex bg-slate-50 rounded-xl">
+            <div id="new-list-card" className="max-w-4xl w-full mt-5 flex bg-slate-50 rounded-xl shadow-md">
                 <div id="new-list-form"  className="w-full  flex-col">
                             <div id="title input" className=" rounded-tl-lg  bg-liiist_pink h-16 ">
                                 <Input2
@@ -170,49 +170,3 @@ const NewListPage = () => {
 };
 
 export default NewListPage;
-
-
-
-// const handleCalculate = async () => {
-//     if (listTitle.trim() === "" || products.length === 0) {
-//         setError("Please enter a list title and add at least one product.");
-//         return;
-//     }
-
-//     setIsLoading(true);
-//     setError(null);
-
-//     try {
-//         const response = await fetch("/api/shopping-lists", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({
-//                 name: listTitle,
-//                 products,
-//                 budget,
-//                 mode,
-//                 userId: "12345",
-//             }),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error("Failed to save the shopping list");
-//         }
-
-//         const data = await response.json();
-
-//         const route =
-//             mode === "savings" ? "/savings-mode" : "/convenience-mode";
-//         router.push(
-//             `${route}?id=${data.id}&listTitle=${listTitle}&budget=${budget}&products=${JSON.stringify(
-//                 products,
-//             )}`,
-//         );
-//     } catch (err) {
-//         setError("Failed to save and calculate the shopping list");
-//     } finally {
-//         setIsLoading(false);
-//     }
-// };

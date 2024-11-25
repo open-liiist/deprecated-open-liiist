@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "./button"
 import ListCard from "./ListCard";
-import { handleCalculate } from "@/services/shoppingListService";
+import { handleCalculate2 } from "@/services/shoppingListService";
 
 const ListOfListComponents = () => {
 	const router = useRouter();
@@ -83,20 +83,21 @@ const ListOfListComponents = () => {
                                 {shoppingLists.map((list) => (
                                     <ListCard
                                         key={list.id}
+                                        router={router}
+                                        listId={list.id}
 						    		    listName={list.name}
 						    		    listBudget={list.budget}
 						    		    onViewList={() => handleListClick(list.id)}
                                         createdAt={list.createdAt}
                                         delateList={() => handleDeleteList(list.id)}
-                                        calculate={() => handleCalculate(
+                                        calculate={() => handleCalculate2(
+                                            list.id,
                                             list.name,
                                             list.products,
                                             list.budget,
                                             list.mode,
                                             "12345",
                                             router,
-                                            setIsLoading,
-                                            setError
                                         )}
                                     />
                                 ))}

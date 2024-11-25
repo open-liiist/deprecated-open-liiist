@@ -4,7 +4,7 @@ import {FaTrashAlt} from "react-icons/fa"
 import { FaArrowRight } from "react-icons/fa6";
 
 
-const ListCard = ({listName, listBudget, onViewList, createdAt, delateList, calculate }) => {
+const ListCard = ({listId, listName, listBudget, onViewList, createdAt, delateList, calculate, router }) => {
 
     const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
     const createdDate = new Date(createdAt);
@@ -16,19 +16,25 @@ const ListCard = ({listName, listBudget, onViewList, createdAt, delateList, calc
     const backgroundColor = colors[lastDigit % colors.length];
     const [isHovered, setIsHovered] = useState(false);
 
+    const handleEditList = () => {
+        router.push(`/edit-list?id=${listId}`);
+    };
+
+
     return (
-        <div className="flex justify-between mb-6 bg-gray-50 rounded-xl text-liiist_black " >
+        <div className="flex justify-between mb-6 bg-gray-50 rounded-xl text-liiist_black  shadow-md" >
             <div
+                id="click box"
                 className="mb-4 w-full rounded-s-xl  cursor-pointer transition-colors duration-300 hover:bg-gray-200"
                 style={{ backgroundColor: isHovered ? "#e2e8f0" : backgroundColor }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 role="button"
                 tabIndex={0}
-                onClick={onViewList}
+                onClick={handleEditList}
                 onKeyPress={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        onViewList();
+                        handleEditList();
                     }
                 }}
                 aria-label={`Open shopping list ${listName}`}
