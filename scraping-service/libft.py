@@ -16,7 +16,7 @@ def wait_for_element_conad(driver, xpath, max_retries=2, retry_delay=2):
 
 	for i in range(max_retries):
 		try:
-			element = WebDriverWait(driver, 5).until(
+			element = WebDriverWait(driver, 3).until(
 				EC.presence_of_element_located((By.XPATH, xpath))
 			)
 			return element
