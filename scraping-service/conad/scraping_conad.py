@@ -122,10 +122,7 @@ if __name__ == "__main__":
 		driver.find_element(By.XPATH, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[1]/ul/li[{macro_count}]/a').click()
 
 		count_micro_cat = len((wait_for_elements(driver, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[2]/div[{macro_count}]/ul/li')))
-
-		print("micro = ", count_micro_cat)
 		time.sleep(3)
-
 		for micro_count in range(2, count_micro_cat + 1):
 			wait.until(EC.visibility_of_element_located((By.XPATH, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[2]/div[{macro_count}]/ul/li[{micro_count}]/a')))
 			driver.find_element(By.XPATH, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[2]/div[{macro_count}]/ul/li[{micro_count}]/a').click()
@@ -141,18 +138,21 @@ if __name__ == "__main__":
 				n_pages = (wait_for_element(driver, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{count_pages - 1}]')).text
 			else:
 				n_pages = 1
-			print("pages = ", n_pages)
-			for page in range(2, int(n_pages)):
-						n_cards = len(wait_for_elements(driver, f'//*[@id="#top"]/div/div[2]/div[2]/div[{advertising}]/div'))
-						# total_items_processed = find_and_send_info(driver, n_cards, advertising)
-						print(page, "\n")
-						time_click = driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{page}]/a').click()
-						time.sleep(6)
+			while True:
+				counter = int(len((wait_for_elements(driver, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li'))))
+				if (wait_for_elements_conad(driver, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{counter}]/a/span') == None):
+					break
+				n_cards = len(wait_for_elements(driver, f'//*[@id="#top"]/div/div[2]/div[2]/div[{advertising}]/div'))
+
+				total_items_processed = find_and_send_info(driver, n_cards, advertising)
+
+				driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{counter}]/a').click()
+				time.sleep(6)
 			wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/section[1]/header/div/nav[2]/ul/li[1]/a')))
 			driver.find_element(By.XPATH, '/html/body/section[1]/header/div/nav[2]/ul/li[1]/a').click()
 			time.sleep(3)
 			wait.until(EC.visibility_of_element_located((By.XPATH, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[1]/ul/li[{macro_count}]/a')))
 			driver.find_element(By.XPATH, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[1]/ul/li[{macro_count}]/a').click()
 		
-	# print(total_items_processed)
+	print(total_items_processed)
 	driver.quit()
