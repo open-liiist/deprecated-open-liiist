@@ -97,7 +97,7 @@ const NewListPage = () => {
                                     placeholder="Enter list title"
                                     value={listTitle}
                                     onChange={(e) => setListTitle(e.target.value)}
-                                    className="w-full border-transparentc"
+                                    className="w-full border-transparentc font-bold"
                                     />
                             </div>
                             <div className="mb-5 pt-4 gap-2 flex px-2 items-center border-t-2 border-dashed border-gray-500">

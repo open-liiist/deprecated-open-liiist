@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiOutlineDown } from "react-icons/ai";
 import { reverseGeocode, getUserLocation } from '../map/Map';
+import { IoPin } from "react-icons/io5";
 
 export default function SetLocationLink() {
   const pathname = usePathname();
@@ -27,8 +28,8 @@ export default function SetLocationLink() {
 
   return (
     <Link href={pathname === '/en/position' ? '/home' : '/position'} className="flex items-center">
-      <span className="ml-2 text-xl font-semibold text-gray-900">
-		{pathname === '/en/position' ? "home" : (<div className='flex'><AiOutlineDown/>{currentAddress}</div>)}
+      <span className="ml-2 text-xl font-normal text-gray-900">
+		{pathname === '/en/position' ? "home" : (<div className='flex items-center'><IoPin />{currentAddress}</div>)}
 	  </span>
     </Link>
   );

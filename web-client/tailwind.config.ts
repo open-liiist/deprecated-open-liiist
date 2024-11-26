@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        liiist_green:  '#6EEB83', //'#384000',
+        liiist_green:  '#384000', //'#6EEB83'
         liiist_white: '#E1F2FE',
         liiist_pink: '#FFABAD',
         liiist_black: '#333333',

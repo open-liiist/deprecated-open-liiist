@@ -20,8 +20,8 @@ const UserHomepage = () => {
             <div className="w-full max-w-4xl mt-5">
                     <ListOfListComponents/>
                     <div className="mt-16 flex justify-center">
-                        <Button onClick={handleNewListClick} className=" bg-liiist_green text-white border-none h-15 w-15 rounded-full cursor-pointer hover:bg-green-600">
-                            <AiOutlinePlus className="text-3xl"/>
+                        <Button onClick={handleNewListClick} className=" text-liiist_black h-15 w-15  shadow-none cursor-pointer hover:scale-125">
+                            <AiOutlinePlus className="text-4xl hover:shadow-inherit"/>
                         </Button>
                     </div>
             </div>

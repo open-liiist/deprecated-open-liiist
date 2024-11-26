@@ -117,7 +117,7 @@ const EditListPage: React.FC = () => {
                                 placeholder="List Title"
                                 value={listTitle || ""}
                                 onChange={(e) => setListTitle(e.target.value)}
-                                className="rounded-tl-lg"
+                                className="rounded-tl-lg font-bold"
                             />
                         </div>
                         <div className="mb-5 pt-4 gap-2 flex px-2 items-center border-t-2 border-dashed border-gray-500">
