@@ -12,6 +12,8 @@ from selenium.common.exceptions import TimeoutException
 # Waits for a single element to appear on the page.
 # Returns: The WebElement if found, otherwise None.
 
+# This function is use for the conad site, because in some case it search for a thing that doesn't exist
+
 def wait_for_element_conad(driver, xpath, max_retries=2, retry_delay=2):
 
 	for i in range(max_retries):
@@ -20,13 +22,24 @@ def wait_for_element_conad(driver, xpath, max_retries=2, retry_delay=2):
 				EC.presence_of_element_located((By.XPATH, xpath))
 			)
 			return element
+		except TimeoutException as e:
+			time.sleep(retry_delay)
+			print("1")
+			pass
+		except NoSuchElementException as e:
+			time.sleep(retry_delay)
+			print("2")
+			pass
+		except ElementNotVisibleException as e:
+			time.sleep(retry_delay)
+			print("3")
+			pass
 		except Exception as e:
 			time.sleep(retry_delay)
+			print("6")
 			pass
 
 	return None
-
-
 
 def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):
 

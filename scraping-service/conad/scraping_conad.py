@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 sys.path.append('../')
-from libft import wait_for_element, wait_for_elements, wait_for_element_conad
+from libft import wait_for_element, wait_for_elements, wait_for_element_conad, wait_for_elements_conad
 # from send_data import send_data_to_receiver
 
 # Finds product information on a webpage and sends it to a specified function.
@@ -19,7 +19,7 @@ def find_and_send_info(driver, n_cards, advertising):
 	processed_items = 0
 	card_selector = f"/html/body/main/div/div[2]/div[2]/div[({advertising})]/div[{{card_index}}]" 
 
-	for card_index in range(1, n_cards + 1):
+	for card_index in range(1, n_cards):
 		flag = 0
 		card_xpath = card_selector.format(card_index=card_index)
 
@@ -114,7 +114,6 @@ if __name__ == "__main__":
 
 	count_macro_cat = len((wait_for_elements(driver, f'/html/body/section[1]/header/div/nav[2]/ul/li[1]/div/div/div/div[1]/ul/li')))
 
-	print("macro = ", count_macro_cat)
 	time.sleep(3)
 
 	for macro_count in range(1, count_macro_cat + 1):
@@ -142,12 +141,14 @@ if __name__ == "__main__":
 				counter = int(len((wait_for_elements(driver, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li'))))
 				if (wait_for_elements_conad(driver, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{counter}]/a/span') == None):
 					break
+				print(n_cards)
 				n_cards = len(wait_for_elements(driver, f'//*[@id="#top"]/div/div[2]/div[2]/div[{advertising}]/div'))
 
 				total_items_processed = find_and_send_info(driver, n_cards, advertising)
 
 				driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{counter}]/a').click()
-				time.sleep(6)
+				# time.sleep(6)
+
 			wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/section[1]/header/div/nav[2]/ul/li[1]/a')))
 			driver.find_element(By.XPATH, '/html/body/section[1]/header/div/nav[2]/ul/li[1]/a').click()
 			time.sleep(3)
