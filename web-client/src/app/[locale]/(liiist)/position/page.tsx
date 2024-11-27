@@ -13,7 +13,7 @@ const LocationSelectionPage = () => {
     const [nearbySupers, setNearbySupers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [manualEntry, setManualEntry] = useState(false);
+    const [manualEntry, setManualEntry] = useState(true);
     const [inputAddress, setInputAddress] = useState("");
     const [autocomplete, setAutocomplete] = useState(null);
 
@@ -102,7 +102,7 @@ const LocationSelectionPage = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="w-full h-96 mb-5">
+                            <div id="map container" className="w-full h-55-vh mb-5 shadow-md">
                                 <Map
                                     center={
                                         userLocation

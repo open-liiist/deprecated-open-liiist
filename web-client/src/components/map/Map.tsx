@@ -16,12 +16,15 @@ export const Map = ({ center, zoom, children }) => {
     if (!isLoaded) {
         return <div>Loading Maps...</div>;
     }
-
+    const mapOptions = {
+        disableDefaultUI: true, // L'assegnazione deve essere corretta come questa.
+    };
     return (
         <GoogleMap
             center={center}
             zoom={zoom}
             mapContainerStyle={{ width: "100%", height: "400px" }}
+            options={mapOptions}
         >
             {center && (
                 <Marker position={center} label="You are here" />
