@@ -45,3 +45,5 @@ docker compose up scraping-service
 2. **Sending Data (`send_data.py`)**:
    - Uses the `requests` library to make POST requests to the `data-receiver` microservice.
    - Logs the success or failure of each sent product.
+
+
