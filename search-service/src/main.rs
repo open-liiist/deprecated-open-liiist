@@ -1,9 +1,13 @@
 mod handlers;
 mod models;
 mod search;
+mod utils;
 
 use ::elasticsearch::Elasticsearch;
-use axum::{routing::get, Router};
+use axum::{
+    routing::{get, post},
+    Router,
+};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
@@ -15,6 +19,7 @@ pub struct AppState {
 async fn main() {
     tracing_subscriber::fmt()
         .with_target(false)
+        .with_level(true)
         .pretty()
         .init();
 
@@ -29,6 +34,9 @@ async fn main() {
     // Configure Axum router with the search route, passing client as State
     let app = Router::new()
         .route("/search", get(handlers::search_handler))
+        .route("/product/exists", post(handlers::check_product_exist))
+        .route("/product/in-shop", post(handlers::search_product_in_shop))
+        .route("/product/lowest-price", post(handlers::find_lowest_price))
         .with_state(app_state);
 
     // Start server

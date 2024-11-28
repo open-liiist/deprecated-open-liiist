@@ -2,6 +2,7 @@ use crate::models::{Localization, ProductResult};
 use crate::AppState;
 use elasticsearch::SearchParts;
 use serde_json::json;
+use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -56,11 +57,128 @@ pub async fn fetch_lowest_price(
     Ok(unique_products)
 }
 
+pub async fn fetch_product_nearby(
+    app_state: &Arc<AppState>,
+    product: &str,
+    latitude: f64,
+    longitude: f64,
+) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
+    let client = app_state.client.lock().await;
+    let response = client
+        .search(SearchParts::Index(&["products"]))
+        .body(json!({
+            "query": {
+                "bool": {
+                    "must": {
+                        "multi_match": {
+                            "query": product,
+                            "fields": ["full_name", "name", "description"]
+                        }
+                    },
+                    "filter": {
+                        "geo_distance": {
+                            "distance": "200km",
+                            "location": {
+                                "lat": latitude,
+                                "lon": longitude
+                            }
+                        }
+                    }
+                }
+            },
+            "size": 1
+        }))
+        .send()
+        .await?;
+    parse_response(response).await
+}
+
+pub async fn fetch_product_in_shop(
+    app_state: &Arc<AppState>,
+    product: &str,
+    shop: &str,
+    latitude: f64,
+    longitude: f64,
+) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
+    let client = app_state.client.lock().await;
+    let response = client
+        .search(SearchParts::Index(&["products"]))
+        .body(json!({
+            "query": {
+                "bool": {
+                    "must": [
+                        { "match": { "full_name": product } },
+                        { "match": { "localization.grocery": shop } }
+                    ],
+                    "filter": {
+                        "geo_distance": {
+                            "distance": "200km",
+                            "location": {
+                                "lat": latitude,
+                                "lon": longitude
+                            }
+                        }
+                    }
+                }
+            },
+            "size": 1
+        }))
+        .send()
+        .await?;
+    parse_response(response).await
+}
+
+/// Fetch prices for each product at nearby shops
+pub async fn fetch_lowest_price_shops(
+    app_state: &Arc<AppState>,
+    products: &[String],
+    latitude: f64,
+    longitude: f64,
+) -> Result<HashMap<String, Vec<ProductResult>>, Box<dyn std::error::Error + Send + Sync>> {
+    let mut product_prices: HashMap<String, Vec<ProductResult>> = HashMap::new();
+    let client = app_state.client.lock().await;
+
+    for product in products.iter() {
+        let response = client
+            .search(SearchParts::Index(&["products"]))
+            .body(json!({
+                "query": {
+                    "bool": {
+                        "must": {
+                            "multi_match": {
+                                "query": product,
+                                "fields": ["full_name", "name", "description"]
+                            }
+                        },
+                        "filter": {
+                            "geo_distance": {
+                                "distance": "100km",
+                                "localization": {
+                                    "lat": latitude,
+                                    "lon": longitude
+                                }
+                            }
+                        }
+                    }
+                },
+                "size": 10,
+                "sort": [{ "price": "asc" }]
+            }))
+            .send()
+            .await?;
+
+        let shop_products = parse_response(response).await?;
+        product_prices.insert(product.clone(), shop_products);
+    }
+    Ok(product_prices)
+}
+
 // Helper function to parse Elasticsearch response into Vec<ProductResult>
 async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let json_resp = response.json::<serde_json::Value>().await?;
+    tracing::debug!("elasticsearch response: {:#?}", json_resp);
     let empty_vec = vec![];
     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
     let products = hits
@@ -73,14 +191,15 @@ async fn parse_response(
                 name: source["name"].as_str().unwrap_or("").to_string(),
                 description: source["description"].as_str().unwrap_or("").to_string(),
                 price: source["price"].as_f64().unwrap_or(0.0),
-                discount: source["discount"].as_i64().map(|d| d as i32),
+                discount: source["discount"].as_f64(),
+                distance: source["distance"].as_f64(),
                 localization: Localization {
                     grocery: source["localization"]["grocery"]
                         .as_str()
                         .unwrap_or("")
                         .to_string(),
                     lat: source["localization"]["lat"].as_f64().unwrap_or(0.0),
-                    lng: source["localization"]["lng"].as_f64().unwrap_or(0.0),
+                    lon: source["localization"]["lon"].as_f64().unwrap_or(0.0),
                 },
             }
         })

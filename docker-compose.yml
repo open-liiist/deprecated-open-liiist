@@ -134,7 +134,16 @@ services:
       - "9300:9300"
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./elasticsearch/setup-elasticsearch.sh:/usr/share/elasticsearch/setup-elasticsearch.sh
       - elasticsearch:/usr/share/elasticsearch/data:Z
+    entrypoint: |
+      sh -c "
+        elasticsearch &
+        chmod +x /usr/share/elasticsearch/setup-elasticsearch.sh &&
+        sleep 10 &&
+        /usr/share/elasticsearch/setup-elasticsearch.sh &&
+        wait
+      "
     environment:
       node.name: elasticsearch
       ES_JAVA_OPTS: -Xms512m -Xmx512m

@@ -15,7 +15,11 @@ type ProductData = {
 	localization: {
 		grocery: string;
 		lat: number;
-		lng: number;
+		lon: number;
+	};
+	location: {
+		lat: number;
+		lon: number;
 	};
 	img_url?: string;
 	price_for_kg?: number;
@@ -129,8 +133,9 @@ router.post('/product', async (req: Request, res: Response) => {
 				localization: {
 					grocery: localization.grocery,
 					lat: localization.lat,
-					lng: localization.long,
+					lon: localization.long,
 				},
+				location: { lat: localization.lat, lon: localization.long },
 			}
 
 			try {
