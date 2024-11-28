@@ -1,4 +1,29 @@
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+#[derive(Serialize, FromRow)]
+pub struct StoreDB {
+    pub id: i32,
+    pub grocery: String,
+    pub lat: f64,
+    pub lng: f64,
+    pub street: Option<String>,
+    pub city: Option<String>,
+    pub zip_code: Option<String>,
+    pub working_hours: Option<String>,
+    pub picks_up_in_store: Option<bool>,
+}
+
+#[derive(Serialize, FromRow)]
+pub struct ProductDB {
+    id: i32,
+    name: String,
+    description: String,
+    current_price: f64,
+    discount: f64,
+    price_for_kg: Option<f64>,
+    image_url: Option<String>,
+}
 
 /// Search query parameters
 #[derive(Deserialize)]

@@ -1,7 +1,7 @@
 use crate::models::{
-    LowestPriceResponse, ProductExistRequest, ProductExistResponse, ProductInShopRequest,
-    ProductInShopResponse, ProductResult, ProductsLowestPriceRequest, SearchQuery, SearchResponse,
-    ShopProduct,
+    LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
+    ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
+    SearchQuery, SearchResponse, ShopProduct, StoreDB,
 };
 use crate::search::{
     fetch_lowest_price, fetch_lowest_price_shops, fetch_most_similar, fetch_product_in_shop,
@@ -10,7 +10,7 @@ use crate::search::{
 use crate::utils::haversine_distance;
 use crate::AppState;
 use axum::{
-    extract::{Query, State},
+    extract::{Path, Query, State},
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -267,4 +267,53 @@ pub async fn find_lowest_price(
     }
     results.extend(best_combination);
     Ok(Json(results))
+}
+
+pub async fn get_all_stores(
+    State(app_state): State<Arc<AppState>>,
+) -> Result<Json<Vec<StoreDB>>, axum::http::StatusCode> {
+    let db_pool = &app_state.db_pool;
+
+    let stores = sqlx::query_as::<_, StoreDB>(
+        r#"
+        SELECT
+            id, grocery, lat, lng, street, city, zip_code,
+            working_hours, picks_up_in_store
+        FROM Localization
+        "#
+    )
+    .fetch_all(db_pool)
+    .await
+    .map_err(|e| {
+        eprintln!("Database query failed: {:?}", e);
+        axum::http::StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
+    Ok(Json(stores))
+}
+
+pub async fn get_products_by_store(
+    Path(store_id): Path<i32>,
+    State(app_state): State<Arc<AppState>>,
+) -> Result<Json<Vec<ProductDB>>, axum::http::StatusCode> {
+    let db_pool = &app_state.db_pool;
+
+    let products = sqlx::query_as::<_, ProductDB>(
+        r#"
+        SELECT
+            p.id, p.name, p.description, p.current_price,
+            p.discount, p.price_for_kg, p.image_url
+        FROM product p
+        WHERE p.localization_id = $1
+        "#
+    )
+    .bind(store_id)
+    .fetch_all(db_pool)
+    .await
+    .map_err(|e| {
+        eprintln!("Database query failed: {:?}", e);
+        axum::http::StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
+    Ok(Json(products))
 }
