@@ -13,7 +13,7 @@ def scrape_ecommerce():
             "localization": {
                 "grocery": "Tech Store",
                 "lat": 40.7128,
-                "long": -74.0060
+                "long": 30.0060
             }
         },
         {
@@ -24,8 +24,8 @@ def scrape_ecommerce():
             "discount": 15.0,
             "localization": {
                 "grocery": "Mobile Shop",
-                "lat": 34.0522,
-                "long": -118.2437
+                "lat": 40.7127,
+                "long": 30.0061
             }
         },
         {
@@ -36,8 +36,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 37.7749,
-                "long": -122.4194
+                "lat": 40.7108,
+                "long": 30.0560
             }
         },
         {
@@ -48,8 +48,8 @@ def scrape_ecommerce():
             "discount": 20.0,
             "localization": {
                 "grocery": "Wearables Store",
-                "lat": 51.5074,
-                "long": -0.1278
+                "lat": 40.7129,
+                "long": 30.0071
             }
         },
         {
@@ -60,8 +60,8 @@ def scrape_ecommerce():
             "discount": 25.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 48.8566,
-                "long": 2.3522
+                "lat": 40.7126,
+                "long": 30.0062
             }
         },
         {
@@ -72,8 +72,8 @@ def scrape_ecommerce():
             "discount": 30.0,
             "localization": {
                 "grocery": "Camera Store",
-                "lat": 35.6895,
-                "long": 139.6917
+                "lat": 40.7125,
+                "long": 30.0063
             }
         },
         {
@@ -84,8 +84,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Office Supplies Store",
-                "lat": 55.7558,
-                "long": 37.6176
+                "lat": 40.7124,
+                "long": 30.0064
             }
         },
         {
@@ -96,8 +96,8 @@ def scrape_ecommerce():
             "discount": 15.0,
             "localization": {
                 "grocery": "Gaming Store",
-                "lat": 52.5200,
-                "long": 13.4050
+                "lat": 40.7123,
+                "long": 30.0065
             }
         },
         {
@@ -108,8 +108,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 40.4168,
-                "long": -3.7038
+                "lat": 40.7122,
+                "long": 30.0066
             }
         },
         {
@@ -120,8 +120,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 52.3667,
-                "long": 4.8945
+                "lat": 40.7121,
+                "long": 30.0067
             }
         },
         {
@@ -132,8 +132,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 48.8566,
-                "long": 2.3522
+                "lat": 40.7120,
+                "long": 30.0068
             }
         },
         {
@@ -144,8 +144,8 @@ def scrape_ecommerce():
             "discount": 15.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 51.5074,
-                "long": -0.1278
+                "lat": 40.7119,
+                "long": 30.0069
             }
         },
         {
@@ -156,8 +156,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 37.7749,
-                "long": -122.4194
+                "lat": 40.7118,
+                "long": 30.0070
             }
         },
         {
@@ -168,8 +168,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 34.0522,
-                "long": -118.2437
+                "lat": 40.7117,
+                "long": 30.0071
             }
         },
         {
@@ -180,8 +180,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 40.7128,
-                "long": -74.0060
+                "lat": 40.7116,
+                "long": 30.0072
             }
         },
         {
@@ -192,8 +192,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 35.6895,
-                "long": 139.6917
+                "lat": 40.7115,
+                "long": 30.0073
             }
         },
         {
@@ -204,8 +204,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 55.7558,
-                "long": 37.6176
+                "lat": 40.7114,
+                "long": 30.0074
             }
         },
         {
@@ -216,8 +216,8 @@ def scrape_ecommerce():
             "discount": 15.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 52.5200,
-                "long": 13.4050
+                "lat": 40.7113,
+                "long": 30.0075
             }
         },
         {
@@ -228,8 +228,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 48.8566,
-                "long": 2.3522
+                "lat": 40.7112,
+                "long": 30.0076
             }
         },
         {
@@ -240,8 +240,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 51.5074,
-                "long": -0.1278
+                "lat": 40.7111,
+                "long": 30.0077
             }
         },
         {
@@ -252,8 +252,8 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 37.7749,
-                "long": -122.4194
+                "lat": 40.7110,
+                "long": 30.0078
             }
         },
         {
@@ -264,8 +264,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 34.0522,
-                "long": -118.2437
+                "lat": 40.7109,
+                "long": 30.0079
             }
         },
         {
@@ -276,8 +276,8 @@ def scrape_ecommerce():
             "discount": 15.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 40.7128,
-                "long": -74.0060
+                "lat": 40.7108,
+                "long": 30.0080
             }
         },
         {
@@ -288,8 +288,8 @@ def scrape_ecommerce():
             "discount": 5.0,
             "localization": {
                 "grocery": "Tech Store",
-                "lat": 35.6895,
-                "long": 139.6917
+                "lat": 40.7107,
+                "long": 30.0081
             }
         },
         {
@@ -300,10 +300,58 @@ def scrape_ecommerce():
             "discount": 10.0,
             "localization": {
                 "grocery": "Electronics Store",
-                "lat": 55.7558,
-                "long": 37.6176
+                "lat": 40.7106,
+                "long": 30.0082
             }
         },
+        {
+            "full_name": "Laptop - Model A",
+            "name": "Laptop",
+            "description": "Basic laptop with essential features",
+            "price": 899.99,
+            "discount": 8.0,
+            "localization": {
+                "grocery": "Tech Outlet",
+                "lat": 40.7127,
+                "long": 30.0061  # Close to the "Tech Store" in Istanbul
+            }
+        },
+        {
+            "full_name": "Mouse - Ergonomic Design",
+            "name": "Mouse",
+            "description": "Ergonomic mouse for long hours of use",
+            "price": 25.99,
+            "discount": 12.0,
+            "localization": {
+                "grocery": "Tech Hub",
+                "lat": 40.4168,
+                "long": 30.7038
+            }
+        },
+        {
+            "full_name": "Laptop Stand - Deluxe Model",
+            "name": "Laptop Stand",
+            "description": "Adjustable laptop stand with additional storage",
+            "price": 29.99,
+            "discount": 15.0,
+            "localization": {
+                "grocery": "Office Supplies Hub",
+                "lat": 40.7128,
+                "long": 30.6185
+            }
+        },
+        {
+            "full_name": "Wireless Earbuds - Noise Cancelling",
+            "name": "Wireless Earbuds",
+            "description": "Advanced earbuds with superior noise cancelling",
+            "price": 59.99,
+            "discount": 10.0,
+            "localization": {
+                "grocery": "Audio Shop",
+                "lat": 39.7392,
+                "long": 30.2675
+            }
+        }
     ]
     
     return products
