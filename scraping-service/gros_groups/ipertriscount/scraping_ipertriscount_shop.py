@@ -76,7 +76,7 @@ def scraping_shop():
 			city_name = parts[0].strip()
 		except:
 			print("No location find information find")
-			return(NULL)
+			return None
 		try:
 			div = soup.find('div', class_="fwPad1x itemAnim")
 			div_info = div.find_all('span', style="float:left; min-height:1.2em; line-height:1.2em")
@@ -88,12 +88,12 @@ def scraping_shop():
 					pass
 		except:
 			print("No working hours information find")
-			return(NULL)
+			return None
 		if (city_name):
 			lat, lng, city, postal_code = geocode(address)
 			if not lat and lng:
 				print("Geocoding failed.")
-				return(NULL)
+				return None
 		shop_info = {
 			"name" : shop_name,
 			"street": address,
@@ -105,7 +105,6 @@ def scraping_shop():
 			"zip_code": postal_code
 			}
 		shop_info_list.append(shop_info)
-		break
 		# print(shop_info)
 	return shop_info_list
 

@@ -35,8 +35,8 @@ def scraping_shop():
 		
 		# Open the file in write mode with proper indentation
 		if (info_need['click_collect'] == "true") | (info_need['click_drive'] == "true"):
-			with open(f"store{file_counter}.json", "w", encoding="utf-8") as outfile:
-				json.dump(info_need, outfile, indent=4)
+			# with open(f"store{file_counter}.json", "w", encoding="utf-8") as outfile:
+			# 	json.dump(info_need, outfile, indent=4)
 			shop_info = {
 				"name" : info_need['name'],
 				"street": info_need['address'],
