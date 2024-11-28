@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://localhost:8080/ricevi_code'
+url = 'http://localhost:5000/ricevi_code'
 
 try:
 	response = requests.post(url, data={'code': 1, 'shop': "conad"})

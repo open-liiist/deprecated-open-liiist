@@ -1,10 +1,15 @@
 import re
+import os
 import sys
 import json
 import requests
 import geocoder
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 sys.path.append('../')
+load_dotenv(dotenv_path='../.env')
+
+api_key_google = os.environ.get('API_KEY_GOOGLE')
 
 # Fetches the HTML content from a given URL.
 # Returns: The HTML content of the page, or None if an error occurs.
@@ -27,7 +32,7 @@ def has_phone_number(string):
 	return re.search(phone_number_regex, string) is not None
 
 def geocode(address):
-	api_key = "AIzaSyBlfBfID8G4a1GzqR_qB-gj2LbqfeWZMZk"
+	api_key = api_key_google
 	url = f"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={api_key}"
 
 	response = requests.get(url)
