@@ -122,5 +122,11 @@ services:
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
 
+  notification-alert:
+    build: ./notification-alert
+    ports:
+      - "5000:5000"
+
+
 volumes:
   pgdata: 
