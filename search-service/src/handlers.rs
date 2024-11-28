@@ -198,6 +198,8 @@ pub async fn find_lowest_price(
         }
     };
 
+    tracing::info!("Found product prices: {:#?}", product_prices);
+
     // Calculate the lowest cost shopping combinations
     let mut shop_combinations: HashMap<String, Vec<ShopProduct>> = HashMap::new();
     for (_product_name, shops) in product_prices.iter() {

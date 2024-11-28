@@ -152,7 +152,7 @@ pub async fn fetch_lowest_price_shops(
                         },
                         "filter": {
                             "geo_distance": {
-                                "distance": "2km",
+                                "distance": "100km",
                                 "localization": {
                                     "lat": latitude,
                                     "lon": longitude
@@ -178,7 +178,7 @@ async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let json_resp = response.json::<serde_json::Value>().await?;
-    tracing::info!("elasticsearch response: {:#?}", json_resp);
+    tracing::debug!("elasticsearch response: {:#?}", json_resp);
     let empty_vec = vec![];
     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
     let products = hits
