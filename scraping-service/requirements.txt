@@ -1,2 +1,5 @@
+geocoder
 requests
+selenium
 python-dotenv
+undetected-chromedriver
