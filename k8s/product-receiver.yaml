@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-receiver-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-receiver-service
+  template:
+    metadata:
+      labels:
+        app: product-receiver-service
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: product-receiver-service
+        image: ghcr.io/fchieric/product-receiver-service:latest
+        ports:
+        - containerPort: 3002
+        env:
+        - name: PRODUCT_RECEIVER_SERVICE_PORT
+          value: "3002"
+        - name: DATABASE_URL
+          value: postgresql://user:postgrespw@postgres:5432/appdb

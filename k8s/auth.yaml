@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: auth-service
+        image: ghcr.io/fchieric/auth-service:latest
+        ports:
+        - containerPort: 4000
+        env:
+        - name: AUTH_SERVICE_PORT
+          value: "4000"
+        - name: AUTH_DATABASE_URL
+          value: postgresql://user:postgrespw@postgres:5432/authdb
+        - name: ACCESS_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: shared-secrets
+              key: ACCESS_TOKEN_SECRET
+        - name: REFRESH_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: shared-secrets
+              key: REFRESH_TOKEN_SECRET

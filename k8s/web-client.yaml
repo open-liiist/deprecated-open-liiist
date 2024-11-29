@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-client
+  template:
+    metadata:
+      labels:
+        app: web-client
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: web-client
+        image: ghcr.io/fchieric/web-client:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: NODE_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: LOG_LEVEL
+        - name: API_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: API_BASE_URL

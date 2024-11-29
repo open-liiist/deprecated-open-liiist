@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      containers:
+      - name: traefik
+        image: traefik:v2.10
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        args:
+        - "--api.insecure=true" # Per abilitare la dashboard (rimuovi in produzione)
+        - "--providers.kubernetescrd" # Per Kubernetes CRD
+        - "--entrypoints.web.address=:80"
+        - "--entrypoints.websecure.address=:443"
