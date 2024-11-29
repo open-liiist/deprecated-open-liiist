@@ -279,7 +279,7 @@ pub async fn get_all_stores(
         SELECT
             id, grocery, lat, lng, street, city, zip_code,
             working_hours, picks_up_in_store
-        FROM Localization
+        FROM "Localization"
         "#
     )
     .fetch_all(db_pool)
@@ -303,8 +303,8 @@ pub async fn get_products_by_store(
         SELECT
             p.id, p.name, p.description, p.current_price,
             p.discount, p.price_for_kg, p.image_url
-        FROM product p
-        WHERE p.localization_id = $1
+        FROM "Product" p
+        WHERE p."localizationId" = $1
         "#
     )
     .bind(store_id)
