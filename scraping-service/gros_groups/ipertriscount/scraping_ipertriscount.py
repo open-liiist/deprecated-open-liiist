@@ -18,10 +18,10 @@ if __name__ == "__main__":
 	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	print(get_all_stores())
+	# print(get_all_stores())
 	# shop_info_list = scraping_shop()
-	# shop_info_list.append(scraping_shop())
 
+	all_product = []
 	for category in micro_categories:
 		category_id = category["categoryId"]
 		products = []
@@ -38,9 +38,11 @@ if __name__ == "__main__":
 			page += 1
 			if page > max_pages:
 				break
+		# print(products)
 		product_data = []
-		for shop in shop_info_list:
-			for product in products:
+		# for shop in shop_info_list:
+		for product in products:
+			try:
 				product_data = {
 				"full_name": product['name'],
 				"img_url": f"{'https://www.ipertriscountspesaonline.it'}{product['mediaURLMedium']}",
@@ -48,15 +50,18 @@ if __name__ == "__main__":
 				"quantity": f"{product['unitMeasureBase']['umId']} {product['unitMeasureBase']['um']}",
 				"price_for_kg": product['price'],
 				"discounted_price": product['priceDisplay'],
-				"localization":
-				{
-					"grocery": shop['name'],
-					"lat": shop['lat'],
-					"long": shop['long']
+				# "localization":
+				# {
+				# 	"grocery": shop['name'],
+				# 	"lat": shop['lat'],
+				# 	"long": shop['long']
+				# }
 				}
-			}
-			# with open(f"{product['name']}.json", 'w') as file:
+				all_product.append(product_data)
+			except Exception as e:
+				print(f"Error finding element: {e}")
+	print(all_product)
 			# 	json.dump(product_data, file)
-			send_data_to_receiver(product_data)
+			# send_data_to_receiver(product_data)
 			# print(product_data)
 		

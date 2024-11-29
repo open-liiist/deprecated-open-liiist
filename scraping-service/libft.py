@@ -59,14 +59,14 @@ def wait_for_element(driver, xpath, max_retries=3, retry_delay=5):
 # Waits for multiple elements to appear on the page
 # Returns: A list of WebElements if found, otherwise an empty list
 
-def wait_for_elements_conad(driver, xpath, max_retries=2, retry_delay=2):
+def wait_for_elements_conad(driver, xpath, max_retries=2, retry_delay=3):
 
 	for i in range(max_retries):
 		try:
-			element = WebDriverWait(driver, 3).until(
-				EC.presence_of_element_located((By.XPATH, xpath))
+			elements = WebDriverWait(driver, 3).until(
+				EC.presence_of_all_elements_located((By.XPATH, xpath))
 			)
-			return element
+			return elements
 		except Exception as e:
 			time.sleep(retry_delay)
 			pass

@@ -8,18 +8,27 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utility_tigre import categories_dict
 sys.path.append('../')
-from libft import wait_for_element, wait_for_elements
+from libft import wait_for_element, wait_for_elements, wait_for_elements_conad
 from scraping_tigre_shop import scraping_shop
 # from send_data import send_data_to_receiver
+
+def wait_fw(driver, xpath):
+
+	try:
+		elements = WebDriverWait(driver, 5).until(
+			EC.presence_of_all_elements_located((By.XPATH, xpath))
+		)
+		return elements
+	except Exception as e:
+		return None
 
 # Finds and processes information from product cards in a micro category
 # Returns: The number of processed items
 
-def find_and_send_info(driver, n_cards, micro_cate, shop_list):
+def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 
 	active = 1
 	processed_items = 0
-	products = []
 	card_selector = f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div[{{card}}]'
 
 	for card in range(1, n_cards + 1):
@@ -50,14 +59,11 @@ def find_and_send_info(driver, n_cards, micro_cate, shop_list):
 				"long": shop['long']
 			}
 		}
-		# with open(f"{product_data['full_name']}.json", 'w') as file:
-		# 	json.dump(product_data, file)
-		# send_data_to_receiver(product)
-		print(product_data)
-
+		# send_data_to_receiver(product_data)
+		product_list.append(product_data)
 		if active == 1:
 			try:
-				wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()
+				wait_fw(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()
 			except:
 				active = 0
 
@@ -67,12 +73,15 @@ def find_and_send_info(driver, n_cards, micro_cate, shop_list):
 
 def change_shop_location(driver, location):
 
+	wait = WebDriverWait(driver, 10)
+
 	driver.get("https://oasitigre.it/it/spesa.html")
-	driver.find_element(By.CLASS_NAME, 'ritira-in-negozio-main-page').click()
 
-	wait = WebDriverWait(driver, 20)
+	button1 = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/main/div[1]/div[2]/div[1]/div/div/button[1]")))
+	button1.click()
+	time.sleep(4)
+
 	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")))
-
 	input_box = driver.find_element(By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")
 	input_box.click()
 	input_box.send_keys(location)
@@ -88,9 +97,11 @@ def change_shop_location(driver, location):
 		return
 
 	available_shops[0].click()
-	time.sleep(2)
-	driver.find_element(By.CLASS_NAME, "scegliDopo").click()
-	time.sleep(3)
+	time.sleep(5)
+	button2 = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[4]/div[2]/div[3]/div[3]/div[8]/button")))
+	button2.click()
+	time.sleep(4)
+
 
 # Selects the first store in a new location after a previous selection
 
@@ -126,33 +137,44 @@ if __name__ == "__main__":
 	driver = uc.Chrome(use_subprocess=False)
 
 	shop_list = scraping_shop()
-	change_shop_location(driver, shop_list[0]['street'])
+	for shop in shop_list:
+		if "RM" in shop['street']:
+			change_shop_location(driver, shop['street'])
+			break
+		else:
+			continue
 
 	total_items_processed = 0
-	for shop in shop_list:
-		for category, items in categories_dict.items():
-			for item in items:
-				product_url = f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html"
+	product_list = []
 
-				driver.get(product_url)
-				time.sleep(5)
+	for category, items in categories_dict.items():
+		count = 0
+		for item in items:
+			product_url = f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html"
 
-				n_micro_cate = len(wait_for_elements(driver, '/html/body/main/div[1]/div[2]/div[2]/div'))
-				active = 1
+			driver.get(product_url)
+			time.sleep(5)
 
-				for micro_cate in range(2, n_micro_cate + 1):
-					if active == 1:
-						try:
-							# Scroll to micro category element
-							element = wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]")
-							driver.execute_script('arguments[0].scrollIntoView(true)', element)
-						except:
-							active = 0
+			n_micro_cate = len(wait_fw(driver, '/html/body/main/div[1]/div[2]/div[2]/div'))
+			active = 1
 
-					n_cards = len(wait_for_elements(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
+			for micro_cate in range(2, n_micro_cate + 1):
+				if active == 1:
+					try:
+						element = wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]")
+						driver.execute_script('arguments[0].scrollIntoView(true)', element)
+					except:
+						active = 0
 
-					total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop)
-		change_already_selected_shop(driver, shop_list['street'])
+				try:
+					n_cards = len(wait_fw(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
+				except:
+					continue
+
+				total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop, product_list)
+
+	with open(f"product_tigre.json", "w", encoding="utf-8") as outfile:
+		json.dump(product_list, outfile, indent=4)
 
 	print(f"Total items processed: {total_items_processed}")
 

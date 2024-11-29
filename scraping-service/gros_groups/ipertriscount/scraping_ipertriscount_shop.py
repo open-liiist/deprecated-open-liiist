@@ -114,7 +114,7 @@ def scraping_shop():
 			}
 		# create_store(shop_info)
 		shop_info_list.append(shop_info)
-		# break
+		break
 	# with open(f"store_ipertriscount.json", "w", encoding="utf-8") as outfile:
 	# 	json.dump(shop_info_list, outfile, indent=4)
 	return shop_info_list
