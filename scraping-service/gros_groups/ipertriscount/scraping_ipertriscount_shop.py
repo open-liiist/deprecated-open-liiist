@@ -6,7 +6,8 @@ import requests
 import geocoder
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-sys.path.append('../')
+sys.path.append('../../')
+from send_data import create_store
 load_dotenv(dotenv_path='../.env')
 
 api_key_google = os.environ.get('API_KEY_GOOGLE')
@@ -109,7 +110,9 @@ def scraping_shop():
 			"picks_up_in_shop" "True"
 			"zip_code": postal_code
 			}
-		shop_info_list.append(shop_info)
+		create_store(shop_info)
+		break
+		# shop_info_list.append(shop_info)
 		# print(shop_info)
 	return shop_info_list
 

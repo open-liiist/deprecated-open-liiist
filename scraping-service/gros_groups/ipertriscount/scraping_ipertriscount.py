@@ -6,7 +6,7 @@ import requests
 import json
 import sys
 sys.path.append('../../')
-# from send_data import send_data_to_receiver
+from send_data import send_data_to_receiver, get_all_stores
 from libft import fetch_data, extract_micro_categories
 from scraping_ipertriscount_shop import scraping_shop
 
@@ -18,7 +18,8 @@ if __name__ == "__main__":
 	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	shop_info_list = scraping_shop()
+	print(get_all_stores())
+	# shop_info_list = scraping_shop()
 	# shop_info_list.append(scraping_shop())
 
 	for category in micro_categories:
@@ -56,5 +57,5 @@ if __name__ == "__main__":
 			}
 			# with open(f"{product['name']}.json", 'w') as file:
 			# 	json.dump(product_data, file)
-		# send_data_to_receiver(product_data)
-			print(product_data)
+			send_data_to_receiver(product_data)
+			# print(product_data)
