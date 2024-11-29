@@ -7,10 +7,10 @@ import geocoder
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 sys.path.append('../../')
-from send_data import create_store
+# from send_data import create_store
 load_dotenv(dotenv_path='../.env')
 
-api_key_google = os.environ.get('API_KEY_GOOGLE')
+api_key_google = os.environ.get('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY')
 
 # Fetches the HTML content from a given URL.
 # Returns: The HTML content of the page, or None if an error occurs.
@@ -80,6 +80,8 @@ def scraping_shop():
 			address = (div_info.find('small')).get_text()
 			parts = div_info.contents
 			city_name = parts[0].strip()
+			if "GPS" in city_name:
+				city_name = city_name.replace("GPS", "").strip()
 		except:
 			print("No location find information find")
 			return None
@@ -96,7 +98,7 @@ def scraping_shop():
 			print("No working hours information find")
 			return None
 		if (city_name):
-			lat, lng, city, postal_code = geocode(address)
+			lat, lng, city, postal_code = geocode({city_name, address})
 			if not lat and lng:
 				print("Geocoding failed.")
 				return None
@@ -105,15 +107,16 @@ def scraping_shop():
 			"street": address,
 			"lat": lat,
 			"long": lng,
-			"city": city,
+			"city": city_name,
 			"working_hours": f"{working_hours}",
-			"picks_up_in_shop" "True"
+			"picks_up_in_shop": "True",
 			"zip_code": postal_code
 			}
-		create_store(shop_info)
-		break
-		# shop_info_list.append(shop_info)
-		# print(shop_info)
+		# create_store(shop_info)
+		shop_info_list.append(shop_info)
+		# break
+	# with open(f"store_ipertriscount.json", "w", encoding="utf-8") as outfile:
+	# 	json.dump(shop_info_list, outfile, indent=4)
 	return shop_info_list
 
 if __name__ == "__main__":

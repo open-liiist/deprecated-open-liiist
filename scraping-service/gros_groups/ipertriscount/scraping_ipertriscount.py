@@ -59,3 +59,4 @@ if __name__ == "__main__":
 			# 	json.dump(product_data, file)
 			send_data_to_receiver(product_data)
 			# print(product_data)
+		

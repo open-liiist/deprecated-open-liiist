@@ -1,0 +1,122 @@
+[
+    {
+        "name": "ipertriscount",
+        "street": "Via Ostiense, 2193",
+        "lat": 41.7681013,
+        "long": 12.3224347,
+        "city": "Ostia Antica (RM)",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00124"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via dell'Arco di Travertino, 88/94",
+        "lat": 41.8650337,
+        "long": 12.5336598,
+        "city": "Roma",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00179"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Carlo Santarelli, 91",
+        "lat": 41.8610365,
+        "long": 12.6076008,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00133"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Enrico Ferri, 8",
+        "lat": 41.8509698,
+        "long": 12.5991978,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00173"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Domenico De Dominicis, 42",
+        "lat": 41.90210769999999,
+        "long": 12.5358778,
+        "city": "Roma, Casal Bertone",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00159"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Orvieto, 44",
+        "lat": 41.8851243,
+        "long": 12.5170723,
+        "city": "Roma",
+        "working_hours": "['07:30 - 20:30 (continuato)', 'Aperto la domenica08:00 - 13:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00182"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Don Primo Mazzolari, 169/181/183 - C.C. Unico",
+        "lat": 41.8940679,
+        "long": 12.6738347,
+        "city": "Roma",
+        "working_hours": "['7:30 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00132"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "S.S. Cassia Nord km 86,400",
+        "lat": 42.4323894,
+        "long": 12.0959488,
+        "city": "Viterbo",
+        "working_hours": "['Dal luned\u00ec al sabato 8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "01100"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via delle Molette, 245",
+        "lat": 42.0019877,
+        "long": 12.6682688,
+        "city": "Fonte Nuova (RM)",
+        "working_hours": "['Dal luned\u00ec al sabato 8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00013"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Braccianese Claudia, 57",
+        "lat": 42.0860861,
+        "long": 12.1855137,
+        "city": "Bracciano (RM)",
+        "working_hours": "['dal luned\u00ec al sabato 8:00 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00062"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Piani di Santa Maria, 83 - Via Nettunense km 12,2",
+        "lat": 41.67035610000001,
+        "long": 12.6513584,
+        "city": "Ariccia (RM)",
+        "working_hours": "['dal luned\u00ec al sabato 7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Salaria, 1380",
+        "lat": 42.0015842,
+        "long": 12.5191373,
+        "city": "Roma, Settebagni",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    }
+]
