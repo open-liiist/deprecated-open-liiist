@@ -5,15 +5,32 @@ import { ApiError } from "../utils/apiError";
 import { ApiResponse } from "../utils/apiResponse";
 
 export class AuthController {
+	// static async register(req: Request, res: Response, next: NextFunction) {
+	// 	const { email, password } = req.body;
+	// 	try {
+	// 		const newUser = await registerUser(email, password);
+	// 		res.status(201).json(ApiResponse.success("User registered successfully", newUser));
+	// 	} catch (err) {
+	// 		next(ApiError.internal("Error registering user :("));
+	// 	}
+	// }
+
 	static async register(req: Request, res: Response, next: NextFunction) {
-		const { email, password } = req.body;
+		// Aggiungi i nuovi campi dalla richiesta
+		const { email, password, name, dateOfBirth, supermarkets } = req.body;
+	
 		try {
-			const newUser = await registerUser(email, password);
+			// Modifica la funzione registerUser per accettare i nuovi campi
+			const newUser = await registerUser(email, password, name, dateOfBirth, supermarkets);
+	
+			// Risposta di successo
 			res.status(201).json(ApiResponse.success("User registered successfully", newUser));
 		} catch (err) {
+			// In caso di errore, passa l'errore al middleware di gestione degli errori
 			next(ApiError.internal("Error registering user :("));
 		}
 	}
+	
 
 	static async login(req: Request, res: Response, next: NextFunction) {
 		const { email, password } = req.body;

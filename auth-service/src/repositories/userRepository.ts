@@ -1,13 +1,24 @@
 import prisma from '../services/prisma'
 
 export class UserRepository {
-	static async createUser(email: string, passwordHash: string) {
+	// static async createUser(email: string, passwordHash: string) {
+	// 	return await prisma.user.create({
+	// 		data: {
+	// 			email,
+	// 			passwordHash,
+	// 		},
+	// 	})
+	// }
+	static async createUser(email: string, passwordHash: string, name: string, dateOfBirth: Date, supermarkets: string[]) {
 		return await prisma.user.create({
 			data: {
 				email,
 				passwordHash,
+				name,
+				dateOfBirth,
+				supermarkets,
 			},
-		})
+		});
 	}
 
 	static async findUserByEmail(email: string) {
