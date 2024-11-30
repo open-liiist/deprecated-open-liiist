@@ -1,0 +1,168 @@
+[
+    {
+        "categoryId": 44969,
+        "parentId": 44979,
+        "name": "Mele",
+        "slug": "frutta-e-verdura/frutta-fresca/mele",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/mele"
+    },
+    {
+        "categoryId": 44970,
+        "parentId": 44979,
+        "name": "Pere",
+        "slug": "frutta-e-verdura/frutta-fresca/pere",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/pere"
+    },
+    {
+        "categoryId": 44971,
+        "parentId": 44979,
+        "name": "Banane",
+        "slug": "frutta-e-verdura/frutta-fresca/banane",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/banane"
+    },
+    {
+        "categoryId": 44972,
+        "parentId": 44979,
+        "name": "Agrumi",
+        "slug": "frutta-e-verdura/frutta-fresca/agrumi",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/agrumi"
+    },
+    {
+        "categoryId": 44973,
+        "parentId": 44979,
+        "name": "Frutta esotica",
+        "slug": "frutta-e-verdura/frutta-fresca/frutta-esotica",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/frutta-esotica"
+    },
+    {
+        "categoryId": 44975,
+        "parentId": 44979,
+        "name": "Altra frutta",
+        "slug": "frutta-e-verdura/frutta-fresca/altra-frutta",
+        "itemUrl": "/frutta-e-verdura/frutta-fresca/altra-frutta"
+    },
+    {
+        "categoryId": 44977,
+        "parentId": 44989,
+        "name": "Frutta secca e disidratata",
+        "slug": "frutta-e-verdura/frutta-secca/frutta-secca-e-disidratata",
+        "itemUrl": "/frutta-e-verdura/frutta-secca/frutta-secca-e-disidratata"
+    },
+    {
+        "categoryId": 44978,
+        "parentId": 44989,
+        "name": "Prugne secche",
+        "slug": "frutta-e-verdura/frutta-secca/prugne-secche",
+        "itemUrl": "/frutta-e-verdura/frutta-secca/prugne-secche"
+    },
+    {
+        "categoryId": 45722,
+        "parentId": 44968,
+        "name": "Minestre e zuppe",
+        "slug": "frutta-e-verdura/minestre-e-zuppe",
+        "itemUrl": "/frutta-e-verdura/minestre-e-zuppe",
+        "metaData": {
+            "category_info": {
+                "HIDE_IN_MENU": false
+            }
+        }
+    },
+    {
+        "categoryId": 44993,
+        "parentId": 44968,
+        "name": "Frutta sciroppata",
+        "slug": "frutta-e-verdura/frutta-sciroppata",
+        "itemUrl": "/frutta-e-verdura/frutta-sciroppata"
+    },
+    {
+        "categoryId": 44289,
+        "parentId": 44968,
+        "name": "Mousse di frutta",
+        "slug": "frutta-e-verdura/mousse-di-frutta",
+        "itemUrl": "/frutta-e-verdura/mousse-di-frutta"
+    },
+    {
+        "categoryId": 44994,
+        "parentId": 44968,
+        "name": "Semi e condimenti",
+        "slug": "frutta-e-verdura/semi-e-condimenti",
+        "itemUrl": "/frutta-e-verdura/semi-e-condimenti"
+    },
+    {
+        "categoryId": 44983,
+        "parentId": 44301,
+        "name": "Insalata lavata",
+        "slug": "frutta-e-verdura/verdura-fresca/insalata-lavata",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/insalata-lavata"
+    },
+    {
+        "categoryId": 44984,
+        "parentId": 44301,
+        "name": "Insalate e radicchi",
+        "slug": "frutta-e-verdura/verdura-fresca/insalate-e-radicchi",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/insalate-e-radicchi"
+    },
+    {
+        "categoryId": 44985,
+        "parentId": 44301,
+        "name": "Verdure pronte",
+        "slug": "frutta-e-verdura/verdura-fresca/verdure-pronte",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/verdure-pronte"
+    },
+    {
+        "categoryId": 44986,
+        "parentId": 44301,
+        "name": "Pomodori e pomodorini",
+        "slug": "frutta-e-verdura/verdura-fresca/pomodori-e-pomodorini",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/pomodori-e-pomodorini"
+    },
+    {
+        "categoryId": 44987,
+        "parentId": 44301,
+        "name": "Peperoni e peperoncini",
+        "slug": "frutta-e-verdura/verdura-fresca/peperoni-e-peperoncini",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/peperoni-e-peperoncini"
+    },
+    {
+        "categoryId": 44988,
+        "parentId": 44301,
+        "name": "Patate e funghi",
+        "slug": "frutta-e-verdura/verdura-fresca/patate-e-funghi",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/patate-e-funghi"
+    },
+    {
+        "categoryId": 44279,
+        "parentId": 44301,
+        "name": "Cipolle e aglio",
+        "slug": "frutta-e-verdura/verdura-fresca/cipolle-e-aglio",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/cipolle-e-aglio"
+    },
+    {
+        "categoryId": 44990,
+        "parentId": 44301,
+        "name": "Altre verdure",
+        "slug": "frutta-e-verdura/verdura-fresca/altre-verdure",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/altre-verdure"
+    },
+    {
+        "categoryId": 44991,
+        "parentId": 44301,
+        "name": "Aromi",
+        "slug": "frutta-e-verdura/verdura-fresca/aromi",
+        "itemUrl": "/frutta-e-verdura/verdura-fresca/aromi"
+    },
+    {
+        "categoryId": 44992,
+        "parentId": 44310,
+        "name": "Verdura cotta",
+        "slug": "frutta-e-verdura/verdura-cotta-e-olive/verdura-cotta",
+        "itemUrl": "/frutta-e-verdura/verdura-cotta-e-olive/verdura-cotta"
+    },
+    {
+        "categoryId": 45782,
+        "parentId": 44310,
+        "name": "Olive",
+        "slug": "frutta-e-verdura/verdura-cotta-e-olive/olive",
+        "itemUrl": "/frutta-e-verdura/verdura-cotta-e-olive/olive"
+    }
+]

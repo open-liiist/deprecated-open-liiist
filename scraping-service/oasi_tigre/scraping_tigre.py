@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+from dotenv import dotenv_values
 import time
 import sys
 import json
@@ -11,6 +14,8 @@ sys.path.append('../')
 from libft import wait_for_element, wait_for_elements, wait_for_elements_conad
 from scraping_tigre_shop import scraping_shop
 # from send_data import send_data_to_receiver
+
+load_dotenv()
 
 def wait_fw(driver, xpath):
 
@@ -102,50 +107,47 @@ def change_shop_location(driver, location):
 	button2.click()
 	time.sleep(4)
 
+def update_env_with_dotenv(env_file, key, new_value):
+	config = dotenv_values(env_file)
 
-# Selects the first store in a new location after a previous selection
+	config[key] = new_value
 
-def change_already_selected_shop(driver, location):
-
-	wait = WebDriverWait(driver, 10)
-	wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[1]/div/div/header/div/nav/div/div[3]/div[1]/span[3]")))
-	driver.find_element(By.XPATH, "/html/body/div[1]/div/div/header/div/nav/div/div[3]/div[1]/span[3]").click()
-
-	wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[3]/div[2]/div[3]/div[3]/div[1]/div[2]/span[2]")))
-	driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[3]/div[3]/div[1]/div[2]/span[2]").click()
-
-	wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")))
-	input_box = driver.find_element(By.CSS_SELECTOR, "input.form-control.pdv.pac-target-input")
-	input_box.click()
-	input_box.send_keys(location)
-	time.sleep(5)
-	input_box.send_keys(Keys.ENTER)
-	time.sleep(7)
-
-	wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")))
-	available_shops = driver.find_elements(By.XPATH, "//div[@class='shop-card-container']/div[@class='card-selezione-negozio']")
-
-	if len(available_shops) == 0:
-		print('No shops found')
-		return
-
-	available_shops[0].click()
-	time.sleep(2)
+	# Riscrive il file .env
+	with open(env_file, "w") as file:
+		for k, v in config.items():
+			file.write(f"{k}={v}\n")
 
 if __name__ == "__main__":
 	# Initialize WebDriver
-	driver = uc.Chrome(use_subprocess=False)
+	all_shop = os.environ.get("ALL_SHOP")
+	count_shop = os.environ.get("COUNT_SHOP")
 
 	shop_list = scraping_shop()
+	shop_list_roma = []
+	shop = []
 	for shop in shop_list:
 		if "RM" in shop['street']:
-			change_shop_location(driver, shop['street'])
-			break
+			shop_list_roma.append(shop)
 		else:
 			continue
+		
+	if len(shop_list_roma) != int(all_shop):
+		print("Cambio nei negozi")
+		exit()
+
+	if int(count_shop) == 6:
+		update_env_with_dotenv(".env", "COUNT_SHOP", 0)
+		count_shop = 0
+	
+	count_shop = int(count_shop)
+
+	shop = shop_list_roma[int(count_shop)]
+
+	driver = uc.Chrome(use_subprocess=False)
 
 	total_items_processed = 0
 	product_list = []
+	change_shop_location(driver, shop['street'])
 
 	for category, items in categories_dict.items():
 		count = 0
@@ -173,9 +175,11 @@ if __name__ == "__main__":
 
 				total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop, product_list)
 
-	with open(f"product_tigre.json", "w", encoding="utf-8") as outfile:
+	with open(f"product_tigre_{shop['street']}.json", "w", encoding="utf-8") as outfile:
 		json.dump(product_list, outfile, indent=4)
 
 	print(f"Total items processed: {total_items_processed}")
+	
+	update_env_with_dotenv(".env", "COUNT_SHOP", int(count_shop + 1))
 
 	driver.close()
