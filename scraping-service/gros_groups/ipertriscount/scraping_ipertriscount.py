@@ -19,7 +19,7 @@ if __name__ == "__main__":
 	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	allowed_keywords = ["ITALIA", "SCOTTONA"]
+	allowed_keywords = ["ITALIA", "SCOTTONA", "ALLEVATO"]
 	# print(get_all_stores())
 	shop_info_list = scraping_shop()
 	  
@@ -66,8 +66,8 @@ if __name__ == "__main__":
 					except:
 						product_data["price_for_kg"] = product['priceDisplay']
 					
-				if product_data['quantity'].strip() in allowed_keywords:
-					if "ITALIA" in product_data['quantity']:
+				if any(keyword in product_data['quantity'] for keyword in allowed_keywords) and not re.search(r'\d', product_data['quantity']):
+					if "ITALIA" in product_data['quantity'] or "ALLEVATO" in product_data['quantity']:
 						product_data['quantity'] = f"{product['productInfos']['WEIGHT_SELLING']}{product['productInfos']['WEIGHT_UNIT_SELLING']}"
 						product_data['description'] = product['description']
 					if "SCOTTONA" in product_data['quantity']:
