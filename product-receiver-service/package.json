@@ -4,7 +4,7 @@
 	"description": "Product receiver service for grocygo",
 	"main": "main.js",
 	"scripts": {
-		"start": "npm run build && npm run db:sync && node dist/main.js",
+		"start": "npm run db:sync && node dist/main.js",
 		"build": "npx tsc",
 		"dev": "npx tsc && node dist/main.js",
 		"db:sync": "npx prisma db push --force-reset",
