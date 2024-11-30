@@ -1,0 +1,112 @@
+[
+    {
+        "name": "cts",
+        "street": "Via Flaminia km 24,200",
+        "lat": 42.0993423,
+        "long": 12.4964633,
+        "city": "Riano (RM)",
+        "working_hours": "['8:30 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "cts",
+        "street": "Via Cassia, 340",
+        "lat": 41.9541534,
+        "long": 12.45765,
+        "city": "Roma",
+        "working_hours": "['7:00 - 21:00 (continuato)', 'Aperto la domenica7:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00191"
+    },
+    {
+        "name": "cts",
+        "street": "Via Anton Cechov, 76",
+        "lat": 41.8392872,
+        "long": 12.5085024,
+        "city": "Roma (RM)",
+        "working_hours": "['7:50 - 13:30 / 16:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00142"
+    },
+    {
+        "name": "cts",
+        "street": "Viale dell'Oceano Atlantico, 271",
+        "lat": 41.8152144,
+        "long": 12.4622346,
+        "city": "Roma (RM)",
+        "working_hours": "['Questo indirizzo email \u00e8 protetto dagli spambots. \u00c8 necessario abilitare JavaScript per vederlo.', 'Dal luned\u00ec al sabato 7:30-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00144"
+    },
+    {
+        "name": "cts",
+        "street": "Via A. Millevoi, 57",
+        "lat": 41.82174,
+        "long": 12.5185996,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00178"
+    },
+    {
+        "name": "cts",
+        "street": "Via degli Alberini, 19",
+        "lat": 41.9193217,
+        "long": 12.5703974,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00155"
+    },
+    {
+        "name": "cts",
+        "street": "Via Raffaele Conforti, 95/97",
+        "lat": 41.8936399,
+        "long": 12.4084841,
+        "city": "Roma (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00166"
+    },
+    {
+        "name": "cts",
+        "street": "Via delle Cerquette, snc",
+        "lat": 41.7282338,
+        "long": 12.6822863,
+        "city": "Ariccia (RM)",
+        "working_hours": "['8:30 - 21.00 (continuato)', 'Aperto la domenica8:45 - 21.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "cts",
+        "street": "Via Casilina km 35,700",
+        "lat": 41.7912667,
+        "long": 12.873514,
+        "city": "Labico (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "cts",
+        "street": "Via Fiume Giallo,19",
+        "lat": 41.8089979,
+        "long": 12.4291993,
+        "city": "Roma (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00144"
+    },
+    {
+        "name": "cts",
+        "street": "Via Flaminia km 27,300",
+        "lat": 42.1298411,
+        "long": 12.4956465,
+        "city": "Castelnuovo di Porto (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    }
+]

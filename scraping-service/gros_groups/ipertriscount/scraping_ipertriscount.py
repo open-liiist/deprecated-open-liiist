@@ -15,36 +15,36 @@ from scraping_ipertriscount_shop import scraping_shop
 if __name__ == "__main__":
 	categories_url = "https://www.ipertriscountspesaonline.it/ebsn/api/category?filtered=false&hash=w0d0t0"
 	headers = {"Accept": "*/*"}
+
 	categories = fetch_data(categories_url, headers)
 	max_pages = 1000
 
 	micro_categories = extract_micro_categories(categories)
-	allowed_keywords = ["ITALIA", "SCOTTONA", "ALLEVATO"]
 	# print(get_all_stores())
 	shop_info_list = scraping_shop()
 	  
+	allowed_keywords = ["ITALIA", "SCOTTONA", "ALLEVATO"]
 	all_product = []
-	all_products = []
-	for category in micro_categories:
 
+	for category in micro_categories:
 		category_id = category["categoryId"]
 		products = []
 		page = 1
 
 		while True:
 			products_url = f"https://www.ipertriscountspesaonline.it/ebsn/api/products?parent_category_id={category_id}&page={page}&page_size=24"
-
 			fetched_products = fetch_data(products_url, headers)
+
 			if fetched_products is None or len(fetched_products["products"]) == 0:
 				break
 
 			products.extend(fetched_products["products"])
 			page += 1
+
 			if page > max_pages:
 				break
 		
 		for product in products:
-
 			try:
 				product_data = {
 				"full_name": product['name'],
@@ -52,6 +52,7 @@ if __name__ == "__main__":
 				"quantity": product['description'],
 				"price": product['price'],
 				}
+
 				if product['priceDisplay'] != product['price']:
 					product_data["discounted_price"] = product['priceDisplay']
 
@@ -76,6 +77,12 @@ if __name__ == "__main__":
 						product_data['full_name'] = f"{product['name']} {product['description']}"
 
 				all_product.append(product_data)
+
+				# if product_data['full_name']:
+				# 	send_data_to_receiver(product_data)
+				# else:
+				# 	send_error()
+
 			except Exception as e:
 				print(f"{product['name']}: {e}")
 				print(f"{product['id']}")
@@ -91,5 +98,4 @@ if __name__ == "__main__":
 		sanitized_street = re.sub(r'[\/:*?"<>|]', '_', shop['street'])
 		with open(f"store_ipertriscount_{sanitized_street}.json", "w", encoding="utf-8") as outfile:
 			json.dump(all_product, outfile, indent=4)
-			# send_data_to_receiver(product_data)
 		
