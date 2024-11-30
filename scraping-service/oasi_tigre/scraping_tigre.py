@@ -20,7 +20,7 @@ load_dotenv()
 def wait_fw(driver, xpath):
 
 	try:
-		elements = WebDriverWait(driver, 5).until(
+		elements = WebDriverWait(driver, 7).until(
 			EC.presence_of_all_elements_located((By.XPATH, xpath))
 		)
 		return elements
