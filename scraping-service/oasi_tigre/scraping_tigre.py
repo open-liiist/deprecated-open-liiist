@@ -1,18 +1,19 @@
 import os
+import sys
+import time
+import json
 from dotenv import load_dotenv
 from dotenv import dotenv_values
-import time
-import sys
-import json
 import undetected_chromedriver as uc
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 from utility_tigre import categories_dict
 sys.path.append('../')
-from libft import wait_for_element, wait_for_elements, wait_for_elements_conad
 from scraping_tigre_shop import scraping_shop
+from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv
 # from send_data import send_data_to_receiver
 
 load_dotenv()
@@ -50,6 +51,7 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 			right_price = old_price
 			old_price = new_price
 			new_price = right_price
+		
 		processed_items += 1
 		product_data = {
 			"full_name": name,
@@ -64,8 +66,10 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 				"long": shop['long']
 			}
 		}
+		
 		# send_data_to_receiver(product_data)
 		product_list.append(product_data)
+		
 		if active == 1:
 			try:
 				wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()
@@ -107,23 +111,14 @@ def change_shop_location(driver, location):
 	button2.click()
 	time.sleep(4)
 
-def update_env_with_dotenv(env_file, key, new_value):
-	config = dotenv_values(env_file)
-
-	config[key] = new_value
-
-	with open(env_file, "w") as file:
-		for k, v in config.items():
-			file.write(f"{k}={v}\n")
-
 if __name__ == "__main__":
-	# Initialize WebDriver
 	all_shop = os.environ.get("ALL_SHOP")
 	count_shop = os.environ.get("COUNT_SHOP")
 
 	shop_list = scraping_shop()
 	shop_list_roma = []
 	shop = []
+	
 	for shop in shop_list:
 		if "RM" in shop['street']:
 			shop_list_roma.append(shop)

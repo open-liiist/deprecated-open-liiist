@@ -1,13 +1,16 @@
+import os
 import sys
-import json
 import time
+import json
 import requests
+from dotenv import load_dotenv
+from dotenv import dotenv_values
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
 
 # Waits for a single element to appear on the page.
 # Returns: The WebElement if found, otherwise None.
@@ -114,3 +117,12 @@ def extract_micro_categories(categories):
 				yield from extract_micro_categories_recursive(sub_category)
 
 	return list(extract_micro_categories_recursive(categories))
+
+def update_env_with_dotenv(env_file, key, new_value):
+	config = dotenv_values(env_file)
+
+	config[key] = new_value
+
+	with open(env_file, "w") as file:
+		for k, v in config.items():
+			file.write(f"{k}={v}\n")
