@@ -68,7 +68,7 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 		product_list.append(product_data)
 		if active == 1:
 			try:
-				wait_fw(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()
+				wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[3]").click()
 			except:
 				active = 0
 
@@ -112,7 +112,6 @@ def update_env_with_dotenv(env_file, key, new_value):
 
 	config[key] = new_value
 
-	# Riscrive il file .env
 	with open(env_file, "w") as file:
 		for k, v in config.items():
 			file.write(f"{k}={v}\n")
@@ -171,6 +170,7 @@ if __name__ == "__main__":
 				try:
 					n_cards = len(wait_fw(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
 				except:
+					print("sono qui")
 					continue
 
 				total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop, product_list)
