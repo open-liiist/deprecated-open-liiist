@@ -76,3 +76,34 @@ mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.loc
 - [Traefik Docs](https://traefik.io/)
 - [Traefik with Docker configs](https://github.com/ChristianLempa/boilerplates/blob/main/docker-compose/traefik/config/traefik.yaml)
 - [Learn Kubernetes](https://learn.udacity.com/courses/ud615/lessons/c986ef51-ffb5-4821-be4b-358289284f90/concepts/ec269da2-1e35-4a29-bdf8-98176f9adaa2)
+
+---
+
+## Endpoints
+
+### Auth Service (nodejs)
+- **POST /auth/register**: Register a new user.
+- **POST /auth/login**: Login a user.
+- **POST /auth/refresh**: Refresh user token.
+- **POST /auth/verify**: Verify user token.
+- **POST /auth/revoke**: Revoke user token.
+- **POST /auth/logout**: Logout user.
+- **POST /users/:id**: Get user by ID.
+- **POST /status**: Get service status.
+
+### Notification Alert Service (golang)
+- **POST /ricevi_code**: Gets errors from the other services.
+
+### Product Receiver Service (nodejs)
+- **POST /product**: Receives products from the scraper service.
+- **POST /store**: Receives stores from the scraper service.
+- **GET /store**: Get all stores.
+- **GET /store/:grocery/:city**: Get all stores by grocery and city.
+
+### Search Service (rust)
+- **POST /search**: Search for products.
+- **POST /product/exists**: Check if a product exists.
+- **POST /product/in-shop**: Search for a product in a store.
+- **POST /product/lowest-price**: Find the lowest price for a product.
+- **GET /stores**: Get all stores.
+- **GET /store/:id/products**: Get all products by store.
