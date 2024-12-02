@@ -1,0 +1,92 @@
+[
+    {
+        "name": "top",
+        "street": "Via Domenico Seghetti, 24",
+        "lat": 41.80935969999999,
+        "long": 12.6777529,
+        "city": "Frascati (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00044"
+    },
+    {
+        "name": "top",
+        "street": "Via San Giovanni Vecchio, 84/86",
+        "lat": 41.688755,
+        "long": 12.7732379,
+        "city": "Velletri (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00049"
+    },
+    {
+        "name": "top",
+        "street": "Via Appia Nuova km 20,800",
+        "lat": 41.7590557,
+        "long": 12.6249355,
+        "city": "Marino (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "top",
+        "street": "Via Ariana km 10,400",
+        "lat": 41.7469194,
+        "long": 12.8597182,
+        "city": "Artena (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00031"
+    },
+    {
+        "name": "top",
+        "street": "Via San Francesco d'Assisi, 11",
+        "lat": 41.8035489,
+        "long": 12.5991322,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00-20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "top",
+        "street": "Via Roma, 209",
+        "lat": 41.7231602,
+        "long": 12.8299021,
+        "city": "Lariano (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "top",
+        "street": "Via Nettunense km 7,100",
+        "lat": 41.690639,
+        "long": 12.6483749,
+        "city": "Ariccia (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 20.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "top",
+        "street": "Via Riserva Nuova, km 44,000",
+        "lat": 41.5905477,
+        "long": 12.6294323,
+        "city": "Aprilia (LT)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "04011"
+    },
+    {
+        "name": "top",
+        "street": "Via dell'ospedaletto, 20",
+        "lat": 41.7789777,
+        "long": 12.6162839,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    }
+]

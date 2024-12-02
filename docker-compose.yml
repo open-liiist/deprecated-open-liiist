@@ -46,17 +46,6 @@ services:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
-  scraping-service:
-    build: 
-      context: ./scraping-service
-      dockerfile: Dockerfile
-    depends_on:
-      - product-receiver-service
-    volumes:
-      - ./scraping-service:/app
-    environment:
-      - PRODUCT_RECEIVER_BASE_URL=${PRODUCT_RECEIVER_BASE_URL}
-
   product-receiver-service:
     build: 
       context: ./product-receiver-service
@@ -194,3 +183,7 @@ services:
 volumes:
   pgdata: 
   elasticsearch:
+
+networks:
+  shared-network:
+    external: true

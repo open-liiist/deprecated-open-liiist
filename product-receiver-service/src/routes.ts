@@ -72,7 +72,10 @@ router.post('/product', async (req: Request, res: Response) => {
 			price_for_kg,
 		} = req.body;
 
-		if (!full_name || !price || !localization || !localization.grocery) {
+		console.log("stamapa per favore")
+		console.log("cosa ho ricevuto dal body:", req.body);
+		if (!full_name || !price || !localization || !localization.grocery ||
+			!localization.lat || !localization.long) {
 			res.status(400).json({ error: 'Missing required fields' });
 			return;
 		}

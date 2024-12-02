@@ -1,0 +1,182 @@
+[
+    {
+        "name": "il_castoro",
+        "street": "Via Conca d'oro, 386",
+        "lat": 41.9452994,
+        "long": 12.5169032,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Erasmo Gattamelata, 124",
+        "lat": 41.88804409999999,
+        "long": 12.5364129,
+        "city": "Roma",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 \u2013 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Palombarese, km 19,900",
+        "lat": 42.0183697,
+        "long": 12.6877857,
+        "city": "Guidonia Moncelio (RM)",
+        "working_hours": "['Lun.-Sab. 8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via della Casetta Mattei, 53",
+        "lat": 41.8520448,
+        "long": 12.4221221,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00148"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Renzo da Ceri, 71/89",
+        "lat": 41.8896951,
+        "long": 12.5389903,
+        "city": "Roma (RM)",
+        "working_hours": "['Lun.-Sab. 8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nomentana, 433",
+        "lat": 41.9278159,
+        "long": 12.5242318,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00199"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Prenestina, 1221",
+        "lat": 41.8928614,
+        "long": 12.6312284,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00132"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nomentana, 6",
+        "lat": 41.9346809,
+        "long": 12.5359324,
+        "city": "Roma",
+        "working_hours": "['7:30 - 20.30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nazionale Tiburtina, km 23,500",
+        "lat": 41.9524095,
+        "long": 12.7209934,
+        "city": "Tivoli Terme (RM)",
+        "working_hours": "['Dal luned\u00ec al sabato 8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Casal Bianco, 2",
+        "lat": 41.9841416,
+        "long": 12.7142662,
+        "city": "Guidonia Montecelio (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via dell'Acqua Bullicante, 162",
+        "lat": 41.8862293,
+        "long": 12.5435782,
+        "city": "Roma",
+        "working_hours": "['7:45 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00177"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via dei Laterani, 39/41",
+        "lat": 41.88339209999999,
+        "long": 12.5033268,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00184"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via San Leo, 9",
+        "lat": 41.979683,
+        "long": 12.5131321,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Dell'Idroscalo, 12 (ang. Via dell'Appagliatore, 5)",
+        "lat": 41.7371434,
+        "long": 12.2648973,
+        "city": "Ostia(RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00121"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Circonvallazione Appia, 190",
+        "lat": 41.8742685,
+        "long": 12.5110112,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00179"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Val Pellice, 12",
+        "lat": 41.9444392,
+        "long": 12.5210324,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Piazza Santa Maria Maggiore, 5/b",
+        "lat": 41.8973997,
+        "long": 12.499561,
+        "city": "Roma",
+        "working_hours": "['7:30 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00185"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Ugo Ojetti, 14",
+        "lat": 41.9437079,
+        "long": 12.5482895,
+        "city": "Roma",
+        "working_hours": "['8:00 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00137"
+    }
+]

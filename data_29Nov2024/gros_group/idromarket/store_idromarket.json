@@ -1,0 +1,42 @@
+[
+    {
+        "name": "idromarket",
+        "street": "Via Tenuta di S.Cecilia, 2/6",
+        "lat": 41.8469056,
+        "long": 12.3453977,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00-13:30 / 16:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00163"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via Altagnana, 9",
+        "lat": 41.9761343,
+        "long": 12.5157908,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via del Ponte Pisano, 210",
+        "lat": 41.85697,
+        "long": 12.39812,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00148"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via Michele Rosi, 203",
+        "lat": 41.9307626,
+        "long": 12.2392666,
+        "city": "Aranova (RM)",
+        "working_hours": "['8:00-20:30 (continuato)', 'Aperto la domenica8:00-13:30 e 16:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00054"
+    }
+]
