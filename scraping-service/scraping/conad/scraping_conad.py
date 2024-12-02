@@ -11,17 +11,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
-from scraping_conad_shop import scraping_shops
 sys.path.append('../')
-from libft import wait_for_element, wait_for_elements, wait_for_element_conad, wait_for_elements_conad, update_env_with_dotenv, to_float
-# from send_data import send_data_to_receiver
+from libft import wait_for_element, wait_for_elements, wait_for_element_conad, wait_for_elements_conad, update_env_with_dotenv, to_float, get_store_by_grocery_and_city, send_data_to_receiver
 
 load_dotenv()
 
 # Finds product information on a webpage and sends it to a specified function.
 # Returns: The number of products processed successfully.
  
-def find_and_send_info(driver, n_cards, advertising):
+def find_and_send_info(driver, n_cards, advertising, shop):
 
 	processed_items = 0
 	card_selector = f"/html/body/main/div/div[2]/div[2]/div[({advertising})]/div[{{card_index}}]" 
@@ -47,34 +45,34 @@ def find_and_send_info(driver, n_cards, advertising):
 				"quantity": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/b").text,
 				"price": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[3]").text,
 				"price_for_kg": wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[1]/div").text,
-				"discounted_price": None,
+				"discount": None,
 				"localization":
-			{
-				"grocery": "conad",
-				# "lat": ,
-				# "long": 
-			}
+				{
+					"grocery": shop['grocery'],
+					"lat": shop['lat'],
+					"long": shop['lng']
+				}
 			}
 		
 			if (product_data["price"] == ""):
 				product_data["price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]").text
-				product_data["discounted_price"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]").text
+				product_data["discount"] = wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]").text
 		
 			try:
-				product_data["discounted_price"] = (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2]")).text
+				product_data["discount"] = (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2]")).text
 			except:
 				pass
 			
 			if product_data["price"]:
 				product_data["price"] = to_float(product_data["price"])
 
-			if product_data["discounted_price"]:
-				product_data["discounted_price"] = to_float(product_data["discounted_price"])
+			if product_data["discount"]:
+				product_data["discount"] = to_float(product_data["discount"])
 			else:
-				product_data["discounted_price"] = float(0)
+				product_data["discount"] = float(0)
 
 			processed_items += 1
-			print(product_data, "\n")
+			send_data_to_receiver(product_data)
 		
 		except Exception as e:
 			print(f"Error finding element: {card_xpath}: {e}")
@@ -115,7 +113,7 @@ def change_shop_location(driver, location, wait):
 	
 	try:
 		wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[34]/div[2]/iframe')))
-		time.sleep(60)
+		exit(1)
 	except:
 		time.sleep(3)
 
@@ -126,12 +124,13 @@ if __name__ == "__main__":
 	all_shop = os.environ.get("ALL_SHOP")
 	count_shop = os.environ.get("COUNT_SHOP")
 
-	shop_list = scraping_shops()
-	shop = []
-		
-	if len(shop_list) != int(all_shop):
-		print("Cambio nei negozi")
-		exit()
+	result1 = get_store_by_grocery_and_city("Conad Superstore", "ROMA")
+	result2 = get_store_by_grocery_and_city("Conad", "ROMA")
+	result3 = get_store_by_grocery_and_city("Conad City", "ROMA")
+	result4 = get_store_by_grocery_and_city("Spazio Conad", "ROMA")
+	result5 = get_store_by_grocery_and_city("Conad", "GUIDONIA MONTECELIO")
+
+	shop_list = {'stores': result1['stores'] + result2['stores'] + result3['stores'] + result4['stores'] + result5['stores']}
 
 	if int(count_shop) == 61:
 		update_env_with_dotenv(".env", "COUNT_SHOP", 0)
@@ -139,10 +138,19 @@ if __name__ == "__main__":
 	
 	count_shop = int(count_shop)
 
-	shop = shop_list[int(count_shop)]
+	shop = shop_list['stores'][count_shop]
 
-	driver = uc.Chrome(use_subprocess=False)
-	wait = WebDriverWait(driver, 10)
+	options = uc.ChromeOptions()
+
+	options.binary_location = "/usr/bin/google-chrome"
+
+	options.add_argument("--headless")
+	options.add_argument("--no-sandbox")
+	options.add_argument("--disable-dev-shm-usage")
+
+	# Initialize the undetected Chrome driver
+	driver = uc.Chrome(options=options, use_subprocess=False)
+	wait = WebDriverWait(driver, 30)
 
 	total_items_processed = 0
 	product_list = []
@@ -188,7 +196,7 @@ if __name__ == "__main__":
 		
 				n_cards = len(wait_for_elements(driver, f'//*[@id="#top"]/div/div[2]/div[2]/div[{advertising}]/div'))
 
-				total_items_processed = find_and_send_info(driver, n_cards, advertising)
+				total_items_processed = find_and_send_info(driver, n_cards, advertising, shop)
 
 				driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/div[2]/div[{advertising + 1}]/ul/li[{counter}]/a').click()
 

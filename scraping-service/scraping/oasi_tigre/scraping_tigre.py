@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from utility_tigre import categories_dict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv, to_float, send_data_to_receiver, get_all_stores
+from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv, to_float, send_data_to_receiver, get_store_by_grocery_and_city
 
 load_dotenv()
 
@@ -48,7 +48,7 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 		if "KG" in old_price:
 			price_for_kg = to_float(old_price)
 		else:
-			price_for_kg = 0.0
+			price_for_kg = 0
 
 		if old_price:
 			old_price, new_price = new_price, old_price
@@ -119,10 +119,13 @@ def change_shop_location(driver, location):
 	time.sleep(4)
 
 if __name__ == "__main__":
-	all_shop = os.environ.get("ALL_SHOP")
-	count_shop = os.environ.get("COUNT_SHOP")
+	all_shop = os.environ.get("ALL_SHOP_2")
+	count_shop = os.environ.get("COUNT_SHOP_2")
 
-	shop_list = get_all_stores()
+	result1 = get_store_by_grocery_and_city("Supermercato Tigre", "Roma")
+	result2 = get_store_by_grocery_and_city("Supermercato Tigre", "Ciampino")
+
+	shop_list = {'stores': result1['stores'] + result2['stores']}
 
 	if int(count_shop) == 6:
 		update_env_with_dotenv(".env", "COUNT_SHOP", 0)
@@ -131,17 +134,14 @@ if __name__ == "__main__":
 	count_shop = int(count_shop)
 
 	shop = shop_list['stores'][count_shop]
-	# print(shop)
 
 	options = uc.ChromeOptions()
 
-	# Specify the Chrome binary location
 	options.binary_location = "/usr/bin/google-chrome"
 
-	# Add necessary arguments for running in Docker
-	options.add_argument("--headless")  # Run in headless mode
-	options.add_argument("--no-sandbox")  # Required in Docker environments
-	options.add_argument("--disable-dev-shm-usage")  # Use /tmp for shared memory
+	options.add_argument("--headless")
+	options.add_argument("--no-sandbox")
+	options.add_argument("--disable-dev-shm-usage")
 
 	# Initialize the undetected Chrome driver
 	driver = uc.Chrome(options=options, use_subprocess=False)
@@ -175,7 +175,6 @@ if __name__ == "__main__":
 					continue
 
 				total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop, product_list)
-				exit()
 
 	print(f"Total items processed: {total_items_processed}")
 	

@@ -4,7 +4,7 @@
 	"description": "Product receiver service for grocygo",
 	"main": "main.js",
 	"scripts": {
-		"start": "npm run db:sync && node dist/main.js",
+		"start": "npm run build && npm run db:sync && node dist/main.js",
 		"build": "npx tsc",
 		"dev": "npx tsc && node dist/main.js",
 		"db:sync": "npx prisma db push --force-reset",
@@ -25,11 +25,11 @@
 	},
 	"homepage": "https://github.com/gabref/grocygo/tree/main#readme",
 	"devDependencies": {
-		"prisma": "^5.21.1",
+		"prisma": "^6.0.1",
 		"typescript": "^5.6.3"
 	},
 	"dependencies": {
-		"@prisma/client": "^5.21.1",
+		"@prisma/client": "^6.0.1",
 		"@types/express": "^5.0.0",
 		"@types/node": "^22.7.5",
 		"express": "^4.21.1"
