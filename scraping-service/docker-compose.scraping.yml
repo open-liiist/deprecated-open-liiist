@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  scraping_shop:
+    build:
+      context: ./scraping_shop
+      dockerfile: Dockerfile
+    container_name: scraping_shop
+    volumes:
+      - ./scraping_shop/libft:/app/libft
+      - ./scraping_shop/oasi_tigre:/app/oasi_tigre
+      - ./scraping_shop/conad:/app/conad
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - scraping-network
+
+  scraping:
+    build:
+      context: ./scraping
+      dockerfile: Dockerfile
+    container_name: scraping
+    volumes:
+      - ./scraping/libft:/app/libft
+      - ./scraping/oasi_tigre:/app/oasi_tigre
+      - ./scraping/conad:/app/conad
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - scraping-network
+
+networks:
+  scraping-network:
+    driver: bridge

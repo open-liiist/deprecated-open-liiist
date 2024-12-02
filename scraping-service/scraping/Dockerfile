@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     gnupg \
-    unzip
+    unzip \
+    cron
 
 # Add Google's GPG key and the correct Chrome repository
 RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -26,9 +27,14 @@ RUN pip install -r requirements.txt
 # Copy application files
 COPY libft/ ./libft/
 COPY oasi_tigre/ ./oasi_tigre/
+COPY conad/ ./conad/
+COPY crontab.txt /etc/cron.d/scraping-cron
+
+# Set permissions for the cron file
+RUN chmod 0644 /etc/cron.d/scraping-cron && crontab /etc/cron.d/scraping-cron
 
 # Add /app to PYTHONPATH
 ENV PYTHONPATH=/app
 
-CMD ["python", "oasi_tigre/scraping_tigre.py"]
-
+# Start cron and keep the container running
+CMD ["cron", "-f"]

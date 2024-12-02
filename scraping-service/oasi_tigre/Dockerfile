@@ -2,14 +2,18 @@ FROM python:3.10
 
 WORKDIR /app
 
+COPY ../requirements.txt ./
+
 # Install dependencies
-COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy source files
-COPY . .
+COPY ../libft.py ./
+COPY ../send_data.py ./
 
-CMD ["python", "scraper_tigre.py"]
+COPY scraping_tigre.py ./
+
+# Command to run the script
+CMD ["python", "scraping_tigre.py"]
 
 # # Install cron and set up the cronjob
 # RUN apt-get update && apt-get install -y cron

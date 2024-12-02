@@ -1,0 +1,4 @@
+# Esegue scraping_*_shop.py ogni due settimane
+0 0 */14 * * python /app/oasi_tigre/scraping_tigre_shop.py >> /var/log/tigre_shop.log 2>&1
+
+0 0 */14 * * python /app/conad/scraping_conad_shop.py >> /var/log/conad_shop.log 2>&1
