@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input2, Input } from "@/components/ui/input";
 import { ActionButton2 } from "@/components/ui/ActionButton";
 import { TagInput } from "@/components/ui/tag-input";
@@ -10,6 +9,7 @@ import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaMagnifyingGlassArrowRight } from "react-icons/fa6";
 import { handleCalculate } from "@/services/shoppingListService";
+import { GoArrowDownRight } from "react-icons/go";
 
 const NewListPage = () => {
     const router = useRouter();
@@ -17,7 +17,7 @@ const NewListPage = () => {
     const [products, setProducts] = useState<
         { name: string; quantity: number }[]
     >([]);
-    const [budget, setBudget] = useState("");
+    const [budget, setBudget] = useState("0");
     const [mode, setMode] = useState("convenience");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -89,49 +89,41 @@ const NewListPage = () => {
     
     return (
         <div id="new-list-base" className="max-w-full w-full flex justify-center p-5 text-liiist_black">
-            <div id="new-list-card" className="max-w-4xl w-full mt-5 flex bg-slate-50 rounded-xl shadow-md">
+            <div id="new-list-card" className="max-w-2xl w-full mt-5 bg-slate-50 rounded-xl shadow-md">
                 <div id="new-list-form"  className="w-full  flex-col">
-                            <div id="title input" className=" rounded-tl-lg  bg-liiist_pink h-16 ">
-                                <Input2
-                                    id="listTitle"
-                                    placeholder="Enter list title"
-                                    value={listTitle}
-                                    onChange={(e) => setListTitle(e.target.value)}
-                                    className="w-full border-transparentc font-bold"
-                                    />
-                            </div>
-                            <div className="mb-5 pt-4 gap-2 flex px-2 items-center border-t-2 border-dashed border-gray-500">
-                                <span className="py-2  text-liiist_black">
-                                    Budget€
-                                </span>
-                                <Input
-                                    id="budget"
-                                    type="number"
-                                    placeholder="insert here"
-                                    value={budget}
-                                    onChange={(e) => setBudget(e.target.value)}
-                                    className="border-transparent shadow-none font-medium w-1/6"
-                                    />
-                            </div>
-                            <div className="mb-5 px-2">
-                                <TagInput
-                                    placeholder="Add product"
-                                    onAdd={handleProductAdd}
-                                    onRemove={handleProductRemove}
-                                    onIncreaseQuantity={handleIncreaseQuantity}
-                                    onDecreaseQuantity={handleDecreaseQuantity}
-                                    tags={products}
-                                    />
-                            </div>
-                            <div className="mb-5 pl-2">
-                                <ToggleSwitch
-                                    checked={mode === "savings"}
-                                    onChange={handleToggleMode}
-                                    labels={["Convenience", "Savings"]}
-                                    />
-                            </div>
+                    <div id="title input" className="flex bg-liiist_pink h-16 mb-4 rounded-t-xl items-center">
+                        <Input2
+                            id="listTitle"
+                            placeholder="Enter list title"
+                            value={listTitle}
+                            onChange={(e) => setListTitle(e.target.value)}
+                            className="w-full border-transparentc font-bold"
+                        />
+                        <ActionButton2
+                            onClick={handleSaveList}
+                            disabled={isLoading || products.length === 0 || listTitle.trim() === ""}
+                            className="mr-4 border-2 rounded-lg hover:scale-105 h-min"
+                        >
+                            <AiOutlinePlus className="text-3xl"/>
+                        </ActionButton2>
+                    </div>
+                    <div className="mb-5 px-2 min-h-[30vh]">
+                        <TagInput
+                            placeholder="Add product"
+                            onAdd={handleProductAdd}
+                            onRemove={handleProductRemove}
+                            onIncreaseQuantity={handleIncreaseQuantity}
+                            onDecreaseQuantity={handleDecreaseQuantity}
+                            tags={products}
+                            />
+                    </div>
                 </div>
-                <div id="all-button" className="w-1/6 h-full border-l-2 border-dashed border-gray-500 flex flex-col justify-between">
+                <div id="bottom_area" className="w-full flex justify-between pb-3 px-3">
+                    <ToggleSwitch
+                        checked={mode === "savings"}
+                        onChange={handleToggleMode}
+                        labels={["Convenience", "Savings"]}
+                    />
                     <ActionButton2
                         onClick={() =>
                             handleCalculate(
@@ -146,24 +138,16 @@ const NewListPage = () => {
                             )
                         }
                         disabled={isLoading || products.length === 0 || budget === ""}
-                        className=" rounded-full flex justify-center"
+                        className="border-2 rounded-lg hover:scale-105 h-min"
                         >
-                        <FaMagnifyingGlassArrowRight className="text-3xl hover:scale-125"/>
+                        <GoArrowDownRight className="text-3xl"/>
                     </ActionButton2>
-                    <ActionButton2
-                        onClick={handleSaveList}
-                        disabled={isLoading || products.length === 0 || listTitle.trim() === ""}
-                        className="rounded-full flex justify-center"
-                        >
-                        <AiOutlinePlus className="text-3xl hover:scale-125"/>
-                    </ActionButton2>
-                    
-                    {error && (
-                        <div className="text-red-500 mt-4">
-                            {error}
-                        </div>
-                    )}
                 </div>
+                {error && (
+                    <div className="text-red-500 mt-4">
+                        {error}
+                    </div>
+                )}
             </div>
         </div>
     );

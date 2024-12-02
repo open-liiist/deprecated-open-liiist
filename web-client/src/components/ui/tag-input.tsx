@@ -38,12 +38,13 @@ export const TagInput: React.FC<TagInputProps> = ({
                 className="w-full p-2 mb-2 border border-gray-300 rounded-lg"
             />
             {/* Contenitore dei tag */}
-            <div className="flex flex-wrap gap-2">
+            <div id="product container" 
+            className="flex flex-wrap gap-y-2 gap-x-2 max-h-[60vh] overflow-y-auto relative">
                 {tags.length > 0 ? (
                     tags.map((tag, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-2 p-2 bg-gray-100 rounded-xl w-1/3"
+                            className="flex items-center gap-2 p-2 bg-gray-100 rounded-xl min-w-[30vh] max-h-12"
                         >
                             <span className="font-bold flex-grow">
                                 {tag.name}
@@ -80,7 +81,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500 pl-2">No tags added yet.</p>
+                    <p className="text-gray-500 pl-2">empty list.</p>
                 )}
             </div>
         </div>

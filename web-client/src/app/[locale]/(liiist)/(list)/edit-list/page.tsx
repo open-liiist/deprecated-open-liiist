@@ -10,6 +10,7 @@ import { ActionButton2 } from "@/components/ui/ActionButton";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import { FaMagnifyingGlassArrowRight } from "react-icons/fa6";
 import { handleCalculate2 } from "@/services/shoppingListService";
+import { GoArrowDownRight } from "react-icons/go";
 
 const EditListPage: React.FC = () => {
     const searchParams = useSearchParams();
@@ -107,32 +108,24 @@ const EditListPage: React.FC = () => {
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <div id="edit-list-card" className="max-w-4xl w-full mt-5 flex bg-slate-50 rounded-xl shadow-md">
+                <div id="edit-list-card" className="max-w-2xl w-full mt-5 flex bg-slate-50 rounded-xl shadow-md">
                     <div className="w-full flex-col flex">
-                        {error && (
-                            <div className="text-red-500 mb-4">{error}</div>
-                        )}
-                        <div className="rounded-tl-lg h-16 " style={{backgroundColor}}>
+                        <div className="rounded-t-lg h-16 flex items-center mb-4" style={{backgroundColor}}>
                             <Input2
                                 placeholder="List Title"
                                 value={listTitle || ""}
                                 onChange={(e) => setListTitle(e.target.value)}
-                                className="rounded-tl-lg font-bold"
+                                className="w-full border-transparentc font-bold"
                             />
+                            <ActionButton2
+                                onClick={handleSaveChanges}
+                                disabled={isLoading}
+                                className={"text-center hover:scale-105 w-auto mr-4"}
+                                >
+                            {isLoading ? "Saving..." : "Save"}
+                            </ActionButton2>
                         </div>
-                        <div className="mb-5 pt-4 gap-2 flex px-2 items-center border-t-2 border-dashed border-gray-500">
-                            <span className="py-2 ">
-                                Budget€
-                            </span>
-                            <Input
-                                type="number"
-                                placeholder="Budget"
-                                value={budget || ""}
-                                onChange={(e) => setBudget(e.target.value)}
-                                className="border-transparent shadow-none font-medium w-1/6"
-                            />
-                        </div>
-                        <div className="mb-5 px-2">
+                        <div className="mb-5 px-2 min-h-[30vh]">
                             <TagInput
                                 placeholder="Add product"
                                 onAdd={(product) =>
@@ -148,40 +141,34 @@ const EditListPage: React.FC = () => {
                                 tags={products || []}
                             />
                         </div>
-                        <div className="mb-5 pl-2">
+                        <div className="w-full flex justify-between pb-3 px-3">
                             <ToggleSwitch
                                 checked={mode === "savings"}
                                 onChange={handleToggleMode}
                                 labels={["Convenience", "Savings"]}
-                            />
+                                />
+                            <ActionButton2
+                                onClick={() =>
+                                    handleCalculate2(
+                                        listId,
+                                        listTitle,
+                                        products,
+                                        budget,
+                                        mode,
+                                        "12345",
+                                        router
+                                    )
+                                }
+                                disabled={isLoading || products.length === 0 || budget === ""}
+                                className="border-2 rounded-lg hover:scale-105 h-min"
+                                >
+                                <GoArrowDownRight className="text-3xl"/>
+                            </ActionButton2>
                         </div>
                     </div>
-                    <div className="w-1/6 h-full border-l-2 border-dashed border-gray-500 flex flex-col justify-between items-center">
-                        <ActionButton2
-                            onClick={() =>
-                                handleCalculate2(
-                                    listId,
-                                    listTitle,
-                                    products,
-                                    budget,
-                                    mode,
-                                    "12345",
-                                    router
-                                )
-                            }
-                            disabled={isLoading || products.length === 0 || budget === ""}
-                            className=" rounded-full flex justify-center"
-                            >
-                            <FaMagnifyingGlassArrowRight className="text-3xl hover:scale-125"/>
-                        </ActionButton2>
-                        <ActionButton2
-                            onClick={handleSaveChanges}
-                            disabled={isLoading}
-                            className={"rounded-full text-center hover:scale-125 w-full"}
-                        >
-                        {isLoading ? "Saving..." : "Save"}
-                        </ActionButton2>
-                    </div>
+                    {error && (
+                        <div className="text-red-500 mb-4">{error}</div>
+                    )}
                 </div>
             )}
         </div>

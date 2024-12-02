@@ -1,6 +1,7 @@
 // components/map/Map.tsx
 "use client";
-import React, { useEffect} from "react";
+
+import React from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 export const Map = ({ center, zoom, children }) => {
@@ -8,17 +9,17 @@ export const Map = ({ center, zoom, children }) => {
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
         libraries: ["places"],
     });
-
     if (loadError) {
         return <div>Error loading maps</div>;
     }
-
     if (!isLoaded) {
         return <div>Loading Maps...</div>;
     }
+
     const mapOptions = {
-        disableDefaultUI: true, // L'assegnazione deve essere corretta come questa.
+        disableDefaultUI: true,  // Disabilita l'interfaccia utente predefinita
     };
+
     return (
         <GoogleMap
             center={center}
@@ -97,5 +98,5 @@ async function reverseGeocodeWithOSM(lat, lng) {
     }
 
     const data = await response.json();
-    return data.display_name; // Restituisce il nome dell'indirizzo o della zona
+    return data.display_name;
 }

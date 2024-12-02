@@ -42,10 +42,9 @@ export const ActionButton2 = ({
             onClick={onClick}
             disabled={disabled}
             style={{
-                padding: "10px 20px",
-                margin: "10px",
                 color: disabled ? "#d3d3d3" : "#333333",
                 cursor: disabled ? "not-allowed" : "pointer",
+                borderColor: disabled ? "#d3d3d3" : "#333333",
             }}
             className={className}
         >

@@ -154,12 +154,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                             {pending ? (
                                 <>
                                     <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                                    Caricamento...
+                                    Loading...
                                 </>
                             ) : mode === 'signin' ? (
-                                'Accedi'
+                                'sign in'
                             ) : (
-                                'Registrati'
+                                'sign up'
                             )}
                         </Button>
                     </div>
@@ -172,7 +172,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                         </div>
                         <div className="relative flex justify-center text-sm">
                             <span className="px-7 bg-liiist_white text-gray-500">
-                                {mode === 'signin' ? 'Nuovo su liiist?' : 'Hai già un account?'}
+                                {mode === 'signin' ? 'New on liiist?' : 'Do you have an account yet?'}
                             </span>
                         </div>
                     </div>
@@ -185,7 +185,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                             }
                             className="w-full flex justify-center py-2 px-4 border border-liiist_green rounded-lg shadow-sm text-sm font-medium text-liiist_green hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-liiist_green"
                         >
-                            {mode === 'signin' ? 'Crea un account' : 'Accedi con il tuo account'}
+                            {mode === 'signin' ? 'Create your account' : 'acces with your account'}
                         </Link>
                     </div>
                 </div>

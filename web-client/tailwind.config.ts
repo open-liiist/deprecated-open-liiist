@@ -11,7 +11,7 @@ const config: Config = {
     extend: {
       colors: {
         liiist_green:  '#384000', //'#6EEB83'
-        liiist_white: '#E1F2FE',
+        liiist_white: '#F9FAFB',//'#E1F2FE',
         liiist_pink: '#FFABAD',
         liiist_black: '#333333',
         background: "var(--background)",
