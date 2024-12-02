@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from libft import to_float, create_store

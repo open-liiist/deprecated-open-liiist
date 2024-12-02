@@ -19,16 +19,20 @@ RUN apt-get update && apt-get install -y google-chrome-stable && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
     rm /tmp/chromedriver.zip
 
+COPY .env .env
+
+RUN export $(cat .env | xargs)
+
 # Install Python dependencies
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy application files
 COPY libft/ ./libft/
-COPY oasi_tigre/ ./oasi_tigre/
+COPY conad/ ./conad/
 
 # Add /app to PYTHONPATH
 ENV PYTHONPATH=/app
 
-CMD ["python", "oasi_tigre/scraping_tigre.py"]
+CMD ["python", "oasi_tigre/scraping_conad.py"]
 

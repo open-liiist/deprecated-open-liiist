@@ -43,7 +43,6 @@ def scraping_shop():
 
 			create_store(shop_info)
 
-
 if __name__ == "__main__":
 	scraping_shop()
 

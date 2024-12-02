@@ -1,5 +1,8 @@
-import json
+import os
+import sys
 import requests
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from libft import to_float, create_store
 
 def scraping_shops():
 	# Declaration of all information that request.post needs to function correctly
@@ -22,7 +25,6 @@ def scraping_shops():
 
 	shop_data = response.json()['data']['orderAndCollect']
 	all_shop = shop_data['pointOfServices']
-	shop_list = []
 
 	for info_need in all_shop:
 		shop_info = {
@@ -32,6 +34,7 @@ def scraping_shops():
 			"long": info_need['geoPoint']['longitude'],
 			"city": info_need['address']['town'],
 			"zip_code": info_need['address']['postalCode'],
+			"picks_up_in_shop": True,
 		}
 
 		if 'serviceHours' in info_need:
@@ -40,12 +43,8 @@ def scraping_shops():
 			else:
 				service_hours = " ".join(info_need['serviceHours'])
 				shop_info['working_hours'] = service_hours
+		create_store(shop_info)
 
-		shop_list.append(shop_info)
-	with open(f"store_conad.json", "w", encoding="utf-8") as outfile:
-		json.dump(shop_list, outfile, indent=4)
-		
-	return(shop_list)
 
 if __name__ == "__main__":
 	scraping_shops()

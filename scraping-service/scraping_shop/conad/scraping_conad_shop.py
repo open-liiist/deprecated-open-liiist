@@ -1,3 +1,5 @@
+import os
+import sys
 import requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from libft import to_float, create_store
@@ -32,6 +34,7 @@ def scraping_shops():
 			"long": info_need['geoPoint']['longitude'],
 			"city": info_need['address']['town'],
 			"zip_code": info_need['address']['postalCode'],
+			"picks_up_in_shop": True,
 		}
 
 		if 'serviceHours' in info_need:
