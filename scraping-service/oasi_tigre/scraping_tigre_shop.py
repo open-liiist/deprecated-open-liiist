@@ -1,5 +1,7 @@
 import json
 import requests
+sys.path.append('../')
+from libft import to_float
 
 def scraping_shop():
 	# Declaration of all information that request.post needs to function correctly
@@ -29,12 +31,12 @@ def scraping_shop():
 	for shop in shop_data:
 		info_need = shop.get("store")
 		
-		if (info_need['click_collect'] == "true") | (info_need['click_drive'] == "true"):
+		if (info_need['click_collect'] == "true") | (info_need['click_drive'] == "true") and "RM" in info_need['address']:
 			shop_info = {
 				"name" : info_need['name'],
 				"street": info_need['address'],
-				"lat": info_need['lat'],
-				"long": info_need['lon'],
+				"lat": to_float(info_need['lat']),
+				"long": to_float(info_need['lon']),
 				"city": info_need['city'],
 				"working_hours": f"{info_need['hours']}",
 				"picks_up_in_shop": "True"

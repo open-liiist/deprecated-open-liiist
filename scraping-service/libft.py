@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotVisibleException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -118,6 +119,8 @@ def extract_micro_categories(categories):
 
 	return list(extract_micro_categories_recursive(categories))
 
+# Updates or adds an environment variable in a .env file
+
 def update_env_with_dotenv(env_file, key, new_value):
 	config = dotenv_values(env_file)
 
@@ -126,3 +129,13 @@ def update_env_with_dotenv(env_file, key, new_value):
 	with open(env_file, "w") as file:
 		for k, v in config.items():
 			file.write(f"{k}={v}\n")
+
+# Converts a string to a float. Handles commas and ignores non-numeric characters.
+# Returns: Defaults to 0.0 if conversion fails or the cleaned value
+
+def to_float(value):
+	try:
+		cleaned_value = ''.join(c for c in value if c.isdigit() or c in ",.")
+		return float(cleaned_value.replace(",", "."))
+	except (ValueError, TypeError):
+		return 0.0

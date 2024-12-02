@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from scraping_conad_shop import scraping_shops
 sys.path.append('../')
-from libft import wait_for_element, wait_for_elements, wait_for_element_conad, wait_for_elements_conad, update_env_with_dotenv
+from libft import wait_for_element, wait_for_elements, wait_for_element_conad, wait_for_elements_conad, update_env_with_dotenv, to_float
 # from send_data import send_data_to_receiver
 
 load_dotenv()
@@ -64,7 +64,15 @@ def find_and_send_info(driver, n_cards, advertising):
 				product_data["discounted_price"] = (wait_for_element_conad(driver, f"{card_xpath}/div/div[1]/div[1]/div[2]/div[2]/div/span/b[2]")).text
 			except:
 				pass
-		
+			
+			if product_data["price"]:
+				product_data["price"] = to_float(product_data["price"])
+
+			if product_data["discounted_price"]:
+				product_data["discounted_price"] = to_float(product_data["discounted_price"])
+			else:
+				product_data["discounted_price"] = float(0)
+
 			processed_items += 1
 			print(product_data, "\n")
 		

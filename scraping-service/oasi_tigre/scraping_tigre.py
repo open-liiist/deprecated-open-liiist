@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from utility_tigre import categories_dict
 sys.path.append('../')
 from scraping_tigre_shop import scraping_shop
-from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv
+from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv, to_float
 # from send_data import send_data_to_receiver
 
 load_dotenv()
@@ -47,11 +47,16 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 		new_price = wait_for_element(driver, f"{card_xpath}/div/div[4]/div[1]/div[2]/p").text
 		old_price = wait_for_element(driver, f"{card_xpath}/div/div[4]/div[1]/div[1]/p").text
 
-		if (old_price):
-			right_price = old_price
-			old_price = new_price
-			new_price = right_price
-		
+		if "KG" in old_price:
+			price_for_kg = to_float(old_price)
+
+		if old_price:
+			old_price, new_price = new_price, old_price
+
+		old_price = to_float(old_price)
+		new_price = to_float(new_price)
+
+
 		processed_items += 1
 		product_data = {
 			"full_name": name,
@@ -59,6 +64,7 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 			"description": description,
 			"price": new_price,
 			"discounted_price": old_price,
+			"price_for_kg": price_for_kg,
 			"localization":
 			{
 				"grocery": shop['name'],
@@ -116,16 +122,16 @@ if __name__ == "__main__":
 	count_shop = os.environ.get("COUNT_SHOP")
 
 	shop_list = scraping_shop()
-	shop_list_roma = []
-	shop = []
+	# shop_list_roma = []
+	# shop = []
 	
-	for shop in shop_list:
-		if "RM" in shop['street']:
-			shop_list_roma.append(shop)
-		else:
-			continue
+	# for shop in shop_list:
+	# 	if "RM" in shop['street']:
+	# 		shop_list_roma.append(shop)
+	# 	else:
+	# 		continue
 		
-	if len(shop_list_roma) != int(all_shop):
+	if len(shop_list) != int(all_shop):
 		print("Cambio nei negozi")
 		exit()
 
@@ -135,7 +141,7 @@ if __name__ == "__main__":
 	
 	count_shop = int(count_shop)
 
-	shop = shop_list_roma[int(count_shop)]
+	shop = shop_list[int(count_shop)]
 
 	driver = uc.Chrome(use_subprocess=False)
 
