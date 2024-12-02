@@ -22,6 +22,7 @@ model Product {
     history        ProductHistory[]
     price_for_kg   Float?
     image_url      String?
+	quantity	   String?
 }
 
 model ProductHistory {
