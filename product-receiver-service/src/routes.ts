@@ -8,7 +8,7 @@ type ProductData = {
 	name_id: string;
 	full_name: string;
 	name: string;
-	description: string;
+	description: string | null;
 	price: number;
 	discount: number;
 	document_id: string;
@@ -63,15 +63,14 @@ router.post('/product', async (req: Request, res: Response) => {
 			full_name,
 			name,
 			description,
-			price,
-			discount,
+			discounted_price: discount,
 			localization,
 			img_url,
+			price,
 			price_for_kg,
 		} = req.body;
 
-		if (!full_name || !description || !price ||
-			!localization || !localization.grocery || !localization.lat || !localization.long) {
+		if (!full_name || !price || !localization || !localization.grocery) {
 			res.status(400).json({ error: 'Missing required fields' });
 			return;
 		}
@@ -89,7 +88,9 @@ router.post('/product', async (req: Request, res: Response) => {
 			const product = await prisma.product.upsert({
 				where: { name_id },
 				create: {
-					name_id, full_name, name, description, discount,
+					name_id, full_name, discount,
+					description: description || '',
+					name: name_id,
 					current_price: price,
 					localization: {
 						connectOrCreate: {
@@ -109,7 +110,9 @@ router.post('/product', async (req: Request, res: Response) => {
 					}
 				},
 				update: {
-					full_name, name, description, discount,
+					full_name, discount,
+					description: description || '',
+					name: name_id,
 					current_price: price,
 					image_url: img_url,
 					price_for_kg,
