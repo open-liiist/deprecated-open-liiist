@@ -14,7 +14,7 @@ docker compose build && docker compose up db auth-service web-client
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `/src/app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Learn More
 
@@ -29,7 +29,7 @@ To learn more about Next.js, take a look at the following resources:
 
 ### **1. Project Overview**
 
-**liiist** is a Next.js-based front-end application designed to help users optimize their grocery shopping experience by providing both convenience and cost-effective solutions. The application includes features such as creating shopping lists, selecting supermarket locations, viewing available products, and using modes for either savings or convenience.
+**liiist** is a Next.js-based front-end application designed to help users optimize their grocery shopping experience by providing both convenience and cost-effective solutions. The application includes features such as creating shopping lists, selecting locations, and using modes for either savings or convenience.
 
 This documentation provides an overview of the app's architecture, page routes, components, and how to get started with development.
 
@@ -186,12 +186,26 @@ The directory structure contains distinct folders for different application part
 - **Status**: done
 - **Description**: Enables users to create new shopping lists.
 - **Features**:
+  - Set list name.
   - Add products using a `tag-input` component.
+  - Choose a mode between Convenience/Savings.
+  - Set product quantities (e.g., "Pasta Barilla x2").
+  - Calculate estimated costs via `/api/calculate-list`.
+
+#### **Edit List (********`/list/edit-list`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)**
+
+- **Status**: done
+- **Description**: Enables users to edit a list.
+- **Features**:
+  - Change list name.
+  - Add products using a `tag-input` component.
+  - Choose a mode between Convenience/Savings.
   - Set product quantities (e.g., "Pasta Barilla x2").
   - Calculate estimated costs via `/api/calculate-list`.
 
 #### **Shopping List (********`/list/shopping-list/[id]`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)**
 
+- **This page are now deprecated.**
 - **Status**: done
 - **Description**: Displays and allows editing of a specific shopping list.
 - **Features**:
@@ -208,7 +222,7 @@ The directory structure contains distinct folders for different application part
 
 #### **Savings Mode (********`/liiist/savings-mode`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)**
 
-- **Status**: Work In Progress
+- **Status**: Work In Progress 
 - **Description**: Splits shopping lists across multiple supermarkets for optimal savings.
 - **Features**:
   - Calculate total potential savings.
@@ -267,7 +281,8 @@ A global font and color palette have been chosen for the application to maintain
 - **Color Palette**: All text, except placeholders, should use the color `#333333` to ensure readability and uniformity.
 - **Rounded Elements**: All elements should have the Tailwind class `rounded-lg` to maintain consistent rounded corners across the UI.
 - **Shadows**: Elements that need to stand out from the background should use the class `shadow-md` for subtle elevation.
-- **Card Width**: The maximum width for cards should be `4xl`.
+- **Card Width**: The maximum width for cards should be `2xl`.
+- to avoid .svg file all the icon are imported from react icon.
 
 ### **6. Technologies Used**
 
@@ -280,7 +295,7 @@ A global font and color palette have been chosen for the application to maintain
 
 ---
 
-### **7. How to Run the Project**
+### **7. How to Run the Project without Docker**
 
 1. **Install Dependencies**:
 
@@ -290,7 +305,8 @@ A global font and color palette have been chosen for the application to maintain
 
 2. **Configure Environment Variables**:
 
-   - Create a `.env` file with the necessary configurations (e.g., API keys).
+   - Create a `.env` file with the necessary configurations (e.g., API keys) or remove the `.*` suffix.
+
 
 3. **Start JSON Server** (for local supermarket data):
 
@@ -312,14 +328,12 @@ A global font and color palette have been chosen for the application to maintain
 
 ### **9. Pending Feature Work**
 
-- **Registration Form**: Implementation is pending.
-
 - **Profile Page**: Styles are not yet complete.
 - **Convenience Mode Page**: Styles are not yet complete.
 - **Savings Mode Page**: Styles are not yet complete.
 
 ---
 
-**Last Updated**: November 26, 2024
+**Last Updated**: December 2, 2024
 
 
