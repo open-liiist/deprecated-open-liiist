@@ -8,10 +8,11 @@ type ProductData = {
 	name_id: string;
 	full_name: string;
 	name: string;
-	description: string;
+	description: string | null;
 	price: number;
 	discount: number;
 	document_id: string;
+	quantity: string | null;
 	localization: {
 		grocery: string;
 		lat: number;
@@ -63,22 +64,24 @@ router.post('/product', async (req: Request, res: Response) => {
 			full_name,
 			name,
 			description,
-			price,
-			discount,
+			discounted_price: discount,
 			localization,
+			quantity,
 			img_url,
+			price,
 			price_for_kg,
 		} = req.body;
 
-		if (!full_name || !description || !price ||
-			!localization || !localization.grocery || !localization.lat || !localization.long) {
+		if (!full_name || !price || !localization || !localization.grocery) {
 			res.status(400).json({ error: 'Missing required fields' });
 			return;
 		}
 
 		console.log('typeof full_name', typeof full_name);
 
-		if (typeof full_name !== 'string' || typeof description !== 'string' || typeof price !== 'number') {
+		if (typeof full_name !== 'string' || typeof price !== 'number' 
+			|| (description && typeof description !== 'string')
+		    || (quantity && typeof quantity !== 'string')) {
 			res.status(400).json({ error: 'Invalid data types' });
 			return;
 		}
@@ -89,7 +92,9 @@ router.post('/product', async (req: Request, res: Response) => {
 			const product = await prisma.product.upsert({
 				where: { name_id },
 				create: {
-					name_id, full_name, name, description, discount,
+					name_id, full_name, discount, quantity,
+					description: description || '',
+					name: name_id,
 					current_price: price,
 					localization: {
 						connectOrCreate: {
@@ -109,7 +114,9 @@ router.post('/product', async (req: Request, res: Response) => {
 					}
 				},
 				update: {
-					full_name, name, description, discount,
+					full_name, discount,
+					description: description || '',
+					name: name_id,
 					current_price: price,
 					image_url: img_url,
 					price_for_kg,
@@ -125,7 +132,7 @@ router.post('/product', async (req: Request, res: Response) => {
 
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
-				full_name, name, description, price, discount, name_id,
+				full_name, name, description, price, discount, name_id, quantity,
 				document_id: `${name_id}_${sanitizeString(localization.grocery)
 					}_${sanitizeString(localization.lat)
 					}_${sanitizeString(localization.long)

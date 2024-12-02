@@ -22,6 +22,7 @@ model Product {
     history        ProductHistory[]
     price_for_kg   Float?
     image_url      String?
+	quantity	   String?
 }
 
 model ProductHistory {
@@ -36,8 +37,8 @@ model ProductHistory {
 model Localization {
     id                Int       @id @default(autoincrement())
     grocery           String
-    lat               Float
-    lng               Float
+    lat               Float?
+    lng               Float?
     products          Product[]
     street            String?
     city              String?
