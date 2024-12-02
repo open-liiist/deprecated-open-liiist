@@ -12,6 +12,7 @@ type ProductData = {
 	price: number;
 	discount: number;
 	document_id: string;
+	quantity: string | null;
 	localization: {
 		grocery: string;
 		lat: number;
@@ -65,6 +66,7 @@ router.post('/product', async (req: Request, res: Response) => {
 			description,
 			discounted_price: discount,
 			localization,
+			quantity,
 			img_url,
 			price,
 			price_for_kg,
@@ -77,7 +79,9 @@ router.post('/product', async (req: Request, res: Response) => {
 
 		console.log('typeof full_name', typeof full_name);
 
-		if (typeof full_name !== 'string' || typeof description !== 'string' || typeof price !== 'number') {
+		if (typeof full_name !== 'string' || typeof price !== 'number' 
+			|| (description && typeof description !== 'string')
+		    || (quantity && typeof quantity !== 'string')) {
 			res.status(400).json({ error: 'Invalid data types' });
 			return;
 		}
@@ -88,7 +92,7 @@ router.post('/product', async (req: Request, res: Response) => {
 			const product = await prisma.product.upsert({
 				where: { name_id },
 				create: {
-					name_id, full_name, discount,
+					name_id, full_name, discount, quantity,
 					description: description || '',
 					name: name_id,
 					current_price: price,
@@ -128,7 +132,7 @@ router.post('/product', async (req: Request, res: Response) => {
 
 			// prepare data to send to elasticsearch via logstash
 			const productData: ProductData = {
-				full_name, name, description, price, discount, name_id,
+				full_name, name, description, price, discount, name_id, quantity,
 				document_id: `${name_id}_${sanitizeString(localization.grocery)
 					}_${sanitizeString(localization.lat)
 					}_${sanitizeString(localization.long)
