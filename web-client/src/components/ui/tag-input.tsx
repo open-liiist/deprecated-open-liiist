@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FiPlus, FiMinus} from "react-icons/fi"; // react-icons
+import { FaTimes } from "react-icons/fa"; // react-icons
 
 interface TagInputProps {
     placeholder: string;
@@ -35,53 +37,61 @@ export const TagInput: React.FC<TagInputProps> = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-full p-2 mb-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 mb-3 border border-gray-300 rounded-xl"
             />
             {/* Contenitore dei tag */}
-            <div id="product container" 
-            className="flex flex-wrap gap-y-2 gap-x-2 max-h-[60vh] overflow-y-auto relative">
+            <div
+                id="product-container"
+                className="flex flex-wrap gap-y-3 gap-x-3 max-h-[60vh] overflow-y-auto relative"
+            >
                 {tags.length > 0 ? (
                     tags.map((tag, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-2 p-2 bg-gray-100 rounded-xl min-w-[30vh] max-h-12"
+                            className="flex items-center gap-4 p-3 bg-gray-100 rounded-xl min-w-[0vh] max-h-12"
                         >
-                            <span className="font-bold flex-grow">
-                                {tag.name}
-                            </span>
-                            <div className="flex items-center gap-2">
-                                {/* Bottone per diminuire la quantità o rimuovere il tag */}
-                                {tag.quantity > 1 ? (
-                                    <button
-                                        onClick={() => onDecreaseQuantity(index)}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full border-none bg-gray-300 text-lg font-bold cursor-pointer"
-                                    >
-                                        -
-                                    </button>
+                            <span className="font-bold flex-grow">{tag.name}</span>
+                            <div className="flex items-center">
+                                {/* Se la quantità è 1, solo + e x */}
+                                {tag.quantity === 1 ? (
+                                    <>
+                                        <button
+                                            onClick={() => onRemove(index)}
+                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                        >
+                                            <FaTimes style={{ fontSize: "12px" }}/>
+                                        </button>
+                                        <span className="px-4">{tag.quantity}</span>
+                                        <button
+                                            onClick={() => onIncreaseQuantity(index)}
+                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                        >
+                                            <FiPlus />
+                                        </button>
+                                    </>
                                 ) : (
-                                    <button
-                                        onClick={() => onRemove(index)}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full border-none bg-red-400 text-white text-lg font-bold cursor-pointer"
-                                    >
-                                        x
-                                    </button>
+                                    // Se la quantità è maggiore di 1, mostra + e -
+                                    <>
+                                        <button
+                                            onClick={() => onDecreaseQuantity(index)}
+                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                        >
+                                            <FiMinus />
+                                        </button>
+                                        <span className="px-4">{tag.quantity}</span>
+                                        <button
+                                            onClick={() => onIncreaseQuantity(index)}
+                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                        >
+                                            <FiPlus />
+                                        </button>
+                                    </>
                                 )}
-                                {/* Cerchio per visualizzare la quantità */}
-                                <span className="w-8 h-8 flex items-center justify-center font-bold">
-                                    {tag.quantity}
-                                </span>
-                                {/* Bottone per aumentare la quantità */}
-                                <button
-                                    onClick={() => onIncreaseQuantity(index)}
-                                    className="w-8 h-8 flex items-center justify-center rounded-full border-none bg-gray-300 text-lg font-bold cursor-pointer"
-                                >
-                                    +
-                                </button>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500 pl-2">empty list.</p>
+                    <p>Nessun tag aggiunto.</p>
                 )}
             </div>
         </div>

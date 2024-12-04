@@ -89,15 +89,16 @@ const NewListPage = () => {
     
     return (
         <div id="new-list-base" className="max-w-full w-full flex justify-center p-5 text-liiist_black">
-            <div id="new-list-card" className="max-w-2xl w-full mt-5 bg-slate-50 rounded-xl shadow-md">
+            <div id="new-list-card" className="max-w-2xl w-full mt-5 bg-slate-50 rounded-3xl shadow-md">
                 <div id="new-list-form"  className="w-full  flex-col">
-                    <div id="title input" className="flex bg-liiist_pink h-16 mb-4 rounded-t-xl items-center">
+                    <div id="title input" className="flex bg-amber-300 h-16 mb-4 rounded-t-3xl items-center">
                         <Input2
+                        autoComplete="off"
                             id="listTitle"
                             placeholder="Enter list title"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
-                            className="w-full border-transparentc font-bold"
+                            className="w-full border-transparent font-bold "
                         />
                         <ActionButton2
                             onClick={handleSaveList}
@@ -144,7 +145,7 @@ const NewListPage = () => {
                     </ActionButton2>
                 </div>
                 {error && (
-                    <div className="text-red-500 mt-4">
+                    <div className="text-red-500 w-full flex justify-between pb-3 px-3">
                         {error}
                     </div>
                 )}
