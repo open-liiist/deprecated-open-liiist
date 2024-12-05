@@ -50,7 +50,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                             key={index}
                             className="flex items-center gap-4 p-3 bg-gray-100 rounded-xl min-w-[0vh] max-h-12"
                         >
-                            <span className="font-bold flex-grow">{tag.name}</span>
+                            <span className=" text-xl flex-grow">{tag.name}</span>
                             <div className="flex items-center">
                                 {/* Se la quantità è 1, solo + e x */}
                                 {tag.quantity === 1 ? (
@@ -61,7 +61,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                                         >
                                             <FaTimes style={{ fontSize: "12px" }}/>
                                         </button>
-                                        <span className="px-4">{tag.quantity}</span>
+                                        <span className="px-2">{tag.quantity}</span>
                                         <button
                                             onClick={() => onIncreaseQuantity(index)}
                                             className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
@@ -78,7 +78,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                                         >
                                             <FiMinus />
                                         </button>
-                                        <span className="px-4">{tag.quantity}</span>
+                                        <span className="px-2">{tag.quantity}</span>
                                         <button
                                             onClick={() => onIncreaseQuantity(index)}
                                             className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"

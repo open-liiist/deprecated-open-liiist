@@ -36,7 +36,7 @@ const ListCard = ({listId, listName, listMode, onViewList, createdAt, delateList
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <div className="font-bold text-3xl mt-6">{listName}</div>
-                <div className="text-white text-sm mb-3 bg-liiist_black w-fit rounded-xl flex gap-2 items-center px-4 py-1">
+                <div className="text-white text-sm mb-3 bg-liiist_black w-fit rounded-lg flex gap-2 items-center px-4 py-1">
                     <FaCheck/>
                     {listMode}
                 </div>

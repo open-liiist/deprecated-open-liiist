@@ -63,37 +63,6 @@
     "updatedAt": "2024-11-29T17:26:27.552Z"
   },
   {
-    "id": "98ba282b-8172-486f-8aad-5fabb85f3bee",
-    "name": "pranzo",
-    "products": [
-      {
-        "name": "alloro",
-        "quantity": 1
-      },
-      {
-        "name": "sinaci",
-        "quantity": 1
-      },
-      {
-        "name": "pasta sfoglia",
-        "quantity": 1
-      },
-      {
-        "name": "ricotta",
-        "quantity": 1
-      },
-      {
-        "name": "birretteee",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "savings",
-    "userId": "12345",
-    "createdAt": "2024-12-02T11:47:29.064Z",
-    "updatedAt": "2024-12-02T11:47:29.064Z"
-  },
-  {
     "id": "269d9ee7-6c9d-4d72-9813-2fe609907b90",
     "name": "cani",
     "products": [
@@ -114,7 +83,7 @@
   },
   {
     "id": "4e6bf88b-e316-4da6-b8a6-37690e7a3e84",
-    "name": "meow",
+    "name": "Listening!",
     "products": [
       {
         "name": "d",
@@ -126,5 +95,35 @@
     "userId": "12345",
     "createdAt": "2024-12-04T16:20:32.752Z",
     "updatedAt": "2024-12-04T16:20:32.752Z"
+  },
+  {
+    "id": "4968984d-8333-437f-970b-e06c62cbf314",
+    "name": "Enter",
+    "products": [
+      {
+        "name": "meow",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2024-12-04T21:07:44.252Z",
+    "updatedAt": "2024-12-04T21:07:44.252Z"
+  },
+  {
+    "id": "04adae79-fcde-46c2-bffa-56021fcf57eb",
+    "name": "tit",
+    "products": [
+      {
+        "name": "prprpr",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "savings",
+    "userId": "12345",
+    "createdAt": "2024-12-05T00:23:02.883Z",
+    "updatedAt": "2024-12-05T00:23:02.883Z"
   }
 ]

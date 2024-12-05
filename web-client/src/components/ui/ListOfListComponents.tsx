@@ -79,7 +79,7 @@ const ListOfListComponents = () => {
                         </div>
                     ) : shoppingLists.length > 0 ? (
                         <div className="relative">
-                            <div className="mt-5 max-h-[65vh] overflow-y-auto relative">
+                            <div className="mt-3 max-h-[65vh] overflow-y-auto relative mx-auto w-full max-w-2xl gap-1">
                                 {shoppingLists.map((list) => (
                                     <ListCard
                                         key={list.id}

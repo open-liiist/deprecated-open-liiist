@@ -16,7 +16,7 @@ const UserHomepage = () => {
     };
 
     return (
-        <div id="home-page" className="flex flex-col items-center justify-center p-5 bg-liiist_white">
+        <div id="home-page" className="flex flex-col items-center justify-center p-2 bg-liiist_white">
             <div className="w-full max-w-2xl mt-5">
                     <ListOfListComponents/>
                     <div className="mt-16 flex justify-center">
