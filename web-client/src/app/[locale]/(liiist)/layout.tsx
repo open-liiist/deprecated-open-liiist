@@ -1,9 +1,9 @@
 'use client';
-//in questo layout va inserito la parte delle mappe
+
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CircleIcon, Home, LogOut } from 'lucide-react';
+import { Home, LogOut } from 'lucide-react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,7 +16,7 @@ import { signOut } from '../(login)/actions';
 import { useRouter } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import SetLocationLink from '@/components/ui/SetLocationLink';
-import {noto_Sans} from "@/components/ui/fonts"
+import { noto_Sans } from "@/components/ui/fonts";
 
 function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,17 +26,29 @@ function Header() {
 
 	async function handleSignOut() {
 		setUser(null);
-		await signOut()
+		await signOut();
 		router.push('/');
 	}
+
 	return (
-		<header className=" border-b-2 border-dashed border-gray-500 bg-liiist_white">
-			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center justify-around">
-				<SetLocationLink/>
-				<Link href="/home" className="mx-auto">
-					<span className={`${noto_Sans.className} text-2xl font-semibold text-liiist_black font-noto`}>liiist</span>
-				</Link>
-				<div className="flex items-center space-x-4">
+		<header className="fixed top-0 left-0 right-0 z-50 border-collapse  border-gray-500 bg-liiist_white shadow-md">
+			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center">
+				{/* Sezione Sinistra - Location */}
+				<div className="flex items-center w-[200px] justify-start">
+					<SetLocationLink />
+				</div>
+
+				{/* Sezione Centrale - Logo */}
+				<div className="flex-grow text-center">
+					<Link href="/home">
+						<span className={`${noto_Sans.className} text-2xl font-semibold text-liiist_black`}>
+							liiist
+						</span>
+					</Link>
+				</div>
+
+				{/* Sezione Destra - Profile/Login */}
+				<div className="flex items-center space-x-4 w-[200px] justify-end">
 					{user && (
 						<Link
 							href="/profile"
@@ -89,7 +101,7 @@ function Header() {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<section className="flex flex-col min-h-screen">
+		<section className="pt-20 flex flex-col min-h-screen">
 			<Header />
 			{children}
 		</section>

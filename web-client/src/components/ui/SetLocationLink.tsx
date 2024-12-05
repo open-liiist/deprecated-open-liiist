@@ -28,7 +28,7 @@ export default function SetLocationLink() {
 
   return (
     <Link href={pathname === '/en/position' ? '/home' : '/position'} className="flex items-center">
-      <span className="ml-2 text-xl font-normal text-gray-900">
+      <span className="ml-2 text-base font-normal text-gray-900">
 		{pathname === '/en/position' ? "home" : (<div className='flex items-center'><IoPin />{currentAddress}</div>)}
 	  </span>
     </Link>
