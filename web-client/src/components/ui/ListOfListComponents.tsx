@@ -102,7 +102,7 @@ const ListOfListComponents = () => {
                                     />
                                 ))}
                             </div>
-                            <div className="w-full h-1 bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
+                            <div className="w-full bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
                         </div>
                     ) : (
                         <div className="mt-5 text-center">

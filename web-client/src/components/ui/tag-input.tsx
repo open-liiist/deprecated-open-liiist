@@ -37,7 +37,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-full p-2 mb-3 border border-gray-300 rounded-xl"
+                className="w-full p-3 mb-4 border-transparent rounded-md"
             />
             {/* Contenitore dei tag */}
             <div
