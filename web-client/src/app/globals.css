@@ -55,3 +55,7 @@ body {
   background: #dfdfdf; /* Colore del thumb quando si passa sopra */
 }
 
+.no-space {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}

@@ -1,17 +1,1 @@
-[
-  {
-    "id": "5b00f45f-ea14-4843-9f58-ebc36b5fff7b",
-    "name": "Ciao",
-    "products": [
-      {
-        "name": "ciao",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "savings",
-    "userId": "12345",
-    "createdAt": "2024-12-06T14:39:37.177Z",
-    "updatedAt": "2024-12-06T14:39:37.177Z"
-  }
-]
+[]

@@ -104,7 +104,7 @@ const EditListPage: React.FC = () => {
     };
 
     return (
-        <div className="max-w-full w-full flex justify-center p-5 text-liiist_black">
+        <div className="mt-navbar max-w-full w-full flex justify-center p-5 text-liiist_black">
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
