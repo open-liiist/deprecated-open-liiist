@@ -31,7 +31,7 @@ function Header() {
 	}
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-50 h-navbar bg-liiist_white shadow-md">
+		<header className="fixed top-0 left-0 right-0 z-50 h-navbar bg-liiist_white">
 			<div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex w-full items-center">
 				{/* Sezione Sinistra - Location */}
 				<div className="flex items-center w-[200px] justify-start">
