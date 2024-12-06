@@ -14,7 +14,7 @@ const UserHomepage = () => {
 
     return (
         <div id="home-page" className="flex flex-col min-h-screen items-center justify-between p-2 bg-liiist_white">
-            <div className="w-full max-w-2xl mt-5">
+            <div className="p-8 w-full max-w-3xl mt-7">
                 {/* Componente per visualizzare le liste */}
                 <ListOfListComponents />
             </div>
