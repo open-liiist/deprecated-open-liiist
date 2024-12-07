@@ -88,10 +88,10 @@ const NewListPage = () => {
     };
     
     return (
-        <div id="new-list-base" className="fixed max-w-full w-full flex justify-center p-5 text-liiist_black">
-            <div id="new-list-card" className="max-w-2xl w-full mt-5 bg-slate-50 rounded-3xl shadow-md">
-                <div id="new-list-form"  className="w-full  flex-col">
-                    <div id="title input" className="flex bg-slate-100 h-20 mb-4 rounded-t-3xl items-center">
+        <div id="new-list-base" className="mt-navbar fixed max-w-full w-full flex justify-center p-5 text-liiist_black">
+            <div id="new-list-card" className="max-w-2xl w-full">
+                <div id="new-list-form"  className="w-full flex-col">
+                    <div id="title input" className="flex mb-10 items-center">
                         <Input2
                         autoComplete="off"
                             id="listTitle"
@@ -103,14 +103,14 @@ const NewListPage = () => {
                         <ActionButton2
                             onClick={handleSaveList}
                             disabled={isLoading || products.length === 0 || listTitle.trim() === ""}
-                            className="mr-4 border-2 rounded-lg hover:scale-105 h-min"
+                            className="mr-2 border-2 rounded-lg hover:scale-105 h-min"
                         >
                             <AiOutlinePlus className="text-3xl"/>
                         </ActionButton2>
                     </div>
-                    <div className="mb-5 px-2 min-h-[30vh]">
+                    <div className="border-transparent px-2 min-h-[30vh]">
                         <TagInput
-                            placeholder="Add product"
+                            placeholder="Add a product"
                             onAdd={handleProductAdd}
                             onRemove={handleProductRemove}
                             onIncreaseQuantity={handleIncreaseQuantity}
@@ -119,7 +119,7 @@ const NewListPage = () => {
                             />
                     </div>
                 </div>
-                <div id="bottom_area" className="w-full flex justify-between pb-3 px-3">
+                <div id="bottom_area" className="w-full flex flex-row justify-between">
                     <ToggleSwitch
                         checked={mode === "savings"}
                         onChange={handleToggleMode}
@@ -141,11 +141,11 @@ const NewListPage = () => {
                         disabled={isLoading || products.length === 0 || budget === ""}
                         className="border-2 rounded-lg hover:scale-105 h-min"
                         >
-                        <GoArrowDownRight className="text-3xl"/>
+                        <GoArrowDownRight className="text-5xl"/>
                     </ActionButton2>
                 </div>
                 {error && (
-                    <div className="text-red-500 w-full flex justify-between pb-3 px-3">
+                    <div className="text-red-500 w-full flex justify-between">
                         {error}
                     </div>
                 )}

@@ -37,7 +37,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-full p-3 mb-4 border-transparent rounded-md"
+                className="w-full p-3 mb-4 border-transparent rounded-full"
             />
             {/* Contenitore dei tag */}
             <div
@@ -48,7 +48,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                     tags.map((tag, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-4 p-3 bg-gray-100 rounded-xl min-w-[0vh] max-h-12"
+                            className="flex items-center gap-5 p-2 bg-gray-100 rounded-xl min-w-[0vh] max-h-12"
                         >
                             <span className=" text-xl flex-grow">{tag.name}</span>
                             <div className="flex items-center">
@@ -74,7 +74,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                                     <>
                                         <button
                                             onClick={() => onDecreaseQuantity(index)}
-                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-100"
                                         >
                                             <FiMinus />
                                         </button>
