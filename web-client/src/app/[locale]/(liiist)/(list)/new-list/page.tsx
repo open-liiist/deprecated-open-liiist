@@ -88,7 +88,7 @@ const NewListPage = () => {
     };
     
     return (
-        <div id="new-list-base" className="max-w-full w-full flex justify-center p-5 text-liiist_black">
+        <div id="new-list-base" className="fixed max-w-full w-full flex justify-center p-5 text-liiist_black">
             <div id="new-list-card" className="max-w-2xl w-full mt-5 bg-slate-50 rounded-3xl shadow-md">
                 <div id="new-list-form"  className="w-full  flex-col">
                     <div id="title input" className="flex bg-slate-100 h-20 mb-4 rounded-t-3xl items-center">

@@ -1,77 +1,21 @@
 [
   {
-    "id": "c014771d-7eaa-4ab4-a26b-541af35bd71d",
-    "name": "Meow",
+    "id": "71e3cd54-1c67-450d-a024-15cbb43ce6b5",
+    "name": "mi",
     "products": [
       {
-        "name": "meow",
+        "name": "j+",
+        "quantity": 1
+      },
+      {
+        "name": "miao",
         "quantity": 1
       }
     ],
     "budget": "0",
     "mode": "convenience",
     "userId": "12345",
-    "createdAt": "2024-12-06T17:54:10.821Z",
-    "updatedAt": "2024-12-06T17:54:10.821Z"
-  },
-  {
-    "id": "167df31a-2b44-4c5f-8cc6-517b3a446e89",
-    "name": "a",
-    "products": [
-      {
-        "name": "meow",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "convenience",
-    "userId": "12345",
-    "createdAt": "2024-12-06T17:54:28.580Z",
-    "updatedAt": "2024-12-06T17:54:28.580Z"
-  },
-  {
-    "id": "3f008b2d-b349-4a11-9d19-733def52162b",
-    "name": "a",
-    "products": [
-      {
-        "name": "a",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "savings",
-    "userId": "12345",
-    "createdAt": "2024-12-06T17:54:35.783Z",
-    "updatedAt": "2024-12-06T17:54:35.783Z"
-  },
-  {
-    "id": "b6510e21-c28e-4882-9e01-0dbfb48ec205",
-    "name": "ma",
-    "products": [
-      {
-        "name": "me",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "convenience",
-    "userId": "12345",
-    "createdAt": "2024-12-06T17:54:49.113Z",
-    "updatedAt": "2024-12-06T17:54:49.113Z"
-  },
-  {
-    "id": "edfa9cda-d05b-40d7-a038-afb00ebdf242",
-    "name": "f",
-    "products": [
-      {
-        "name": "f",
-        "quantity": 1
-      }
-    ],
-    "budget": "0",
-    "mode": "savings",
-    "userId": "12345",
-    "createdAt": "2024-12-06T17:57:19.284Z",
-    "updatedAt": "2024-12-06T17:57:19.284Z"
+    "createdAt": "2024-12-06T20:37:58.567Z",
+    "updatedAt": "2024-12-06T20:37:58.567Z"
   }
 ]
