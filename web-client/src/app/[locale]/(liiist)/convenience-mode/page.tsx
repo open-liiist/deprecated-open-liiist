@@ -1,203 +1,30 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import { useRouter, useSearchParams } from "next/navigation";
-// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-// import convenienceStyles from "./styles/ConvenienceMode.module.css";
-
-// type Supermarket = {
-//     supermarketId: string;
-//     name: string;
-//     street: string;
-//     lat: number;
-//     long: number;
-//     city: string;
-//     working_hours: string;
-//     pickup_available: boolean;
-//     zip_code: string;
-//     products: Product[];
-// };
-
-// type Product = {
-//     full_name: string;
-//     img_url: string;
-//     description: string;
-//     quantity: number;
-//     price: number;
-//     price_for_kg?: number;
-//     discounted_price?: number;
-//     localization: {
-//         grocery: string;
-//         lat: number;
-//         long: number;
-//     };
-// };
-
-// const ConvenienceModePage: React.FC = () => {
-//     const router = useRouter();
-//     const searchParams = useSearchParams();
-//     const [listTitle, setListTitle] = useState<string>("");
-//     const [budget, setBudget] = useState<string>("");
-//     const [products, setProducts] = useState<string[]>([]);
-//     const [supermarket, setSupermarket] = useState<Supermarket | null>(null);
-//     const [error, setError] = useState<string | null>(null);
-//     const [isLoading, setIsLoading] = useState<boolean>(true);
-
-//     useEffect(() => {
-//         // Estrazione dei parametri dalla query string
-//         const listId = searchParams.get("id");
-//         const title = searchParams.get("listTitle") || "Shopping List";
-//         const budgetParam = searchParams.get("budget") || "0";
-
-//         setListTitle(title);
-//         setBudget(budgetParam);
-
-//         if (listId) {
-//             // Recupera i dati della lista tramite API
-//             const fetchList = async () => {
-//                 try {
-//                     const response = await fetch(
-//                         `/api/shopping-lists/${listId}`,
-//                     );
-//                     if (!response.ok) {
-//                         throw new Error("Failed to fetch shopping list");
-//                     }
-//                     const listData = await response.json();
-
-//                     // Popola i dati della lista
-//                     setListTitle(listData.name);
-//                     setBudget(listData.budget);
-//                     setProducts(listData.products);
-
-//                     // Simula una chiamata API per ottenere i supermercati
-//                     const responseSupermarkets = await fetch(
-//                         `/api/list-result?userId=${listData.userId}`,
-//                     );
-//                     if (!responseSupermarkets.ok) {
-//                         throw new Error("Failed to fetch supermarkets");
-//                     }
-//                     const supermarketData = await responseSupermarkets.json();
-//                     if (
-//                         supermarketData.supermarkets &&
-//                         supermarketData.supermarkets.length > 0
-//                     ) {
-//                         setSupermarket(supermarketData.supermarkets[0]); // Seleziona il primo supermercato per comodità
-//                     } else {
-//                         throw new Error(
-//                             "No supermarkets found for convenience mode",
-//                         );
-//                     }
-//                 } catch (err) {
-//                     setError((err as Error).message);
-//                 } finally {
-//                     setIsLoading(false);
-//                 }
-//             };
-
-//             fetchList();
-//         } else {
-//             setError("Missing list ID");
-//             setIsLoading(false);
-//         }
-//     }, [searchParams]);
-
-//     const handleEditList = () => {
-//         const listId = searchParams.get("id");
-//         if (listId) {
-//             router.push(`/edit-list?id=${listId}`);
-//         } else {
-//             setError("No list ID found to edit");
-//         }
-//     };
-
-//     if (isLoading) {
-//         return <div className={convenienceStyles.loading}>Loading...</div>;
-//     }
-
-//     if (error) {
-//         return <div className={convenienceStyles.error}>{error}</div>;
-//     }
-
-//     return (
-//         <div className={convenienceStyles.container}>
-//             <Card className={convenienceStyles.card}>
-//                 <CardHeader>
-//                     <CardTitle>Modalità Comodità - {listTitle}</CardTitle>
-//                 </CardHeader>
-//                 <CardContent>
-//                     <div>
-//                         <p>Budget: €{budget}</p>
-//                         <p>Prodotti: {products.join(", ")}</p>
-//                     </div>
-//                     <button
-//                         onClick={handleEditList}
-//                         className={convenienceStyles.editButton}
-//                     >
-//                         Modifica Lista
-//                     </button>
-//                     {supermarket ? (
-//                         <div className={convenienceStyles.supermarketSection}>
-//                             <h3>{supermarket.name}</h3>
-//                             <p>
-//                                 {supermarket.street}, {supermarket.city} -{" "}
-//                                 {supermarket.zip_code}
-//                             </p>
-//                             <p>
-//                                 Orari di apertura: {supermarket.working_hours}
-//                             </p>
-//                             <ul className={convenienceStyles.productList}>
-//                                 {supermarket.products.map((product, index) => (
-//                                     <li
-//                                         key={index}
-//                                         className={
-//                                             convenienceStyles.productItem
-//                                         }
-//                                     >
-//                                         <img
-//                                             src={product.img_url}
-//                                             alt={product.full_name}
-//                                             className={
-//                                                 convenienceStyles.productImage
-//                                             }
-//                                         />
-//                                         <div>
-//                                             {product.full_name} - €
-//                                             {product.price.toFixed(2)} -{" "}
-//                                             {product.description}
-//                                         </div>
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-//                     ) : (
-//                         <div>No supermarket data available</div>
-//                     )}
-//                 </CardContent>
-//             </Card>
-//         </div>
-//     );
-// };
-
-// export default ConvenienceModePage;
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SupermarketCard from "@/components/ui/SupermarketCard";
-import { Supermarket } from "@/types";
+import ProductTags from "@/components/ui/ProductTags";
+import { Supermarket, Product } from "@/types";
+import { FaToggleOn, FaToggleOff } from "react-icons/fa";
+
+type UserProduct = {
+  name: string;
+  quantity: number;
+};
 
 const ConvenienceModePage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [listTitle, setListTitle] = useState<string>("");
   const [budget, setBudget] = useState<string>("");
-  const [products, setProducts] = useState<string[]>([]);
+  const [userProducts, setUserProducts] = useState<UserProduct[]>([]);
   const [supermarket, setSupermarket] = useState<Supermarket | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [mode, setMode] = useState<"comodità" | "risparmio">("comodità");
 
   useEffect(() => {
-    // Estrazione parametri
     const listId = searchParams.get("id");
     const title = searchParams.get("listTitle") || "Shopping List";
     const budgetParam = searchParams.get("budget") || "0";
@@ -208,16 +35,20 @@ const ConvenienceModePage: React.FC = () => {
     if (listId) {
       const fetchList = async () => {
         try {
+          // Fetch dei dati della lista utente
           const response = await fetch(`/api/shopping-lists/${listId}`);
           if (!response.ok) {
             throw new Error("Failed to fetch shopping list");
           }
           const listData = await response.json();
 
+          const userProductsFromList: UserProduct[] = listData.products; 
+          // Ci aspettiamo che listData.products sia [{name: string, quantity: number}, ...]
           setListTitle(listData.name);
           setBudget(listData.budget);
-          setProducts(listData.products);
+          setUserProducts(userProductsFromList);
 
+          // Fetch dei dati del supermercato
           const responseSupermarkets = await fetch(
             `/api/list-result?userId=${listData.userId}`
           );
@@ -230,7 +61,25 @@ const ConvenienceModePage: React.FC = () => {
             supermarketData.supermarkets &&
             supermarketData.supermarkets.length > 0
           ) {
-            setSupermarket(supermarketData.supermarkets[0]);
+            let selectedSupermarket: Supermarket = supermarketData.supermarkets[0];
+
+            // Allineiamo il numero di prodotti a quelli dell'utente
+            const userCount = userProductsFromList.length;
+            selectedSupermarket.products = selectedSupermarket.products.slice(0, userCount);
+
+            // Allineiamo le quantità del supermercato alle quantità dell'utente
+            // Ora ogni supermarket.product[i].quantity = userProductsFromList[i].quantity
+            for (let i = 0; i < userCount; i++) {
+              if (selectedSupermarket.products[i]) {
+                selectedSupermarket.products[i].quantity = userProductsFromList[i].quantity;
+              }
+            }
+
+            setSupermarket(selectedSupermarket);
+
+            // Calcoliamo il total price
+            const computedTotal = calcTotalPrice(selectedSupermarket.products);
+            setTotalPrice(computedTotal);
           } else {
             throw new Error("No supermarkets found for convenience mode");
           }
@@ -248,6 +97,16 @@ const ConvenienceModePage: React.FC = () => {
     }
   }, [searchParams]);
 
+  // Calcola il total price usando solo supermarket.products
+  // Ora che quantity è allineato, basta moltiplicare price * quantity
+  const calcTotalPrice = (products: Product[]) => {
+    return products.reduce((acc, prod) => {
+      const productPrice = prod.discounted_price ?? prod.price;
+      const q = prod.quantity || 1;
+      return acc + productPrice * q;
+    }, 0);
+  };
+
   const handleEditList = () => {
     const listId = searchParams.get("id");
     if (listId) {
@@ -257,10 +116,42 @@ const ConvenienceModePage: React.FC = () => {
     }
   };
 
+  const handleToggleMode = () => {
+    const listId = searchParams.get("id");
+    if (!listId) {
+      setError("No list ID found for savings mode");
+      return;
+    }
+
+    setMode("risparmio");
+    setTimeout(() => {
+      router.push(`/savings-mode?id=${listId}`);
+    }, 2000);
+  };
+
+  const handleRemoveProduct = (index: number) => {
+    if (!supermarket) return;
+
+    // Rimuoviamo il prodotto da userProducts
+    const newUserProducts = [...userProducts];
+    newUserProducts.splice(index, 1);
+
+    // Rimuoviamo il prodotto corrispondente da supermarket.products
+    const newSupermarket = { ...supermarket };
+    newSupermarket.products = [...newSupermarket.products];
+    newSupermarket.products.splice(index, 1);
+
+    setUserProducts(newUserProducts);
+    setSupermarket(newSupermarket);
+
+    const newTotal = calcTotalPrice(newSupermarket.products);
+    setTotalPrice(newTotal);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <span className="text-gray-600 animate-pulse">Loading...</span>
+        <span className="text-gray-600 animate-pulse">Caricamento...</span>
       </div>
     );
   }
@@ -268,39 +159,65 @@ const ConvenienceModePage: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-red-100 text-red-700 p-4 rounded">
+        <div className="bg-red-100 text-red-700 p-4 rounded shadow-sm">
           {error}
         </div>
       </div>
     );
   }
 
+  const userBudgetNum = parseFloat(budget);
+  const isOverBudget = totalPrice > userBudgetNum;
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h1 className="text-2xl font-semibold mb-4">
-            Modalità Comodità - {listTitle}
-          </h1>
-          <div className="mb-4">
-            <p className="text-gray-700">Budget: €{budget}</p>
-            <p className="text-gray-700">Prodotti: {products.join(", ")}</p>
+      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <h1 className="text-3xl font-bold text-gray-800">
+              {listTitle} - {mode}
+            </h1>
+            {mode === "comodità" ? (
+              <FaToggleOff
+                onClick={handleToggleMode}
+                className="text-5xl text-blue-500 cursor-pointer hover:text-blue-600 transition-colors"
+              />
+            ) : (
+              <FaToggleOn className="text-5xl text-blue-600" />
+            )}
           </div>
+          <div className="text-right">
+            <p className="text-gray-700 text-sm">Budget: €{budget}</p>
+            <p
+              className={`text-lg font-semibold ${
+                isOverBudget ? "text-red-600" : "text-green-600"
+              }`}
+            >
+              Costo totale: €{totalPrice.toFixed(2)}
+            </p>
+          </div>
+        </div>
+
+        <div className="mb-6 space-y-1">
+          <ProductTags products={userProducts} onRemove={handleRemoveProduct} />
+        </div>
+
+        <div className="flex gap-4 mb-6">
           <button
             onClick={handleEditList}
             className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
           >
             Modifica Lista
           </button>
-
-          {supermarket ? (
-            <SupermarketCard supermarket={supermarket} />
-          ) : (
-            <div className="text-center text-gray-500 mt-6">
-              No supermarket data available
-            </div>
-          )}
         </div>
+
+        {supermarket ? (
+          <SupermarketCard supermarket={supermarket} />
+        ) : (
+          <div className="text-center text-gray-500 mt-6">
+            Nessun dato del supermercato disponibile
+          </div>
+        )}
       </div>
     </div>
   );

@@ -77,7 +77,7 @@ const EditListPage: React.FC = () => {
             if (!response.ok) {
                 throw new Error("Failed to update the shopping list");
             }
-            router.push("/home");
+            router.push("/home"); /*router.push(`/convenience-mode?id=${listId}&listTitle=${listTitle}&budget=${budget}`);            */
         } catch (err) {
             setError((err as Error).message);
         } finally {

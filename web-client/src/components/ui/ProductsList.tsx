@@ -10,7 +10,7 @@ interface ProductsListProps {
 
 const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
   return (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
       {products.map((prod) => (
         <ProductItem key={prod.uniqueProductId} product={prod} />
       ))}
