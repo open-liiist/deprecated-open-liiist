@@ -8,7 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const data = {
             supermarkets: [
                 {
-                    name: "Supermercato1",
+                    name: "Conad",
                     street: "Via Roma 1",
                     city: "Milano",
                     pickup_available: true,
@@ -16,8 +16,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     products: [
                         {
                             full_name: "Pasta Spaghetti Barilla 500g",
-                            img_url: "http://esempio.com/img/pasta.jpg",
-                            description: "Pasta di semola di grano duro.",
+                            img_url: "https://media.gettyimages.com/id/1457889029/it/foto/gruppo-di-alimenti-ad-alto-contenuto-di-fibre-alimentari-disposti-fianco-a-fianco.jpg?s=612x612&w=gi&k=20&c=BOgZmSq3tEnpLnqH0kTdnyZwYayeurskiWn-vwOCpNs=",
+                            description: "Pasta di semola di grano duro. Lorem ipsum dolor",
                             quantity: 1,
                             price: 1.50,
                             discounted_price: null,
