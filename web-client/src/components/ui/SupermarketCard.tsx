@@ -2,62 +2,102 @@
 
 import React from "react";
 import { Supermarket } from "@/types";
-import ProductsList from "./ProductsList";
+import { FaTimes, FaDirections } from "react-icons/fa";
 
 interface SupermarketCardProps {
   supermarket: Supermarket;
+  onRemoveProduct: (index: number) => void;
 }
 
-const SupermarketCard: React.FC<SupermarketCardProps> = ({ supermarket }) => {
-  const {
-    name,
-    street,
-    city,
-    zip_code,
-    working_hours,
-    pickup_available,
-    lat,
-    long,
-  } = supermarket;
+const SupermarketCard: React.FC<SupermarketCardProps> = ({ supermarket, onRemoveProduct }) => {
+  const { name, street, city, zip_code, working_hours, pickup_available, lat, long } = supermarket;
 
-  const latitude = typeof lat === "string" ? parseFloat(lat) : lat;
-  const longitude = typeof long === "string" ? parseFloat(long) : long;
-
-  const hasValidCoordinates =
-    typeof latitude === "number" &&
-    !isNaN(latitude) &&
-    typeof longitude === "number" &&
-    !isNaN(longitude);
-
-  const googleMapsDirectionsUrl = hasValidCoordinates
+  // Link direzioni Google Maps se lat/long validi
+  const latitude = typeof lat === "number" && !isNaN(lat) ? lat : null;
+  const longitude = typeof long === "number" && !isNaN(long) ? long : null;
+  const hasValidCoordinates = latitude !== null && longitude !== null;
+  const directionsUrl = hasValidCoordinates
     ? `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
     : null;
 
   return (
-    <div className="mt-8">
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">{name}</h3>
-      <p className="text-gray-600">
+    <div className="mt-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-xl font-medium text-gray-800">{name}</h3>
+        {hasValidCoordinates && (
+          <a
+            href={directionsUrl!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-700 transition-colors"
+            title="Ottieni indicazioni"
+          >
+            <FaDirections className="text-2xl" />
+          </a>
+        )}
+      </div>
+      <p className="text-gray-600 mb-2">
         {street}, {city} - {zip_code}
       </p>
-      <p className="text-sm text-gray-600 mt-1">Orari: {working_hours}</p>
-      <p className="text-sm text-gray-600 mt-1">
-        {pickup_available
-          ? "Ritiro in negozio disponibile"
-          : "Ritiro in negozio non disponibile"}
+      <p className="text-sm text-gray-600 mb-2">Orari di apertura: {working_hours}</p>
+      <p className="text-sm text-gray-600 mb-4">
+        {pickup_available ? "Ritiro in negozio disponibile" : "Ritiro in negozio non disponibile"}
       </p>
 
-      {hasValidCoordinates && (
-        <a
-          href={googleMapsDirectionsUrl!}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-colors mt-4"
-        >
-          Ottieni indicazioni
-        </a>
-      )}
+      {supermarket.products && supermarket.products.length > 0 && (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          {supermarket.products.map((prod, index) => {
+            const productPrice = prod.discounted_price ?? prod.price;
+            const isDiscounted = prod.discounted_price !== undefined && prod.discounted_price < prod.price;
 
-      <ProductsList products={supermarket.products} />
+            return (
+              <li
+                key={prod.uniqueProductId}
+                className="flex bg-gray-100 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow relative"
+              >
+                <img
+                  src={prod.img_url}
+                  alt={prod.full_name}
+                  className="w-16 h-16 object-cover rounded mr-4"
+                />
+                <div className="flex flex-col justify-center flex-1">
+                  <span className="font-semibold text-gray-800">{prod.full_name}</span>
+                  <span className="text-sm text-gray-600">{prod.description}</span>
+                  <div className="mt-2 flex items-center space-x-2">
+                    {isDiscounted && (
+                      <span className="text-sm text-gray-500 line-through">
+                        €{prod.price.toFixed(2)}
+                      </span>
+                    )}
+                    <span className="text-blue-700 font-semibold">
+                      €{productPrice.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-gray-700">x {prod.quantity}</span>
+                  </div>
+
+                  {prod.external_url && (
+                    <a
+                      href={prod.external_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block bg-blue-500 text-white text-sm px-3 py-1 rounded mt-3 hover:bg-blue-600 transition-colors w-fit"
+                    >
+                      Vedi Prodotto
+                    </a>
+                  )}
+                </div>
+                <button
+                  onClick={() => onRemoveProduct(index)}
+                  className="ml-2 text-red-500 hover:text-red-600 font-bold absolute top-2 right-2"
+                  title="Rimuovi prodotto"
+                >
+                  <FaTimes className="w-5 h-5" />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };

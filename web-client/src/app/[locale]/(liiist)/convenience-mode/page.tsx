@@ -6,6 +6,7 @@ import SupermarketCard from "@/components/ui/SupermarketCard";
 import ProductTags from "@/components/ui/ProductTags";
 import { Supermarket, Product } from "@/types";
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 
 type UserProduct = {
   name: string;
@@ -35,7 +36,7 @@ const ConvenienceModePage: React.FC = () => {
     if (listId) {
       const fetchList = async () => {
         try {
-          // Fetch dei dati della lista utente
+          // Fetch della lista
           const response = await fetch(`/api/shopping-lists/${listId}`);
           if (!response.ok) {
             throw new Error("Failed to fetch shopping list");
@@ -43,12 +44,13 @@ const ConvenienceModePage: React.FC = () => {
           const listData = await response.json();
 
           const userProductsFromList: UserProduct[] = listData.products; 
-          // Ci aspettiamo che listData.products sia [{name: string, quantity: number}, ...]
           setListTitle(listData.name);
           setBudget(listData.budget);
           setUserProducts(userProductsFromList);
+          const currentMode = listData.mode === "savings" ? "risparmio" : "comodità";
+          setMode(currentMode);
 
-          // Fetch dei dati del supermercato
+          // Fetch dei supermercati
           const responseSupermarkets = await fetch(
             `/api/list-result?userId=${listData.userId}`
           );
@@ -63,12 +65,9 @@ const ConvenienceModePage: React.FC = () => {
           ) {
             let selectedSupermarket: Supermarket = supermarketData.supermarkets[0];
 
-            // Allineiamo il numero di prodotti a quelli dell'utente
             const userCount = userProductsFromList.length;
             selectedSupermarket.products = selectedSupermarket.products.slice(0, userCount);
 
-            // Allineiamo le quantità del supermercato alle quantità dell'utente
-            // Ora ogni supermarket.product[i].quantity = userProductsFromList[i].quantity
             for (let i = 0; i < userCount; i++) {
               if (selectedSupermarket.products[i]) {
                 selectedSupermarket.products[i].quantity = userProductsFromList[i].quantity;
@@ -76,8 +75,6 @@ const ConvenienceModePage: React.FC = () => {
             }
 
             setSupermarket(selectedSupermarket);
-
-            // Calcoliamo il total price
             const computedTotal = calcTotalPrice(selectedSupermarket.products);
             setTotalPrice(computedTotal);
           } else {
@@ -97,8 +94,6 @@ const ConvenienceModePage: React.FC = () => {
     }
   }, [searchParams]);
 
-  // Calcola il total price usando solo supermarket.products
-  // Ora che quantity è allineato, basta moltiplicare price * quantity
   const calcTotalPrice = (products: Product[]) => {
     return products.reduce((acc, prod) => {
       const productPrice = prod.discounted_price ?? prod.price;
@@ -132,11 +127,9 @@ const ConvenienceModePage: React.FC = () => {
   const handleRemoveProduct = (index: number) => {
     if (!supermarket) return;
 
-    // Rimuoviamo il prodotto da userProducts
     const newUserProducts = [...userProducts];
     newUserProducts.splice(index, 1);
 
-    // Rimuoviamo il prodotto corrispondente da supermarket.products
     const newSupermarket = { ...supermarket };
     newSupermarket.products = [...newSupermarket.products];
     newSupermarket.products.splice(index, 1);
@@ -172,6 +165,8 @@ const ConvenienceModePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+
+        {/* Riga con titolo e toggle a sx, edit a dx */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <h1 className="text-3xl font-bold text-gray-800">
@@ -183,36 +178,34 @@ const ConvenienceModePage: React.FC = () => {
                 className="text-5xl text-blue-500 cursor-pointer hover:text-blue-600 transition-colors"
               />
             ) : (
-              <FaToggleOn className="text-5xl text-blue-600" />
+              <FaToggleOn className="text-5xl text-green-600" />
             )}
           </div>
-          <div className="text-right">
-            <p className="text-gray-700 text-sm">Budget: €{budget}</p>
-            <p
-              className={`text-lg font-semibold ${
-                isOverBudget ? "text-red-600" : "text-green-600"
-              }`}
-            >
-              Costo totale: €{totalPrice.toFixed(2)}
-            </p>
-          </div>
+          <FiEdit
+            onClick={handleEditList}
+            className="text-3xl text-blue-600 cursor-pointer hover:text-blue-700 transition-colors"
+          />
         </div>
 
+        {/* Budget e Costo Totale sotto il titolo */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 mb-6">
+          <span className="text-lg font-semibold text-gray-700">Budget: €{budget}</span>
+          <span
+            className={`text-lg font-semibold ${
+              isOverBudget ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            Costo totale: €{totalPrice.toFixed(2)}
+          </span>
+        </div>
+
+        {/* Tag dei prodotti */}
         <div className="mb-6 space-y-1">
           <ProductTags products={userProducts} onRemove={handleRemoveProduct} />
         </div>
 
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={handleEditList}
-            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-          >
-            Modifica Lista
-          </button>
-        </div>
-
         {supermarket ? (
-          <SupermarketCard supermarket={supermarket} />
+          <SupermarketCard supermarket={supermarket} onRemoveProduct={handleRemoveProduct} />
         ) : (
           <div className="text-center text-gray-500 mt-6">
             Nessun dato del supermercato disponibile
