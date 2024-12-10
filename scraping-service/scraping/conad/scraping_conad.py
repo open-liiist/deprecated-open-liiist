@@ -25,7 +25,6 @@ def find_and_send_info(driver, n_cards, advertising, shop):
 	card_selector = f"/html/body/main/div/div[2]/div[2]/div[({advertising})]/div[{{card_index}}]" 
 
 	for card_index in range(1, n_cards):
-		flag = 0
 		card_xpath = card_selector.format(card_index=card_index)
 
 		card_element = wait_for_element(driver, card_xpath)
