@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-// Mock dataset of supermarkets in Rome
+// Mock dataset of supermarkets in Rome /*localhost:3000/position */
 const supermarkets = [
     {
         id: 1,
