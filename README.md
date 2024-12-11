@@ -100,10 +100,198 @@ mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.loc
 - **GET /store**: Get all stores.
 - **GET /store/:grocery/:city**: Get all stores by grocery and city.
 
-### Search Service (rust)
-- **POST /search**: Search for products.
-- **POST /product/exists**: Check if a product exists.
-- **POST /product/in-shop**: Search for a product in a store.
-- **POST /product/lowest-price**: Find the lowest price for a product.
-- **GET /stores**: Get all stores.
-- **GET /store/:id/products**: Get all products by store.
+### Search Service (Rust)
+
+#### **POST /search**
+**Description:** Search for products by a query string.
+- **Request Body (Query Parameters):**
+  ```json
+  {
+    "query": "string"  // The product name or keyword to search for
+  }
+  ```
+- **Response Body:**
+  ```json
+  {
+    "most_similar": [
+      {
+        "_id": "string",
+        "name": "string",
+        "full_name": "string",
+        "description": "string",
+        "price": "float",
+        "discount": "float|null",
+        "localization": {
+          "grocery": "string",
+          "lat": "float",
+          "lon": "float"
+        },
+        "distance": "float|null"
+      }
+    ],
+    "lowest_price": [
+      {
+        "_id": "string",
+        "name": "string",
+        "full_name": "string",
+        "description": "string",
+        "price": "float",
+        "discount": "float|null",
+        "localization": {
+          "grocery": "string",
+          "lat": "float",
+          "lon": "float"
+        },
+        "distance": "float|null"
+      }
+    ]
+  }
+  ```
+---
+
+#### **POST /product/exists**
+**Description:** Check if a product exists near a location.
+- **Request Body:**
+  ```json
+  {
+    "product": "string", // The name of the product
+    "position": {
+      "latitude": "float",
+      "longitude": "float"
+    }
+  }
+  ```
+- **Response Body:**
+  ```json
+  {
+    "product": "string",
+    "exists": "boolean",  // true if product exists, false otherwise
+    "details": {
+      "_id": "string",
+      "name": "string",
+      "full_name": "string",
+      "description": "string",
+      "price": "float",
+      "discount": "float|null",
+      "localization": {
+        "grocery": "string",
+        "lat": "float",
+        "lon": "float"
+      },
+      "distance": "float|null"
+    } | null
+  }
+  ```
+
+---
+
+#### **POST /product/in-shop**
+**Description:** Search for a specific product in a specific store.
+- **Request Body:**
+  ```json
+  {
+    "product": "string", // The name of the product
+    "shop": "string", // The name or identifier of the shop
+    "position": {
+      "latitude": "float",
+      "longitude": "float"
+    }
+  }
+  ```
+- **Response Body:**
+  ```json
+  {
+    "product": "string",
+    "shop": "string",
+    "exists": "boolean", // true if product is in the shop, false otherwise
+    "details": {
+      "_id": "string",
+      "name": "string",
+      "full_name": "string",
+      "description": "string",
+      "price": "float",
+      "discount": "float|null",
+      "localization": {
+        "grocery": "string",
+        "lat": "float",
+        "lon": "float"
+      },
+      "distance": "float|null"
+    } | null
+  }
+  ```
+---
+
+#### **POST /product/lowest-price**
+**Description:** Find the lowest price for a list of products.
+- **Request Body:**
+  ```json
+  {
+    "products": ["string", "string"], // List of product names to search for
+    "position": {
+      "latitude": "float",
+      "longitude": "float"
+    }
+  }
+  ```
+
+- **Response Body:**
+  ```json
+  [
+    {
+      "shop": "string",
+      "total_price": "float", // Total price for all products at this shop
+      "products": [
+        {
+          "shop": "string",
+          "name": "string",
+          "description": "string",
+          "price": "float",
+          "discount": "float|null",
+          "distance": "float"
+        }
+      ]
+    }
+  ]
+  ```
+---
+
+#### **GET /stores**
+**Description:** Get a list of all available stores.
+- **Response Body:**
+  ```json
+  [
+    {
+      "id": "integer",
+      "grocery": "string", // Name of the store
+      "lat": "float",
+      "lng": "float",
+      "street": "string|null",
+      "city": "string|null",
+      "zip_code": "string|null",
+      "working_hours": "string|null",
+      "picks_up_in_store": "boolean|null"
+    }
+  ]
+  ```
+
+---
+
+#### **GET /store/:id/products**
+**Description:** Get a list of products available at a specific store.
+- **Path Parameters:**
+  - **id**: The ID of the store.
+- **Response Body:**
+  ```json
+  [
+    {
+      "id": "integer",
+      "name": "string", // Name of the product
+      "description": "string",
+      "current_price": "float",
+      "discount": "float",
+      "price_for_kg": "float|null",
+      "image_url": "string|null"
+    }
+  ]
+  ```
