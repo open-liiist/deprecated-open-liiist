@@ -1,5 +1,5 @@
 'use client';
-//in questo layout va inserito la parte delle mappe
+//la navbar
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
