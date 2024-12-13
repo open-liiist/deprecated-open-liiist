@@ -23,7 +23,8 @@ export class ShoppingListController {
         });
 
         if (!shoppingLists || shoppingLists.length === 0) {
-            next(ApiResponse.error("No shopping lists found"));
+            //next(ApiResponse.error("No shopping lists found"));
+            res.status(200).json(ApiResponse.success("No shopping lists found", []));
             return;
         }
 

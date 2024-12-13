@@ -111,5 +111,33 @@
     "userId": "12345",
     "createdAt": "2024-12-02T11:59:20.679Z",
     "updatedAt": "2024-12-02T11:59:20.679Z"
+  },
+  {
+    "id": "7b083451-ddf1-4887-a729-19d7c76028d4",
+    "name": "lista 1",
+    "products": [
+      {
+        "name": "merendine",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "savings",
+    "createdAt": "2024-12-13T18:14:10.954Z",
+    "updatedAt": "2024-12-13T18:14:10.954Z"
+  },
+  {
+    "id": "04dd3a35-8de7-43d8-bbbb-db582b1e925d",
+    "name": "test",
+    "products": [
+      {
+        "name": "test",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "createdAt": "2024-12-13T18:27:07.725Z",
+    "updatedAt": "2024-12-13T18:27:07.725Z"
   }
 ]
