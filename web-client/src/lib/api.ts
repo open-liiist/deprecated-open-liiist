@@ -96,6 +96,14 @@ class FetchClient {
 		};
 		return this.handleRequest(url, options, accessToken);
 	}
+
+	public async delete(url: string, accessToken?: string): Promise<Response> {
+		const options: RequestInit = {
+			method: 'DELETE',
+			headers: this.headers,
+		};
+		return this.handleRequest(url, options, accessToken);
+	}
 }
 
 const fetchClient = FetchClient.getInstance();

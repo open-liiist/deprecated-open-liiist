@@ -6,7 +6,7 @@
 */
 
 export const publicRoutes = ['/', '/profile', '/sign-in']
-export const privateRoutes = ['/dashboard', '/profile']
+export const privateRoutes = ['/dashboard', '/profile', '/home']
 export const authRoutes = ['/sign-in', '/sign-up']
 export const APP_HOME = '/home'
 export const APP_LOGIN = '/sign-in'
