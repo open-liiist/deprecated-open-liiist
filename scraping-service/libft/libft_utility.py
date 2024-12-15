@@ -139,3 +139,12 @@ def to_float(value):
 		return float(cleaned_value.replace(",", "."))
 	except (ValueError, TypeError):
 		return 0.0
+
+def get_html_from_url(url, headers):
+	try:
+		response = requests.get(url, headers = headers)
+		return response
+	except:
+		if response.status_code != 200:
+			print('Request failed:', response.status_code)
+			exit()

@@ -8,6 +8,7 @@ from .libft_utility import (
     extract_micro_categories,
     update_env_with_dotenv,
     to_float,
+	get_html_from_url,
 )
 
 # Import from send_data.py
@@ -28,6 +29,7 @@ __all__ = [
     "extract_micro_categories",
     "update_env_with_dotenv",
     "to_float",
+	"get_html_from_url",
     "send_data_to_receiver",
     "create_store",
     "get_all_stores",
