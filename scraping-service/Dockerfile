@@ -2,17 +2,12 @@ FROM python:3.10
 
 WORKDIR /app
 
-COPY requirements.txt .
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY run_docker_file.py ./run_docker_file.py
 
-COPY libft ./libft
+RUN chmod +x run_docker_file.py
 
-COPY scraping_cts_shop.py ./scraping_cts_shop.py
-
-ENV PYTHONPATH=/app
-
-RUN chmod +x scraping_cts_shop.py
-
-# Comando per eseguire lo script
-CMD ["python3", "scraping_cts_shop.py"]
+CMD ["python3", "run_docker_file.py"]

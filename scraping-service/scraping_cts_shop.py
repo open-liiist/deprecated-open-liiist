@@ -69,9 +69,7 @@ def scraping_shop():
 			"picks_up_in_shop": "True",
 			"zip_code": postal_code
 			}
-		# create_store(shop_info)
-		print(shop_info)
-		break
+		create_store(shop_info)
 
 if __name__ == "__main__":
 	scraping_shop()
