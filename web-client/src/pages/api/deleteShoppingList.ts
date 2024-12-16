@@ -10,7 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Recupera il cookie della sessione
     const sessionCookie = req.cookies[environment.cookies.access];
-    console.log(`Chiamata API del front ${sessionCookie}`); // Debug info
 
     // Se il token di accesso è assente, restituisci un errore 401
     if (!sessionCookie) {

@@ -3,6 +3,18 @@ import { ApiResponse } from '../utils/apiResponse';
 import { logger } from '../utils/logger';
 import prisma from '../services/prisma' // Assicurati che Prisma sia correttamente importato
 
+interface Product {
+  name: string;
+  quantity: number;
+}
+
+interface CreateShoppingListRequest {
+  name: string;
+  budget: string;
+  mode: string;
+  products: Product[]; // Un array di oggetti di tipo Product
+}
+
 export class ShoppingListController {
   // Ottieni tutte le liste della spesa per un utente
   static async getShoppingLists(req: Request, res: Response, next: NextFunction) {
@@ -36,43 +48,88 @@ export class ShoppingListController {
     }
 }
 
-  // Crea una nuova lista della spesa
-  static async createShoppingList(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user || !req.user.userId) {
-          next(ApiResponse.error("User ID is missing"));
-          return; 
-      }
-      
-      const userId = req.user.userId; // L'utente è autenticato, quindi possiamo prendere l'id
-      const { name, budget, mode } = req.body;
 
-      // Validazione dei campi obbligatori
-      if (!name || !budget || !mode) {
-        next(ApiResponse.error("All fields (name, budget, mode) are required." ));
-        return;
-      }
+static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>, res: Response, next: NextFunction) {
+  try {
+    if (!req.user || !req.user.userId) {
+        next(ApiResponse.error("User ID is missing"));
+        return; 
+    }
+    
+    const userId = req.user.userId; // L'utente è autenticato, quindi possiamo prendere l'id
+    const { name, budget, mode, products } = req.body;
 
-      const newList = await prisma.shoppingList.create({
-        data: {
-          name,
-          budget,
-          mode,
-          userId,
-          products: {
-            create: [], // Inizialmente senza prodotti
-          },
-        },
-      });
-
-      res.status(201).json(ApiResponse.success("list created successfully", newList));
-     // res.status(201).json(newList);
-    } catch (error) {
-      console.error("Errore nella creazione della lista:", error);
-      next(ApiResponse.error("Errore nella creazione della lista." ));
+    // Validazione dei campi obbligatori
+    if (!name || !budget || !mode) {
+      next(ApiResponse.error("All fields (name, budget, mode) are required."));
       return;
     }
+
+    // Verifica che products sia un array e che i prodotti siano validi
+    if (!Array.isArray(products) || !products.every(product => product.name && product.quantity)) {
+      next(ApiResponse.error("Invalid products format. Each product must have name, quantity"));
+      return;
+    }
+
+    const newList = await prisma.shoppingList.create({
+      data: {
+        name,
+        budget,
+        mode,
+        userId,
+        products: {
+          create: products.map(product => ({
+            name: product.name,
+            quantity: product.quantity,
+          })),
+        },
+      },
+    });
+
+    res.status(201).json(ApiResponse.success("list created successfully", newList));
+  } catch (error) {
+    console.error("Errore nella creazione della lista:", error);
+    next(ApiResponse.error("Errore nella creazione della lista."));
+    return;
   }
+}
+  // Crea una nuova lista della spesa
+  // static async createShoppingList(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     if (!req.user || !req.user.userId) {
+  //         next(ApiResponse.error("User ID is missing"));
+  //         return; 
+  //     }
+      
+  //     const userId = req.user.userId; // L'utente è autenticato, quindi possiamo prendere l'id
+  //     const { name, budget, mode} = req.body;
+
+  //     // Validazione dei campi obbligatori
+  //     if (!name || !budget || !mode) {
+  //       next(ApiResponse.error("All fields (name, budget, mode) are required." ));
+  //       return;
+  //     }
+
+  //     const newList = await prisma.shoppingList.create({
+  //       data: {
+  //         name,
+  //         budget,
+  //         mode,
+  //         userId,
+  //         products: {
+  //           create: [], // Inizialmente senza prodotti
+  //         },
+  //       },
+  //     });
+
+  //     res.status(201).json(ApiResponse.success("list created successfully", newList));
+  //    // res.status(201).json(newList);
+  //   } catch (error) {
+  //     console.error("Errore nella creazione della lista:", error);
+  //     next(ApiResponse.error("Errore nella creazione della lista." ));
+  //     return;
+  //   }
+  // }
 
   // Ottieni una lista della spesa specifica
   static async getShoppingList(req: Request, res: Response, next: NextFunction) {

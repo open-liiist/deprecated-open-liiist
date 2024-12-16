@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         // Recupera il corpo della richiesta dalla richiesta POST
         const body = req.body;
-
+        console.log(`la lista da mandare`, body);
         // Verifica che il corpo contenga i dati necessari per creare la lista della spesa
         if (!body || Object.keys(body).length === 0) {
             return res.status(400).json({ error: "Bad Request. Missing request body." });

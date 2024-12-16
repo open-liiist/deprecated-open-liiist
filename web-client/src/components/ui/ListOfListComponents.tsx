@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
 import ListCard from "./ListCard";
 import { handleCalculate2 } from "@/services/shoppingListService";
-import { cookies } from 'next/headers';
-import { fetchClient } from "@/lib/api";
 
 const ListOfListComponents = () => {
 	const router = useRouter();
@@ -41,29 +39,6 @@ const ListOfListComponents = () => {
 	const handleListClick = (listId) => {
         router.push(`/shopping-list/${listId}`);
 	}
-
-    // const handleDeleteList = async (listId) => {
-    //     if (confirm("Sei sicuro di voler eliminare questa lista?")) {
-    //         try {
-    //             const response = await fetch(`/api/delateShoppingList/${listId}`, {
-    //                 method: "DELETE",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 credentials: 'include',
-    //             });
-    //             if (response.ok) {
-    //                 setShoppingLists((prevLists) =>
-    //                     prevLists.filter((list) => list.id !== listId),
-    //                 );
-    //             } else {
-    //                 console.error("Errore durante l'eliminazione della lista");
-    //             }
-    //         } catch (err) {
-    //             console.error("Errore nella chiamata API:", err);
-    //         }
-    //     }
-    // };
 
     const handleDeleteList = async (listId) => {
         if (!listId) {
