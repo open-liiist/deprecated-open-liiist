@@ -3,7 +3,6 @@ import environment from "@/config/environment";
 import { fetchClient } from "@/lib/api"; // Assicurati che il percorso sia corretto
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // Verifica che il metodo sia DELETE
     if (req.method !== "DELETE") {
         return res.status(405).json({ error: "Method not allowed" });
     }

@@ -20,15 +20,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         const response = await fetchClient.get(`/shoppingList/${listId}`, sessionCookie);
         if (!response.ok) {
-            console.error("Errore dall'API backend:", response.statusText); // Debug info
-            return res.status(response.status).json({ error: "Failed to delete shopping list" });
+            console.error("Backend API error:", response.statusText);
+            return res.status(response.status).json({ error: "Failed to get shopping list" });
         }
         const data = await response.json();
         console.log("getAList return ", JSON.stringify(data, null, 2));
         return res.status(200).json({ message: "Shopping list retrived successfully", data });
     }
     catch (error) {
-        console.error("Errore durante l'eliminazione della lista:", error);
+        console.error("error retriving the list:", error);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }

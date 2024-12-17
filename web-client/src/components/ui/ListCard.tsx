@@ -7,7 +7,7 @@ import { GoArrowDownRight } from "react-icons/go";
 import { RxCross1 } from "react-icons/rx";
 
 
-const ListCard = ({listId, listName, listMode, onViewList, createdAt, delateList, calculate, router }) => {
+const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate, router }) => {
 
     const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
     const createdDate = new Date(createdAt);

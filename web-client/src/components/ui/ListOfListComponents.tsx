@@ -36,9 +36,6 @@ const ListOfListComponents = () => {
         return <p className="text-red-500">{error}</p>;
     }
 
-	const handleListClick = (listId) => {
-        router.push(`/shopping-list/${listId}`);
-	}
 
     const handleDeleteList = async (listId) => {
         if (!listId) {
@@ -101,7 +98,6 @@ const ListOfListComponents = () => {
                                         listId={list.id}
 						    		    listName={list.name}
 						    		    listMode={list.mode}
-						    		    onViewList={() => handleListClick(list.id)}
                                         createdAt={list.createdAt}
                                         delateList={() => handleDeleteList(list.id)}
                                         calculate={() => handleCalculate2(

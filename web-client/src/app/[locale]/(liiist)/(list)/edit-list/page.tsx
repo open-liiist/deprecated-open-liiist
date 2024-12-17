@@ -80,10 +80,11 @@ const EditListPage: React.FC = () => {
         setError(null);
         try {
             // Modificare la lista tramite una richiesta PUT all'endpoint API
-            const response = await fetch(`/api/shopping-lists/${listId}`, {
+            const response = await fetch(`/api/uploadShoppingList?listId=${listId}`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     name: listTitle,
@@ -91,6 +92,7 @@ const EditListPage: React.FC = () => {
                     budget,
                     mode,
                 }),
+                credentials: 'include', 
             });
             if (!response.ok) {
                 throw new Error("Failed to update the shopping list");
