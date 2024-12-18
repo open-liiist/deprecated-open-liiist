@@ -53,6 +53,9 @@ class RouteHandler {
 	}
 
 	handleRedirection(isLoggedIn: boolean): NextResponse | undefined {
+		if (this.pathNameWithoutLocale.startsWith('/api')) {
+			return NextResponse.next(); // Lascia proseguire le richieste API senza ulteriori elaborazioni
+		}
 		if (
 			this.isPublicRoute() ||
 			(!isLoggedIn && this.isAuthRoute()) ||
@@ -100,6 +103,6 @@ export const config = {
 		// Enable redirects that add missing locales
 		// (e.g. `/pathnames` -> `/en/pathnames`)
 		'/((?!_next|_vercel|.*\\..*).*)',
-		'/((?!api|_next/static|_next/image|favicon.ico).*)'
+		'/((?!api|_next/static|_next/image|favicon.ico|maps\\.googleapis\\.com).*)'
 	]
 };

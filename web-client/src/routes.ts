@@ -5,8 +5,8 @@
 	authRoutes: routes that are only accessible by unauthenticated users
 */
 
-export const publicRoutes = ['/', '/app']
-export const privateRoutes = ['/dashboard', '/profile']
+export const publicRoutes = ['/', '/profile', '/sign-in']
+export const privateRoutes = ['/dashboard', '/profile', '/home']
 export const authRoutes = ['/sign-in', '/sign-up']
-export const APP_HOME = '/app'
+export const APP_HOME = '/home'
 export const APP_LOGIN = '/sign-in'

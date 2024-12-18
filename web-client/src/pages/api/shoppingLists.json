@@ -1,0 +1,143 @@
+[
+  {
+    "id": "b83732e4-38a4-47b7-b6e7-061259848a11",
+    "name": "lista",
+    "products": [
+      {
+        "name": "maionese",
+        "quantity": 1
+      },
+      {
+        "name": "uova",
+        "quantity": 1
+      },
+      {
+        "name": "costine",
+        "quantity": 1
+      },
+      {
+        "name": "carne dei cani",
+        "quantity": 1
+      },
+      {
+        "name": "pasta frolla",
+        "quantity": 1
+      },
+      {
+        "name": "cssdcd",
+        "quantity": 1
+      },
+      {
+        "name": "scsdcsd",
+        "quantity": 1
+      },
+      {
+        "name": "csdcsdcds",
+        "quantity": 1
+      },
+      {
+        "name": "cdcd",
+        "quantity": 1
+      },
+      {
+        "name": "cdcdc",
+        "quantity": 1
+      },
+      {
+        "name": "dcdcsdc",
+        "quantity": 1
+      },
+      {
+        "name": "dcdddvcdvd",
+        "quantity": 1
+      },
+      {
+        "name": "ccdcdcdcscsdvsdvd",
+        "quantity": 1
+      }
+    ],
+    "budget": "45",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2024-11-29T17:26:27.552Z",
+    "updatedAt": "2024-11-29T17:26:27.552Z"
+  },
+  {
+    "id": "98ba282b-8172-486f-8aad-5fabb85f3bee",
+    "name": "pranzo",
+    "products": [
+      {
+        "name": "alloro",
+        "quantity": 1
+      },
+      {
+        "name": "sinaci",
+        "quantity": 1
+      },
+      {
+        "name": "pasta sfoglia",
+        "quantity": 1
+      },
+      {
+        "name": "ricotta",
+        "quantity": 1
+      },
+      {
+        "name": "birretteee",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "savings",
+    "userId": "12345",
+    "createdAt": "2024-12-02T11:47:29.064Z",
+    "updatedAt": "2024-12-02T11:47:29.064Z"
+  },
+  {
+    "id": "269d9ee7-6c9d-4d72-9813-2fe609907b90",
+    "name": "cani",
+    "products": [
+      {
+        "name": "croccantini",
+        "quantity": 1
+      },
+      {
+        "name": "biscotti",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2024-12-02T11:59:20.679Z",
+    "updatedAt": "2024-12-02T11:59:20.679Z"
+  },
+  {
+    "id": "7b083451-ddf1-4887-a729-19d7c76028d4",
+    "name": "lista 1",
+    "products": [
+      {
+        "name": "merendine",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "savings",
+    "createdAt": "2024-12-13T18:14:10.954Z",
+    "updatedAt": "2024-12-13T18:14:10.954Z"
+  },
+  {
+    "id": "04dd3a35-8de7-43d8-bbbb-db582b1e925d",
+    "name": "test",
+    "products": [
+      {
+        "name": "test",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "createdAt": "2024-12-13T18:27:07.725Z",
+    "updatedAt": "2024-12-13T18:27:07.725Z"
+  }
+]
