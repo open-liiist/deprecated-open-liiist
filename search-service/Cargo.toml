@@ -16,3 +16,4 @@ tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["json"] }
 warp = "0.3.7"
 sqlx = { version = "0.7", features = ["postgres", "runtime-tokio-native-tls"] }
+aide = "0.13.4"
