@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "./button"
+import React, {useEffect, useState} from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "./button";
 import ListCard from "./ListCard";
 import { handleCalculate2 } from "@/services/shoppingListService";
 
@@ -10,7 +10,6 @@ const ListOfListComponents = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
     
-
     // Simuliamo l'ID dell'utente per ora.
     const userId = "12345";
 
@@ -64,53 +63,52 @@ const ListOfListComponents = () => {
     };
 
 	return (
-		<div>
+		<div className="">
 			{isLoading ? (
-                        <div
-                            className="text-xl text-gray-700"
-                            role="status"
-                            aria-live="polite"
-                        >
-                            Loading...
-                        </div>
-                    ) : error ? (
-                        <div className="text-red-500 text-base mt-2" role="alert">
-                            {error}
-                        </div>
-                    ) : shoppingLists.length > 0 ? (
-                        <div className="flex">
-                            <div className="mt-3 max-h-[75vh] overflow-y-auto relative mx-auto w-full max-w-2xl gap-1">
-                                {shoppingLists.map((list) => (
-                                    <ListCard
-                                        key={list.id}
-                                        router={router}
-                                        listId={list.id}
-						    		    listName={list.name}
-						    		    listMode={list.mode}
-						    		    onViewList={() => handleListClick(list.id)}
-                                        createdAt={list.createdAt}
-                                        delateList={() => handleDeleteList(list.id)}
-                                        calculate={() => handleCalculate2(
-                                            list.id,
-                                            list.name,
-                                            list.products,
-                                            list.budget,
-                                            list.mode,
-                                            "12345",
-                                            router,
-                                        )}
-                                    />
-                                ))}
-                            </div>
-                            <div className="w-full bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
-                        </div>
-                    ) : (
-                        <div className="mt-5 text-center">
-                            <p className="text-lg text-gray-600">
-                                You don't have any shopping lists yet.
-                            </p>
-                        </div>
-                    )}
+                <div
+                    className="text-xl text-gray-700"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Loading...
+                </div>
+            ) : error ? (
+                <div className="text-red-500 text-base mt-2" role="alert">
+                    {error}
+                </div>
+            ) : shoppingLists.length > 0 ? (
+                <div className="relative">
+                    <div className="mt-3 relative mx-auto w-full max-w-2xl gap-1">
+                        {shoppingLists.map((list) => (
+                            <ListCard
+                                key={list.id}
+                                router={router}
+                                listId={list.id}
+                                listName={list.name}
+                                listMode={list.mode}
+                                onViewList={() => handleListClick(list.id)}
+                                createdAt={list.createdAt}
+                                delateList={() => handleDeleteList(list.id)}
+                                calculate={() => handleCalculate2(
+                                    list.id,
+                                    list.name,
+                                    list.products,
+                                    list.budget,
+                                    list.mode,
+                                    "12345",
+                                    router,
+                                )}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div className="mt-5 text-left">
+                    <p className="text-lg text-gray-600">
+                        You don't have any shopping lists yet.
+                    </p>
+                </div>
+            )}
 		</div>
 	);
 };

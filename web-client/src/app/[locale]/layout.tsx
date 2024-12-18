@@ -5,7 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UserProvider } from "@/services/auth";
 import { getUser } from "@/services/user";
-import {noto_Sans} from "@/components/ui/fonts"
+import {poppins} from "@/components/ui/fonts"
 
 const geistSans = localFont({
 	src: "../fonts/GeistVF.woff",
@@ -32,9 +32,9 @@ export default async function RootLayout({
 	const userPromise = getUser();
 
 	return (
-		<html lang="en" className={noto_Sans.className}>
+		<html lang="en" className={poppins.className}>
 			<body
-				className={`${noto_Sans.className} antialiased bg-liiist_white`}
+				className={`${poppins.className} antialiased bg-liiist_white`}
 			>
 				<UserProvider userPromise={userPromise}>
 					<NextIntlClientProvider messages={messages}>

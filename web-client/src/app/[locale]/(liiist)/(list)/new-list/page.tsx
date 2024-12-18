@@ -23,7 +23,7 @@ const NewListPage = () => {
     const [error, setError] = useState<string | null>(null);
 
     const handleProductAdd = (product: { name: string; quantity: number }) => {
-        setProducts([...products, product]);
+        setProducts([product, ...products]);
     };
 
     const handleProductRemove = (index: number) => {

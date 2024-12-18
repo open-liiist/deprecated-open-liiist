@@ -1,38 +1,3 @@
-// "use client";
-
-// import React from "react";
-// import { useRouter } from "next/navigation";
-// import { AiOutlinePlus } from "react-icons/ai";
-// import ListOfListComponents from "@/components/ui/ListOfListComponents";
-
-// const UserHomepage = () => {
-//     const router = useRouter();
-
-//     const handleNewListClick = () => {
-//         router.push("/new-list");
-//     };
-
-//     return (
-//         <div id="home-page" className="mt-navbar flex flex-col min-h-screen items-center justify-between bg-liiist_white">
-//             <div className="w-full max-w-xl">
-//                 {/* Componente per visualizzare le liste */}
-//                 <ListOfListComponents />
-//             </div>
-
-//             {/* Pulsante per creare una nuova lista */}
-//             <div className="fixed bottom-4 flex justify-center w-full">
-//                 <button
-//                     onClick={handleNewListClick}
-//                     className="text-liiist_black h-16 w-16 shadow-none cursor-pointer bg-gray-300 rounded-full transition-all duration-700 ease-in-out hover:rounded-2xl hover:bg-gray-600 flex items-center justify-center"
-//                 >
-//                     <AiOutlinePlus className="text-4xl text-white" />
-//                 </button>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default UserHomepage;
 "use client";
 
 import React from "react";
@@ -43,6 +8,7 @@ import ListOfListComponents from "@/components/ui/ListOfListComponents";
 const UserHomepage = () => {
     const router = useRouter();
 
+    // Navigates to the "Create New List" page
     const handleNewListClick = () => {
         router.push("/new-list");
     };
@@ -52,24 +18,41 @@ const UserHomepage = () => {
             id="home-page"
             className="mt-navbar flex flex-col items-center min-h-screen bg-liiist_white"
         >
-            {/* Contenitore della lista */}
-            <section className="fidex w-full max-w-xl mt-4 px-4">
-                <h1 className="text-2xl font-semibold text-liiist_black mb-2">
+            {/* Header Section */}
+            <header className="w-full max-w-xl mt-4 px-4">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-liiist_black mb-4">
                     Le Tue Liste
-                </h1>
-                <ListOfListComponents/>
+                </h3>
+            </header>
+
+            {/* Contenitore della lista */}
+            <section 
+                className="w-full max-w-xl px-4 mb-20" 
+                aria-label="Lista delle tue liste"
+            >
+                <ListOfListComponents />
             </section>
 
             {/* Pulsante per creare una nuova lista */}
             <button
                 onClick={handleNewListClick}
                 aria-label="Crea una nuova lista"
-                className="fixed bottom-4 flex items-center justify-center w-16 h-16 bg-liiist_green text-white rounded-full shadow-md transition-transform duration-300 hover:scale-110"
+                className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center w-16 h-16 bg-liiist_green text-white rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:ring-4 focus:ring-liiist_green/50"
             >
-                <AiOutlinePlus className="text-3xl" />
+                <AiOutlinePlus className="text-3xl sm:text-4xl" />
             </button>
         </main>
     );
 };
 
 export default UserHomepage;
+
+/*
+<button
+    onClick={handleNewListClick}
+    aria-label="Crea una nuova lista"
+    className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center w-16 h-16 bg-liiist_green text-white rounded-full shadow-lg transition-all duration-700 ease-in-out hover:scale-110 hover:rounded-lg hover:border hover:border-liiist_green focus:ring-4 focus:ring-liiist_green/50"
+>
+    <AiOutlinePlus className="text-3xl sm:text-4xl" />
+</button>
+*/

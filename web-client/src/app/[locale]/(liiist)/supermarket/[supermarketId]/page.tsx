@@ -1,22 +1,41 @@
-import { Supermarket } from '@/types';
+import { Localization } from '@/types';
 import SupermarketInfoCard from './SupermarketInfoCard';
 import SupermarketProducts from './SupermarketProducts';
 
-async function getSupermarketData(supermarketId: string): Promise<Supermarket | null> {
+async function getLocalizationData(localizationId: string): Promise<Localization | null> {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!apiUrl) {
         throw new Error('NEXT_PUBLIC_API_URL non è definito.');
     }
 
-    const res = await fetch(`${apiUrl}/api/supermarket/${supermarketId}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
+    try {
+        const res = await fetch(`${apiUrl}/api/supermarket/${localizationId}`, { cache: 'no-store' });
+        if (!res.ok) {
+            console.error(`Errore API: ${res.status} ${res.statusText}`);
+            return null;
+        }
+
+        const data: Localization = await res.json();
+        return data;
+    } catch (error) {
+        console.error('Errore durante la chiamata API:', error);
+        return null;
+    }
 }
 
 export default async function SupermarketPage({ params }: { params: { supermarketId: string } }) {
-    const supermarket = await getSupermarketData(params.supermarketId);
+    const localizationId = parseInt(params.supermarketId, 10);
+    if (isNaN(localizationId)) {
+        return (
+            <div className="p-8">
+                <p className="text-center text-gray-500 text-xl">ID Supermercato non valido</p>
+            </div>
+        );
+    }
 
-    if (!supermarket) {
+    const localization = await getLocalizationData(params.supermarketId);
+
+    if (!localization) {
         return (
             <div className="p-8">
                 <p className="text-center text-gray-500 text-xl">Supermercato non trovato</p>
@@ -24,14 +43,10 @@ export default async function SupermarketPage({ params }: { params: { supermarke
         );
     }
 
-    // Passiamo i dati al componente di visualizzazione
     return (
         <div className="p-8 space-y-8">
-            {/* Info Supermercato */}
-            <SupermarketInfoCard supermarket={supermarket} />
-
-            {/* Sezione Prodotti con ricerca e paginazione */}
-            <SupermarketProducts products={supermarket.products} />
+            <SupermarketInfoCard supermarket={localization} />
+            <SupermarketProducts products={localization.products} />
         </div>
     );
 }

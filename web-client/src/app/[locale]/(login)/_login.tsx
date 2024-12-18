@@ -11,7 +11,7 @@ import { signIn, signUp } from './actions';
 import { ActionState } from '@/services/auth/middleware';
 import { useFormState } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { oswald, noto_Sans } from '@/components/ui/fonts';
+//import { oswald, noto_Sans } from '@/components/ui/fonts';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     const t = useTranslations('');
@@ -44,7 +44,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     return (
         <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-liiist_white">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h1 className={`${noto_Sans.className} text-5xl font-bold mb-6 text-liiist_green text-center`}>liiist</h1>
+                <h1 className={`text-5xl font-bold mb-6 text-liiist_green text-center`}>liiist</h1>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-liiist_green">
                     {mode === 'signin' ? t('auth.signIn') : t('auth.create')}
                 </h2>

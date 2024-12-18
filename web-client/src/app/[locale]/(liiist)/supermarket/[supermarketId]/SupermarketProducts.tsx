@@ -35,24 +35,20 @@ export default function SupermarketProducts({ products }: { products: Product[] 
 
         switch (sortOption) {
             case 'DISCOUNT':
-                // Prodotti con sconto prima
                 filtered.sort((a, b) => {
-                    if (a.discounted_price && !b.discounted_price) return -1;
-                    if (!a.discounted_price && b.discounted_price) return 1;
+                    if (a.discount && !b.discount) return -1;
+                    if (!a.discount && b.discount) return 1;
                     return 0;
                 });
                 break;
             case 'PRICE_DESC':
-                // Più caro prima
-                filtered.sort((a, b) => b.price - a.price);
+                filtered.sort((a, b) => b.current_price - a.current_price);
                 break;
             case 'PRICE_ASC':
-                // Meno caro prima
-                filtered.sort((a, b) => a.price - b.price);
+                filtered.sort((a, b) => a.current_price - b.current_price);
                 break;
             case 'DEFAULT':
             default:
-                // Ordinamento predefinito (per nome)
                 filtered.sort((a, b) => a.full_name.localeCompare(b.full_name));
                 break;
         }
@@ -71,12 +67,12 @@ export default function SupermarketProducts({ products }: { products: Product[] 
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1); // resetta alla prima pagina su nuova ricerca
+        setCurrentPage(1); // Resetta alla prima pagina su nuova ricerca
     };
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSortOption(e.target.value as SortOption);
-        setCurrentPage(1); // resetta alla prima pagina su nuovo ordinamento
+        setCurrentPage(1); // Resetta alla prima pagina su nuovo ordinamento
     };
 
     const handleNextPage = () => {
@@ -143,9 +139,9 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                     <p className="text-gray-700">Trovati {filteredAndSortedProducts.length} prodotti.</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         {currentProducts.map(product => (
-                            <div key={product.uniqueProductId} className="bg-white rounded-lg shadow p-4 flex flex-col">
+                            <div key={product.id} className="bg-white rounded-lg shadow p-4 flex flex-col">
                                 <img 
-                                    src={product.img_url} 
+                                    src={product.image_url ?? '/placeholder.jpg'} 
                                     alt={product.full_name}
                                     className="w-full h-40 object-cover rounded mb-2"
                                 />
@@ -153,11 +149,16 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                                 <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                                 <div className="mt-auto">
                                     <p className="text-gray-800">
-                                        Prezzo: <span className="font-bold">€{product.price.toFixed(2)}</span>
+                                        Prezzo: <span className="font-bold">€{product.current_price.toFixed(2)}</span>
                                     </p>
-                                    {product.discounted_price && (
+                                    {product.discount && (
                                         <p className="text-green-600">
-                                            Prezzo scontato: <span className="font-bold">€{product.discounted_price.toFixed(2)}</span>
+                                            Sconto: <span className="font-bold">{product.discount}%</span>
+                                        </p>
+                                    )}
+                                    {product.price_for_kg && (
+                                        <p className="text-gray-500">
+                                            Prezzo al kg: <span>€{product.price_for_kg.toFixed(2)}</span>
                                         </p>
                                     )}
                                 </div>
