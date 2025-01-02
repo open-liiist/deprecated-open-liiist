@@ -89,9 +89,26 @@ class FetchClient {
 		return this.handleRequest(url, options, accessToken);
 	}
 
+	public async put(url: string, body: object, accessToken?: string): Promise<Response> {
+		const options: RequestInit = {
+			method: 'PUT',
+			headers: this.headers,
+			body: JSON.stringify(body),
+		};
+		return this.handleRequest(url, options, accessToken);
+	}
+
 	public async get(url: string, accessToken?: string): Promise<Response> {
 		const options: RequestInit = {
 			method: 'GET',
+			headers: this.headers,
+		};
+		return this.handleRequest(url, options, accessToken);
+	}
+
+	public async delete(url: string, accessToken?: string): Promise<Response> {
+		const options: RequestInit = {
+			method: 'DELETE',
 			headers: this.headers,
 		};
 		return this.handleRequest(url, options, accessToken);

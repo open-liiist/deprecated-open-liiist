@@ -45,18 +45,18 @@ const NewListPage = () => {
             setProducts(updatedProducts);
         }
     };
-
+    
     const handleSaveList = async () => {
         if (listTitle.trim() === "" || products.length === 0) {
             setError("Please enter a list title and add at least one product.");
             return;
         }
-
+    
         setIsLoading(true);
         setError(null);
-
+    
         try {
-            const response = await fetch("/api/shopping-lists", {
+            const response = await fetch("/api/postShoppingList", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -65,23 +65,27 @@ const NewListPage = () => {
                     name: listTitle,
                     products,
                     budget,
-                    mode,
-                    userId: "12345",
+                    mode
                 }),
+                credentials: 'include', 
             });
-
+    
             if (!response.ok) {
-                throw new Error("Failed to save the shopping list");
+                const errorData = await response.json();
+                throw new Error(errorData?.error || "Failed to save the shopping list");
             }
-
+    
+            const result = await response.json();
+            console.log("Lista creata con successo:", result);
             router.push("/home");
         } catch (err) {
-            setError("Failed to save the shopping list");
+            setError(err.message || "Failed to save the shopping list");
+            console.error("Errore durante il salvataggio della lista:", err);
         } finally {
             setIsLoading(false);
         }
     };
-
+    
     
     const handleToggleMode = () => {
         setMode(mode === "convenience" ? "savings" : "convenience");
@@ -124,7 +128,7 @@ const NewListPage = () => {
                         checked={mode === "savings"}
                         onChange={handleToggleMode}
                         labels={["Convenience", "Savings"]}
-                    />
+                        />
                     <ActionButton2
                         onClick={() =>
                             handleCalculate(
@@ -155,3 +159,41 @@ const NewListPage = () => {
 };
 
 export default NewListPage;
+
+
+//old save list
+    // const handleSaveList = async () => {
+    //     if (listTitle.trim() === "" || products.length === 0) {
+    //         setError("Please enter a list title and add at least one product.");
+    //         return;
+    //     }
+
+    //     setIsLoading(true);
+    //     setError(null);
+
+    //     try {
+    //         const response = await fetch("/api/shopping-lists", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify({
+    //                 name: listTitle,
+    //                 products,
+    //                 budget,
+    //                 mode,
+    //                 userId: "12345",
+    //             }),
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error("Failed to save the shopping list");
+    //         }
+
+    //         router.push("/home");
+    //     } catch (err) {
+    //         setError("Failed to save the shopping list");
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // };

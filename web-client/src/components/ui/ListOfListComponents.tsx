@@ -1,75 +1,75 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "./button";
 import ListCard from "./ListCard";
 import { handleCalculate2 } from "@/services/shoppingListService";
 
 const ListOfListComponents = () => {
-	const router = useRouter();
-	const [shoppingLists, setShoppingLists] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-    
-    // Simuliamo l'ID dell'utente per ora.
-    const userId = "12345";
+    const router = useRouter();
+    const [shoppingLists, setShoppingLists] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
+    // Fetch shopping lists from the API
+    useEffect(() => {
+        const fetchShoppingLists = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await fetch("/api/getShoppingLists");
+                if (!response.ok) {
+                    throw new Error("Failed to fetch shopping lists");
+                }
+                const data = await response.json();
+                setShoppingLists(data.data);
+                console.log(`Shopping lists:, ${shoppingLists}`);
+            } catch (err) {
+                console.error("Errore:", err);
+                setError("Impossibile recuperare le liste della spesa");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         fetchShoppingLists();
     }, []);
 
-    const fetchShoppingLists = async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            // Chiamata API per recuperare le liste di spesa dell'utente
-            const response = await fetch(`/api/shopping-lists?userId=${userId}&t=${new Date().getTime()}`, {
-                headers: {
-                    "Cache-Control": "no-cache"
-                }});
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            console.log("data fetched from list", data);
-            setShoppingLists(data);
-        } catch (err) {
-            setError("Failed to fetch shopping lists");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-	const handleListClick = (listId) => {
-        router.push(`/shopping-list/${listId}`);
-	}
-
+    // Handle deletion of a shopping list
     const handleDeleteList = async (listId) => {
-        if (confirm("Sei sicuro di voler eliminare questa lista?")) {
-            try {
-                const response = await fetch(`/api/shopping-lists/${listId}`, {
-                    method: "DELETE",
-                });
-                if (response.ok) {
-                    setShoppingLists((prevLists) =>
-                        prevLists.filter((list) => list.id !== listId),
-                    );
-                } else {
-                    console.error("Errore durante l'eliminazione della lista");
-                }
-            } catch (err) {
-                console.error("Errore nella chiamata API:", err);
+        if (!listId) {
+            console.error("ID della lista mancante");
+            return;
+        }
+
+        const confirmDelete = confirm("Sei sicuro di voler eliminare questa lista?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`/api/deleteShoppingList`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ listId }),
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Errore durante l'eliminazione della lista:", errorData?.error || "Errore sconosciuto");
+                alert(`Errore: ${errorData?.error || "Impossibile eliminare la lista"}`);
+                return;
             }
+
+            setShoppingLists((prevLists) => prevLists.filter((list) => list.id !== listId));
+        } catch (err) {
+            console.error("Errore nella chiamata API:", err);
+            alert("Errore durante la comunicazione con il server. Riprova più tardi.");
         }
     };
 
-	return (
-		<div className="">
-			{isLoading ? (
-                <div
-                    className="text-xl text-gray-700"
-                    role="status"
-                    aria-live="polite"
-                >
+    // Render component
+    return (
+        <div className="relative">
+            {isLoading ? (
+                <div className="text-xl text-gray-700" role="status" aria-live="polite">
                     Loading...
                 </div>
             ) : error ? (
@@ -78,7 +78,8 @@ const ListOfListComponents = () => {
                 </div>
             ) : shoppingLists.length > 0 ? (
                 <div className="relative">
-                    <div className="mt-3 relative mx-auto w-full max-w-2xl gap-1">
+                    {/* Contenitore per le liste */}
+                    <div className="mt-3 relative mx-auto w-full max-w-2xl gap-1 max-h-[65vh] overflow-y-auto">
                         {shoppingLists.map((list) => (
                             <ListCard
                                 key={list.id}
@@ -86,21 +87,24 @@ const ListOfListComponents = () => {
                                 listId={list.id}
                                 listName={list.name}
                                 listMode={list.mode}
-                                onViewList={() => handleListClick(list.id)}
                                 createdAt={list.createdAt}
                                 delateList={() => handleDeleteList(list.id)}
-                                calculate={() => handleCalculate2(
-                                    list.id,
-                                    list.name,
-                                    list.products,
-                                    list.budget,
-                                    list.mode,
-                                    "12345",
-                                    router,
-                                )}
+                                calculate={() =>
+                                    handleCalculate2(
+                                        list.id,
+                                        list.name,
+                                        list.products,
+                                        list.budget,
+                                        list.mode,
+                                        "12345",
+                                        router
+                                    )
+                                }
                             />
                         ))}
                     </div>
+                    {/* Effetto sfumato per lo scrolling */}
+                    <div className="w-full h-1 bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
                 </div>
             ) : (
                 <div className="mt-5 text-left">
@@ -109,8 +113,8 @@ const ListOfListComponents = () => {
                     </p>
                 </div>
             )}
-		</div>
-	);
+        </div>
+    );
 };
 
 export default ListOfListComponents;

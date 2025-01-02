@@ -44,25 +44,15 @@ services:
       - "4001:4001"
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
-
-  scraping-service:
-    build: 
-      context: ./scraping-service
-      dockerfile: Dockerfile
-    depends_on:
-      - product-receiver-service
-    volumes:
-      - ./scraping-service:/app
-    environment:
-      - PRODUCT_RECEIVER_BASE_URL=${PRODUCT_RECEIVER_BASE_URL}
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   product-receiver-service:
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
     depends_on:
-      db:
-        condition: service_healthy
+      db: 
+          condition: service_healthy
     ports:
       - "3002:3002"
     environment:
@@ -122,5 +112,78 @@ services:
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
 
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      dockerfile: Dockerfile
+      args: 
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./elasticsearch/setup-elasticsearch.sh:/usr/share/elasticsearch/setup-elasticsearch.sh
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+    entrypoint: |
+      sh -c "
+        elasticsearch &
+        chmod +x /usr/share/elasticsearch/setup-elasticsearch.sh &&
+        sleep 10 &&
+        /usr/share/elasticsearch/setup-elasticsearch.sh &&
+        wait
+      "
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+    restart: unless-stopped
+
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xmx256m -Xms256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  notification-alert:
+    build: ./notification-alert
+    ports:
+      - "5000:5000"
+
 volumes:
   pgdata: 
+  elasticsearch:
+
+networks:
+  shared-network:
+    external: true

@@ -3,12 +3,10 @@
 // app/edit-list/page.tsx
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input, Input2 } from "@/components/ui/input";
 import { TagInput } from "@/components/ui/tag-input";
 import { ActionButton2 } from "@/components/ui/ActionButton";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
-import { FaMagnifyingGlassArrowRight } from "react-icons/fa6";
 import { handleCalculate2 } from "@/services/shoppingListService";
 import { GoArrowDownRight } from "react-icons/go";
 
@@ -18,17 +16,24 @@ const EditListPage: React.FC = () => {
     const listId = searchParams.get("id");
     const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
     const [listTitle, setListTitle] = useState<string>("");
-    const [products, setProducts] = useState<{ name: string; quantity: number }[]>([]);
+    const [products, setProducts] = useState([]);
     const [budget, setBudget] = useState<string>("");
     const [mode, setMode] = useState<string>("convenience");
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [backgroundColor, setBackgroundColor] = useState("#ffffff")
     
+
     useEffect(() => {
         // Recuperare la lista da modificare usando l'ID della lista
         if (listId) {
-            fetch(`/api/shopping-lists/${listId}`)
+            fetch(`/api/getAList?listId=${listId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch list data");
@@ -36,24 +41,37 @@ const EditListPage: React.FC = () => {
                 return response.json();
             })
             .then((data) => {
-                setListTitle(data.name || "");
-                setProducts(data.products || []);
-                setBudget(data.budget || "");
-                setMode(data.mode || "convenience");
+                if (!data.data) {
+                    throw new Error("List data not found");
+                }
+                const listData = data.data.data;
+                setListTitle(listData.name || "");
+                setProducts(Array.isArray(listData.products) 
+                    ? listData.products.map(product => ({
+                        name: product.name,
+                        quantity: Number(product.quantity)
+                        })) 
+                    : []
+                );
+                setBudget(listData.budget || "");
+                setMode(listData.mode || "convenience");
                 setIsLoading(false);
-                const createdDate = new Date(data.createdAt);
+    
+                const createdDate = new Date(listData.createdAt);
                 const minute = createdDate.getMinutes();
-                var lastDigit = minute % 10;
+                let lastDigit = minute % 10;
+    
                 if(lastDigit > 5){
                     lastDigit = lastDigit - 5;
                 }
-                const choosecolor = colors[lastDigit % colors.length];
-                setBackgroundColor(choosecolor);
-                })
-                .catch((err) => {
-                    setError(err.message);
-                    setIsLoading(false);
-                });
+    
+                const chooseColor = colors[lastDigit % colors.length];
+                setBackgroundColor(chooseColor);
+            })
+            .catch((err) => {
+                setError(err.message);
+                setIsLoading(false);
+            });
         }
     }, [listId]);
 
@@ -62,10 +80,11 @@ const EditListPage: React.FC = () => {
         setError(null);
         try {
             // Modificare la lista tramite una richiesta PUT all'endpoint API
-            const response = await fetch(`/api/shopping-lists/${listId}`, {
+            const response = await fetch(`/api/uploadShoppingList?listId=${listId}`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     name: listTitle,
@@ -73,6 +92,7 @@ const EditListPage: React.FC = () => {
                     budget,
                     mode,
                 }),
+                credentials: 'include', 
             });
             if (!response.ok) {
                 throw new Error("Failed to update the shopping list");

@@ -9,7 +9,7 @@ import { BsTrash3Fill } from "react-icons/bs";
 
 
 
-const ListCard = ({listId, listName, listMode, onViewList, createdAt, delateList, calculate, router }) => {
+const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate, router }) => {
 
     const colors = ["#FFABAD", "#FFC576", "#B594B6" , "#7D5C65", "#6EEB83"];
     const createdDate = new Date(createdAt);
