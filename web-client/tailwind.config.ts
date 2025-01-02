@@ -1,6 +1,5 @@
 import type { Config } from "tailwindcss";
 
-
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,19 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        liiist_green:  '#384000', //'#6EEB83'
-        liiist_white: '#F9FAFB',//'#E1F2FE',
+        liiist_green: '#384000',
+        liiist_white: '#F9FAFB',
         liiist_pink: '#FFABAD',
         liiist_black: '#333333',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        noto: ['var(--font-noto_Sans)'], // Definisci `Noto Sans` per essere utilizzato con Tailwind
+        noto: ['var(--font-noto_Sans)'],
         sans: ['var(--font-noto_Sans)'],
+      },
+      spacing: {
+        navbar: '64px', // Altezza navbar dinamica
       },
     },
   },
   plugins: [],
 };
+
 export default config;

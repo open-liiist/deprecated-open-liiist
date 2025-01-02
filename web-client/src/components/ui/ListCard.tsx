@@ -5,11 +5,13 @@ import { FaArrowRight } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { GoArrowDownRight } from "react-icons/go";
 import { RxCross1 } from "react-icons/rx";
+import { BsTrash3Fill } from "react-icons/bs";
+
 
 
 const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate, router }) => {
 
-    const colors = ["#FFABAD", "#FFC576", "#B4B1B1" , "#7D5C65", "#6EEB83"];
+    const colors = ["#FFABAD", "#FFC576", "#B594B6" , "#7D5C65", "#6EEB83"];
     const createdDate = new Date(createdAt);
     const minute = createdDate.getMinutes();
     var lastDigit = minute % 10;
@@ -36,15 +38,15 @@ const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate,
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <div className="font-bold text-3xl mt-6">{listName}</div>
-                <div className="text-white text-sm mb-3 bg-liiist_black w-fit rounded-xl flex gap-2 items-center px-4 py-1">
+                <div className="text-white text-sm mb-3 bg-liiist_black w-fit rounded-lg flex gap-2 items-center px-4 py-1">
                     <FaCheck/>
                     {listMode}
                 </div>
             </div>
             <div className="w-1/6 rounded-e-xl flex flex-col justify-between items-end pt-4 pb-3 px-4">
-                    <div className="border-liiist_black border-2 rounded-md hover:scale-105 cursor-pointer">
-                        <RxCross1 
-                            className="text-md m-0.5"
+                    <div className="border-liiist_black  hover:scale-105 cursor-pointer">
+                        <BsTrash3Fill 
+                            className="text-3xl m-0.5"
                             role = "button"
                             onClick={delateList}
                             onKeyPress={(e) => {

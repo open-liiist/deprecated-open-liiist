@@ -1,34 +1,58 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import ListOfListComponents from "@/components/ui/ListOfListComponents";
-
 
 const UserHomepage = () => {
     const router = useRouter();
 
-    const handleNewListClick = async () => {
+    // Navigates to the "Create New List" page
+    const handleNewListClick = () => {
         router.push("/new-list");
     };
 
     return (
-        <div id="home-page" className="flex flex-col items-center justify-center p-5 bg-liiist_white">
-            <div className="w-full max-w-2xl mt-5">
-                    <ListOfListComponents/>
-                    <div className="mt-16 flex justify-center">
-                        <Button onClick={handleNewListClick} className=" text-liiist_black h-15 w-15  shadow-none cursor-pointer hover:scale-125">
-                            <AiOutlinePlus className="text-4xl hover:shadow-inherit"/>
-                        </Button>
-                    </div>
-            </div>
-        </div>
+        <main
+            id="home-page"
+            className="mt-navbar flex flex-col items-center min-h-screen bg-liiist_white"
+        >
+            {/* Header Section */}
+            <header className="w-full max-w-xl mt-4 px-4">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-liiist_black mb-4">
+                    Le Tue Liste
+                </h3>
+            </header>
+
+            {/* Contenitore della lista */}
+            <section 
+                className="w-full max-w-xl px-4 mb-20" 
+                aria-label="Lista delle tue liste"
+            >
+                <ListOfListComponents />
+            </section>
+
+            {/* Pulsante per creare una nuova lista */}
+            <button
+                onClick={handleNewListClick}
+                aria-label="Crea una nuova lista"
+                className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center w-16 h-16 bg-liiist_green text-white rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:ring-4 focus:ring-liiist_green/50"
+            >
+                <AiOutlinePlus className="text-3xl sm:text-4xl" />
+            </button>
+        </main>
     );
 };
 
 export default UserHomepage;
 
-
+/*
+<button
+    onClick={handleNewListClick}
+    aria-label="Crea una nuova lista"
+    className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center w-16 h-16 bg-liiist_green text-white rounded-full shadow-lg transition-all duration-700 ease-in-out hover:scale-110 hover:rounded-lg hover:border hover:border-liiist_green focus:ring-4 focus:ring-liiist_green/50"
+>
+    <AiOutlinePlus className="text-3xl sm:text-4xl" />
+</button>
+*/

@@ -97,7 +97,7 @@ const EditListPage: React.FC = () => {
             if (!response.ok) {
                 throw new Error("Failed to update the shopping list");
             }
-            router.push("/home");
+            router.push("/home"); /*router.push(`/convenience-mode?id=${listId}&listTitle=${listTitle}&budget=${budget}`);            */
         } catch (err) {
             setError((err as Error).message);
         } finally {
@@ -124,7 +124,7 @@ const EditListPage: React.FC = () => {
     };
 
     return (
-        <div className="max-w-full w-full flex justify-center p-5 text-liiist_black">
+        <div className="mt-navbar max-w-full w-full flex justify-center p-5 text-liiist_black">
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
@@ -167,23 +167,50 @@ const EditListPage: React.FC = () => {
                                 onChange={handleToggleMode}
                                 labels={["Convenience", "Savings"]}
                                 />
-                            <ActionButton2
-                                onClick={() =>
-                                    handleCalculate2(
-                                        listId,
-                                        listTitle,
-                                        products,
-                                        budget,
-                                        mode,
-                                        "12345",
-                                        router
-                                    )
-                                }
-                                disabled={isLoading || products.length === 0 || budget === ""}
-                                className="border-2 rounded-lg hover:scale-105 h-min"
-                                >
-                                <GoArrowDownRight className="text-3xl"/>
-                            </ActionButton2>
+<ActionButton2
+    onClick={async () => {
+        setIsLoading(true);
+        try {
+            // Salva le modifiche alla lista prima di calcolare
+            const response = await fetch(`/api/shopping-lists/${listId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: listTitle,
+                    products,
+                    budget,
+                    mode,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to save the shopping list");
+            }
+
+            // Procedi con il calcolo solo dopo che la lista è stata salvata con successo
+            await handleCalculate2(
+                listId,
+                listTitle,
+                products,
+                budget,
+                mode,
+                "12345", // Puoi sostituire con un ID utente reale se necessario
+                router
+            );
+        } catch (err) {
+            setError((err as Error).message);
+        } finally {
+            setIsLoading(false);
+        }
+    }}
+    disabled={isLoading || products.length === 0 || budget === ""}
+    className="border-2 rounded-lg hover:scale-105 h-min"
+>
+    <GoArrowDownRight className="text-3xl" />
+</ActionButton2>
+
                         </div>
                     </div>
                     {error && (
