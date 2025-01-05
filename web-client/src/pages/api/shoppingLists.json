@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": "7f65fc48-cb3b-4b5b-90de-33bcd6d9c5f3",
+    "name": "prodAdmin",
+    "products": [
+      {
+        "name": "prod",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "savings",
+    "userId": "12345",
+    "createdAt": "2025-01-03T17:04:06.905Z",
+    "updatedAt": "2025-01-03T17:04:06.905Z"
+  },
+  {
+    "id": "3ec98a8b-5bf2-44ac-ac18-676723dc7901",
+    "name": "Miao",
+    "products": [
+      {
+        "name": "Ciao",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-04T12:34:46.900Z",
+    "updatedAt": "2025-01-04T12:34:46.900Z"
+  },
+  {
+    "id": "d4acfcad-221f-4d8e-a4bd-f733ec621c11",
+    "name": "list",
+    "products": [
+      {
+        "name": "prod1",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-05T18:57:22.735Z",
+    "updatedAt": "2025-01-05T18:57:22.735Z"
+  }
+]

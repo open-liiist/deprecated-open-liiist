@@ -14,16 +14,28 @@ const ListOfListComponents = () => {
         const fetchShoppingLists = async () => {
             setIsLoading(true);
             setError(null);
+        
             try {
-                const response = await fetch("/api/getShoppingLists");
+                const token = localStorage.getItem('token'); // Recupera il token salvato
+                console.log('Token utilizzato:', token);
+        
+                const response = await fetch("/api/getShoppingLists", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`, // Aggiungi il token
+                    },
+                    credentials: "include", // Invia i cookie insieme alla richiesta
+                });
+        
                 if (!response.ok) {
                     throw new Error("Failed to fetch shopping lists");
                 }
+        
                 const data = await response.json();
                 setShoppingLists(data.data);
-                console.log(`Shopping lists:, ${shoppingLists}`);
+                console.log(`Shopping lists recuperate:`, data.data);
             } catch (err) {
-                console.error("Errore:", err);
+                console.error("Errore durante il fetch:", err);
                 setError("Impossibile recuperare le liste della spesa");
             } finally {
                 setIsLoading(false);

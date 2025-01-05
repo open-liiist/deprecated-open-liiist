@@ -84,16 +84,38 @@ class RouteHandler {
 	}
 }
 
+// export async function middleware(request: NextRequest) {
+// 	const accessToken = request.cookies.get(environment.cookies.access);
+// 	console.log('Access Token Cookie:', accessToken?.value); // Log del cookie
+
+
+// 	if (!accessToken || !accessToken.value)
+// 		return new RouteHandler(request).handleRedirection(false);
+
+// 	const user = await verifyToken(accessToken.value);
+// 	console.log('Utente verificato:', user); // Log del risultato della verifica del token
+
+
+// 	return new RouteHandler(request).handleRedirection(!!user);
+// }
 export async function middleware(request: NextRequest) {
-	const accessToken = request.cookies.get(environment.cookies.access);
+    const accessToken = request.cookies.get(environment.cookies.access);
 
-	if (!accessToken || !accessToken.value)
-		return new RouteHandler(request).handleRedirection(false);
+    if (!accessToken || !accessToken.value) {
+        console.log('Token non presente nel cookie');
+        return new RouteHandler(request).handleRedirection(false);
+    }
 
-	const user = await verifyToken(accessToken.value);
+    const user = await verifyToken(accessToken.value);
 
-	return new RouteHandler(request).handleRedirection(!!user);
+    if (!user) {
+        console.log('Token non valido o scaduto');
+        return new RouteHandler(request).handleRedirection(false);
+    }
+
+    return new RouteHandler(request).handleRedirection(!!user);
 }
+
 
 export const config = {
 	// Match only internationalized pathnames
