@@ -8,7 +8,7 @@ import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://auth-service:4000"; // Corretto
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api"; // Corretto
 
 // Schema per il login
 const signInSchema = z.object({
@@ -38,6 +38,10 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 
         const result = await response.json();
         console.log("Login successful:", result);
+        
+        // Salva i token nel localStorage
+        localStorage.setItem('accessToken', result.data.accessToken);
+        localStorage.setItem('refreshToken', result.data.refreshToken);
 
         // Redirect dopo il login
         const redirectTo = formData.get("redirect") as string | null;

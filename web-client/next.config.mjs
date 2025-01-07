@@ -1,8 +1,19 @@
+// next.config.mjs
+
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntln = createNextIntlPlugin()
+const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    async rewrites() {
+        return [
+          {
+            source: '/api/:path*',
+            destination: 'http://auth-service:4000/:path*', // Proxy alle API del backend senza /api
+          },
+        ];
+      },
+};
 
-export default withNextIntln(nextConfig);
+export default withNextIntl(nextConfig);
