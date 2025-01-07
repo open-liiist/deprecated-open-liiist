@@ -1,17 +1,19 @@
-import development from './environments/development'
-import production from './environments/production'
-import test from './environments/test'
+// auth-service/src/config/environment.ts
 
-type Environment = "development" | "production" | "test"
+import development from './environments/development';
+import production from './environments/production';
+import test from './environments/test';
 
-const env: Environment = (process.env.NODE_ENV as Environment) || "development"
+type Environment = "development" | "production" | "test";
+
+const env: Environment = (process.env.NODE_ENV as Environment) || "development";
 
 const environments = {
-	development,
-	production,
-	test,
+    development,
+    production,
+    test,
 };
 
-const environment = environments[env]
+const environment = environments[env];
 
-export default environment
+export default environment;

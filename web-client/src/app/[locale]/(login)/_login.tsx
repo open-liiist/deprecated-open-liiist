@@ -11,7 +11,6 @@ import { signIn, signUp } from './actions';
 import { ActionState } from '@/services/auth/middleware';
 import { useFormState } from 'react-dom';
 import { useTranslations } from 'next-intl';
-//import { oswald, noto_Sans } from '@/components/ui/fonts';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     const t = useTranslations('');

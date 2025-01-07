@@ -1,3 +1,108 @@
+# services:
+
+#   web-client:
+#     build: 
+#       context: ./web-client
+#       target: dev
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       # Mount the web-client directory to the container (live reloading)
+#       - ./web-client:/app
+#       # separate host node_modules from container node_modules
+#       - /app/node_modules
+#       - /app/.next
+#     command: npm run dev
+#     environment:
+#       - NODE_ENV=${NODE_ENV}
+#       - LOG_LEVEL=${LOG_LEVEL}
+#       - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+#       - API_BASE_URL=${API_BASE_URL}  # Redundant/Conflicting
+#       - NAME_COOKIE_ACCESS=${NAME_COOKIE_ACCESS}
+#       - NAME_COOKIE_REFRESH=${NAME_COOKIE_REFRESH}
+#     networks:
+#       - shared-network
+    
+#   auth-service:
+#     build: 
+#       context: ./auth-service
+#       dockerfile: Dockerfile
+#     ports:
+#     - "4000:4000"
+#     #- "5555:5555" # Exposes Prisma Studio
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#     environment:
+#       - AUTH_SERVICE_PORT=4000
+#       - AUTH_DATABASE_URL=postgresql://user:postgrespw@db:5432/authdb  # Updated to authdb
+#       - ACCESS_TOKEN_SECRET=access_token_secret
+#       - REFRESH_TOKEN_SECRET=refresh_token_secret
+#     env_file:
+#       - ./auth-service/.env
+#     networks:
+#       - shared-network
+
+#   search-service:
+#     build: 
+#       context: ./search-service
+#       dockerfile: Dockerfile
+#     ports:
+#       - "4001:4001"
+#     environment:
+#       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
+#       - ELASTICSEARCH_URL=http://elasticsearch:9200
+
+#   product-receiver-service:
+#     build: 
+#       context: ./product-receiver-service
+#       dockerfile: Dockerfile
+#     depends_on:
+#       db: 
+#           condition: service_healthy
+#     ports:
+#       - "3002:3002"
+#     environment:
+#       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
+#       - DATABASE_URL=postgresql://user:postgrespw@db:5432/appdb
+#     volumes:
+#       - ./product-receiver-service:/app
+
+#   db:
+#     image: postgres:13
+#     restart: always
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       #PGUSER: user
+#       POSTGRES_USER: user
+#       POSTGRES_PASSWORD: postgrespw
+#       POSTGRES_DB: authdb
+#     healthcheck:
+#       #test: "pg_isready -h db"
+#       test: ["CMD", "pg_isready", "-U", "user"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 5
+#     networks:
+#       - shared-network
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+#       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+
+#   adminer:
+#     image: adminer
+#     restart: always
+#     command: php -S [::]:8090 -t /var/www/html
+#     ports:
+#       - 8090:8090
+#     networks:
+#       - shared-network
+
+
 services:
 
   web-client:
@@ -8,18 +113,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Mount the web-client directory to the container (live reloading)
       - ./web-client:/app
-      # separate host node_modules from container node_modules
       - /app/node_modules
       - /app/.next
     command: npm run dev
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - API_BASE_URL=${API_BASE_URL}
-      - NAME_COOKIE_ACCESS=${NAME_COOKIE_ACCESS}
-      - NAME_COOKIE_REFRESH=${NAME_COOKIE_REFRESH}
+    env_file:
+      - ./web-client/.env
+    networks:
+      - shared-network
+
 
   auth-service:
     build: 
@@ -31,20 +133,15 @@ services:
       db:
         condition: service_healthy
     environment:
-      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
-      - AUTH_DATABASE_URL=${AUTH_DATABASE_URL}
-      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
-      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+      - AUTH_SERVICE_PORT=4000
+      - AUTH_DATABASE_URL=postgresql://user:postgrespw@db:5432/authdb?schema=public
+      - ACCESS_TOKEN_SECRET=access_token_secret
+      - REFRESH_TOKEN_SECRET=refresh_token_secret
+    env_file:
+      - ./auth-service/.env
+    networks:
+      - shared-network
 
-  search-service:
-    build: 
-      context: ./search-service
-      dockerfile: Dockerfile
-    ports:
-      - "4001:4001"
-    environment:
-      - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   product-receiver-service:
     build: 
@@ -52,14 +149,17 @@ services:
       dockerfile: Dockerfile
     depends_on:
       db: 
-          condition: service_healthy
+        condition: service_healthy
     ports:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - DATABASE_URL=${DATABASE_URL}
+      # - DATABASE_URL=postgresql://user:postgrespw@db:5432/appdb
+      - DATABASE_URL=postgresql://user:postgrespw@db:5432/appdb?schema=public
     volumes:
       - ./product-receiver-service:/app
+    networks:
+      - shared-network
 
   db:
     image: postgres:13
@@ -67,17 +167,20 @@ services:
     ports:
       - "5432:5432"
     environment:
-      PGUSER: user
       POSTGRES_USER: user
       POSTGRES_PASSWORD: postgrespw
-      POSTGRES_DB: appdb
+      POSTGRES_MULTIPLE_DATABASES: authdb,appdb  # Define both databases
     healthcheck:
-      test: "pg_isready -h db"
+      #test: ["CMD", "pg_isready", "-U", "user"]
+      test: ["CMD-SHELL", "pg_isready -h db -U user"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - shared-network
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   adminer:
     image: adminer
@@ -85,6 +188,8 @@ services:
     command: php -S [::]:8090 -t /var/www/html
     ports:
       - 8090:8090
+    networks:
+      - shared-network
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -186,4 +291,4 @@ volumes:
 
 networks:
   shared-network:
-    external: true
+    driver: bridge

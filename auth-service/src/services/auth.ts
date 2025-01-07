@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
 import { clearRefreshTokens, generateAccessToken, generateRefreshToken, saveRefreshToken, verifyRefreshToken } from './jwt';
 import { ApiError } from '../utils/apiError';
 import { logger } from '../utils/logger';
@@ -19,6 +20,15 @@ import { User } from '../config/types/api';
 // 	}
 // }
 
+const prisma = new PrismaClient({
+	datasources: {
+	  db: {
+		url: process.env.AUTH_DATABASE_URL,
+	  },
+	},
+	log: ['query', 'info', 'warn', 'error'],
+  });
+  
 export async function registerUser(
 	email: string,
 	password: string,
@@ -38,6 +48,7 @@ export async function registerUser(
 		return user;
 	} catch (err) {
 		logger.error(err);
+		console.error('Error registering user:', err);  // Add this line
 		throw ApiError.internal('Error registering user into database');
 	}
 }

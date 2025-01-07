@@ -4,6 +4,11 @@ import { UserController } from "../controllers/user";
 
 const router = Router();
 
-router.get('/:id', authenticateToken, UserController.getUser);
+// Applica il middleware a tutte le rotte di questo router
+router.use(authenticateToken);
+
+// Definisci le rotte protette
+router.get('/:id', UserController.getUser);
+router.put('/:id', UserController.updateUser);
 
 export { router };

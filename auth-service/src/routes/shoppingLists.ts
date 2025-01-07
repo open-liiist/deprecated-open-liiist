@@ -4,19 +4,14 @@ import { ShoppingListController } from "../controllers/shoppingList";
 
 const router = Router();
 
-// Ottieni tutte le liste della spesa per un utente
-router.get("/", authenticateToken, ShoppingListController.getShoppingLists);
+// Applica il middleware a tutte le rotte di questo router
+router.use(authenticateToken);
 
-// Crea una nuova lista della spesa
-router.post("/", authenticateToken, ShoppingListController.createShoppingList);
-
-// Ottieni una lista della spesa specifica
-router.get("/:id", authenticateToken, ShoppingListController.getShoppingList);
-
-// Aggiorna una lista della spesa
-router.put("/:id", authenticateToken, ShoppingListController.updateShoppingList);
-
-// Elimina una lista della spesa
-router.delete("/:id", authenticateToken, ShoppingListController.deleteShoppingList);
+// Rotte protette
+router.get("/", ShoppingListController.getShoppingLists);
+router.post("/", ShoppingListController.createShoppingList);
+router.get("/:id", ShoppingListController.getShoppingList);
+router.put("/:id", ShoppingListController.updateShoppingList);
+router.delete("/:id", ShoppingListController.deleteShoppingList);
 
 export { router };

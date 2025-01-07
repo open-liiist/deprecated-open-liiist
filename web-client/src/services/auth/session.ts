@@ -1,131 +1,107 @@
+// web-client/src/services/auth/session.ts
+
 import environment from "@/config/environment";
 import logger from "@/config/logger";
 import { fetchClient } from "@/lib/api";
 import { User } from "@/types/user";
-import { cookies } from "next/headers";
+// Rimuovi l'importazione di `cookies` da "next/headers" poiché non puoi gestire i cookie httpOnly dal client-side
 
 type SessionData = {
-	user: { id: number },
+    user: { id: number },
 }
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:4000"; // Usa localhost se non definito
 
 export async function verifyToken(input: string): Promise<SessionData | null> {
-	try {
-		const res = await fetchClient.post('/auth/verify', { token: input });
-		if (res.status >= 400)
-			return null;
-		const payload = (await res.json()).data;
-		return payload as SessionData;
-	} catch (error) {
-		logger.error(error);
-		return null;
-	}
+    try {
+        const res = await fetchClient.post('/auth/verify', { token: input }, { credentials: 'include' });
+        if (res.status >= 400)
+            return null;
+        const payload = (await res.json()).data;
+        return payload as SessionData;
+    } catch (error) {
+        logger.error(error);
+        return null;
+    }
 }
 
 export async function getSession() {
-	const session = cookies().get(environment.cookies.access)?.value;
-	if (!session) return null;
-	return await verifyToken(session);
+    // Le cookie httpOnly non sono accessibili dal client-side
+    // Questa funzione dovrebbe essere gestita lato server (Server Components)
+    return null;
 }
 
-//vecchia versione di register 
-// export async function register(email: string, password: string) {
-// 	try {
-// 		const res = await fetchClient.post('/auth/register', { email, password });
-// 		if (res.status >= 400)
-// 			return null;
-// 		const user = (await res.json()).data as User;
-// 		return user;
-// 	} catch (error) {
-// 		logger.error(error);
-// 		return null;
-// 	}
-// }
+// Rimuovi completamente la funzione setSession
 
 export async function register(email: string, password: string, name: string, dateOfBirth: string, supermarkets: string[]) {
-	
-	console.log("register user log", email, password, name, dateOfBirth, supermarkets);
-	try {
-		const res = await fetchClient.post('/auth/register', {
-			email,
-			password,
-			name,
-			dateOfBirth,
-			supermarkets,
-		});
-		if (res.status >= 400) {
-			return null;
-		}
-		const user = (await res.json()).data as User;
-		return user;
-	} catch (error) {
-		logger.error(error);
-		return null;
-	}
+    console.log("register user log", email, password, name, dateOfBirth, supermarkets);
+    try {
+        const res = await fetchClient.post('/auth/register', {
+            email,
+            password,
+            name,
+            dateOfBirth,
+            supermarkets,
+        }, { credentials: 'include' }); // Includi le credenziali
+        if (res.status >= 400) {
+            return null;
+        }
+        const user = (await res.json()).data as User;
+        return user;
+    } catch (error) {
+        logger.error(error);
+        return null;
+    }
 }
-
 
 export async function login(email: string, password: string) {
-	try {
-		const res = await fetchClient.post('/auth/login', { email, password });
-		if (res.status >= 400) {
-			logger.warn(`could not log user, statusCode: ${res.status}`)
-			return null;
-		}
-		const { accessToken, refreshToken, user } = (await res.json()).data;
-		return {
-			accessToken,
-			refreshToken,
-			user
-		} as {
-			accessToken: string,
-			refreshToken: string,
-			user: User
-		};
-	} catch (error) {
-		logger.error(error);
-		return null;
-	}
-}
+    try {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+            credentials: "include", // Necessario per inviare i cookie
+        });
 
-export async function setSession(_user: User, tokens: {
-	accessToken: string, refreshToken: string
-} | null) {
-	try {
-		if (!tokens){
-            console.error("No tokens provided to setSession.");
-            return false;
+        if (!response.ok) {
+            logger.warn(`Could not log user, statusCode: ${response.status}`);
+            return null;
         }
-        console.log("Tokens received for session:", tokens);
-		const { accessToken, refreshToken } = tokens;
-		const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
-		const expiresInOneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-		cookies().set(environment.cookies.access, accessToken, {
-			expires: expiresInOneDay,
-			httpOnly: true,
-			secure: true,
-			sameSite: 'lax',
-		});
-		cookies().set(environment.cookies.refresh, refreshToken, {
-			expires: expiresInOneMonth,
-			httpOnly: true,
-			secure: true,
-			sameSite: 'lax',
-		});
-		return true
-	} catch (error) {
-		logger.error(error);
-		return false;
-	}
+
+        const data = await response.json();
+        const { accessToken, refreshToken, user } = data.data;
+
+        return {
+            accessToken,
+            refreshToken,
+            user,
+        } as {
+            accessToken: string;
+            refreshToken: string;
+            user: User;
+        };
+    } catch (error: unknown) {
+        logger.error("Error during login:", error);
+        if (error instanceof Error) {
+            return { error: error.message || "An unexpected error occurred." };
+        } else {
+            return { error: "An unexpected error occurred." };
+        }
+    }
 }
 
 export async function clearSessionUser() {
-	const refresh_token = cookies().get(environment.cookies.refresh)?.value;
-	if (!refresh_token)
-		return;
-	const res = await fetchClient.post('/auth/logout', { token: refresh_token });
-	if (res.status >= 400)
-		return null;
-	cookies().delete(environment.cookies.access);
-	cookies().delete(environment.cookies.refresh);
-	logger.info('----- LOGGED OUT -----')
+    try {
+        const res = await fetchClient.post('/auth/logout', {}, { credentials: 'include' }); // Includi le credenziali
+        if (res.status >= 400) {
+            logger.warn(`Could not log out user, statusCode: ${res.status}`);
+            return null;
+        }
+        logger.info('----- LOGGED OUT -----');
+        return true;
+    } catch (error) {
+        logger.error(error);
+        return null;
+    }
 }

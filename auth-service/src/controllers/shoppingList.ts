@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { ApiResponse } from '../utils/apiResponse';
 import { logger } from '../utils/logger';
 import prisma from '../services/prisma'
@@ -18,7 +18,7 @@ interface CreateShoppingListRequest {
 export class ShoppingListController {
   // Ottieni tutte le liste della spesa per un utente
   static async getShoppingLists(req: Request, res: Response, next: NextFunction) {
-    logger.info(`getting list for this user`);
+    logger.info(`Getting (current user's) Lists`);
     try {
         if (!req.user || !req.user.userId) {
           next(ApiResponse.error("User ID is missing"));
@@ -78,10 +78,10 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
       },
     });
 
-    res.status(201).json(ApiResponse.success("list created successfully", newList));
+    res.status(201).json(ApiResponse.success("List created successfully", newList));
   } catch (error) {
-    console.error("Errore nella creazione della lista:", error);
-    next(ApiResponse.error("Errore nella creazione della lista."));
+    console.error("Error creating the list:", error);
+    next(ApiResponse.error("Error creating the list."));
     return;
   }
 }
@@ -96,13 +96,13 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
       });
 
       if (!shoppingList) {
-        next(ApiResponse.error("list not found"));
+        next(ApiResponse.error("List not found"));
         return;
       }
-      res.status(200).json(ApiResponse.success("list found", shoppingList));
+      res.status(200).json(ApiResponse.success("List found", shoppingList));
     } catch (error) {
-      console.error("Errore nel recupero della lista della spesa:", error);
-      next(ApiResponse.error("error getting list"));
+      console.error("Error retrieving the shopping list:", error);
+      next(ApiResponse.error("Getting (current user's) Lists`"));
       return;
     }
   }
@@ -161,8 +161,8 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
   
       res.status(200).json(ApiResponse.success("List updated successfully", updatedList));
     } catch (error) {
-      console.error("Errore nell'aggiornamento della lista:", error);
-      next(ApiResponse.error("Errore nell'aggiornamento della lista."));
+      console.error("Error updating the list:", error);
+      next(ApiResponse.error("Error updating the list."));
       return;
     }
   }
@@ -181,8 +181,8 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
 
       res.json(deletedList);
     } catch (error) {
-      console.error("Errore nell'eliminazione della lista della spesa:", error);
-      res.status(500).json({ error: "Errore nell'eliminazione della lista." });
+      console.error("Error deleting the shopping list:", error);
+      res.status(500).json({ error: "Error deleting the list." });
     }
   }
 }

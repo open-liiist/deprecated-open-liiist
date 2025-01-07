@@ -4,11 +4,13 @@ import prisma from './prisma';
 import jwt from 'jsonwebtoken';
 
 export function generateAccessToken(userId: string) {
-	return jwt.sign(
+	const token = jwt.sign(
 		{ userId },
 		environment.accessTokenSecret,
 		{ expiresIn: '1d' }
 	);
+	console.log('Access Token Generated:', token); // Aggiungi questo log
+    return token;
 }
 
 export function generateRefreshToken(userId: string) {
@@ -32,8 +34,18 @@ export async function saveRefreshToken(userId: string, refreshToken: string) {
 	});
 }
 
+// export function verifyAccessToken(token: string) {
+// 	return jwt.verify(token, environment.accessTokenSecret) as { userId: string };
+// }
 export function verifyAccessToken(token: string) {
-	return jwt.verify(token, environment.accessTokenSecret) as { userId: string };
+    try {
+        const decoded = jwt.verify(token, environment.accessTokenSecret) as { userId: string };
+        console.log('Access Token Verified:', decoded); // Aggiungi questo log
+        return decoded;
+    } catch (err) {
+        console.error('Access Token Verification Failed:', err); // Log errori
+        throw ApiError.unauthorized('Invalid access token');
+    }
 }
 
 export async function verifyRefreshToken(token: string) {
