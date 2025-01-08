@@ -47,7 +47,6 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { noto_Sans, nunito, oswald } from "@/components/ui/fonts";
 
 // 🔨 Component per gestire la rotazione delle frasi
 const PhraseRotator = ({ phrases }) => {

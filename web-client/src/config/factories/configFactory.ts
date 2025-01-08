@@ -1,5 +1,5 @@
-// web-client/src/config/factories/configFactory.ts
 import { configSchema, Config } from '../schemas/configSchema'
+import merge from 'lodash.merge' // Aggiungi lodash.merge per un merge profondo
 
 export const configFactory = (overrides: Partial<Config>): Config => {
     const envConfig = {
@@ -12,12 +12,14 @@ export const configFactory = (overrides: Partial<Config>): Config => {
             refresh: process.env.NAME_COOKIE_REFRESH,
         },
         appPort: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : 3000,
-        apiBaseUrl: process.env.API_BASE_URL,
+        apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL, // Usa NEXT_PUBLIC_API_BASE_URL
+        frontendUrl: process.env.FRONTEND_URL,
         jwtSecret: process.env.JWT_SECRET,
         jwtExpiration: process.env.JWT_EXPIRATION
     }
 
-    const mergedConfig = { ...envConfig, ...overrides }
+    // Utilizza lodash.merge per un merge profondo
+    const mergedConfig = merge({}, envConfig, overrides)
 
     const validatedConfig = configSchema.safeParse(mergedConfig)
 

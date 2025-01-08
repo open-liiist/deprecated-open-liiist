@@ -1,5 +1,5 @@
 // web-client/src/config/schemas/configSchema.ts
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const configSchema = z.object({
     appName: z.string().default("Web Client for Grocygo"),
@@ -14,11 +14,12 @@ export const configSchema = z.object({
     apiBaseUrl: z.union([
         z.string().url(),       // Permette URL assolute
         z.string().regex(/^\/.*/) // Permette URL relative che iniziano con '/'
-    ]).default('http://localhost:3001'), // Valore di default per ambienti che richiedono URL assolute
+    ]).default('/api'), // Impostazione di default a '/api'
     frontendUrl: z.string().url().default('http://localhost:3000'),
     jwtSecret: z.string().min(10).default('your_jwt_secret'),
     jwtExpiration: z.string().default('7d'),
-})
+});
 
-export type Config = z.infer<typeof configSchema>
+export type Config = z.infer<typeof configSchema>;
+
 

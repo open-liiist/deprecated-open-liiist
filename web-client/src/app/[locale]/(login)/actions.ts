@@ -40,8 +40,8 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
         console.log("Login successful:", result);
         
         // Salva i token nel localStorage
-        localStorage.setItem('accessToken', result.data.accessToken);
-        localStorage.setItem('refreshToken', result.data.refreshToken);
+        //localStorage.setItem('accessToken', result.data.accessToken);
+        //localStorage.setItem('refreshToken', result.data.refreshToken);
 
         // Redirect dopo il login
         const redirectTo = formData.get("redirect") as string | null;
