@@ -33,8 +33,10 @@ export class AuthController {
         }
         try {
             const decoded = verifyTokenService(token);
+            logger.info(`Token verificato per l'utente: ${decoded.userId}`);
             res.status(200).json(ApiResponse.success('Token valido', { userId: decoded.userId }));
         } catch (error) {
+            logger.error(`Errore durante la verifica del token: ${(error as Error).message}`);
             next(error);
         }
     }

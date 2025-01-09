@@ -6,6 +6,9 @@ import { fetchClient } from "@/lib/api"; // Assicurati che il percorso sia corre
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Recupera il cookie della sessione
     const sessionCookie = req.cookies[environment.cookies.access];
+    if (!sessionCookie) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
     console.log(`chiamata api del front ${sessionCookie}`);
 
     // Se il token di accesso è assente, restituisci un errore 401
@@ -15,8 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         // Usa FetchClient per ottenere le liste della spesa
-        const response = await fetchClient.get(`/shoppingList`, sessionCookie);
-
+        const response = await fetchClient.get('/shoppingList', {
+            headers: { Authorization: `Bearer ${sessionCookie}` }
+        });
+        
         // Gestisci errori dalla risposta dell'API
         if (!response.ok) {
             return res.status(response.status).json({ error: "Failed to fetch shopping lists" });

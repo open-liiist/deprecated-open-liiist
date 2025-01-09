@@ -9,7 +9,7 @@ import { User } from "@/types/user";
 type SessionData = {
     user: { id: number },
 }
-const API_BASE_URL = process.env.API_BASE_URL || "/api"; // Usa localhost se non definito
+const API_BASE_URL = process.env.API_BASE_URL || 'http://auth-service:4000';
 
 export async function verifyToken(input: string): Promise<SessionData | null> {
     try {
