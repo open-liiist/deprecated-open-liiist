@@ -1,56 +1,63 @@
-// auth-service/src/repositories/userRepository.ts
+import { PrismaClient, User as PrismaUser } from '@prisma/client';
+import { UpdateUserDTO } from '../config/types/api';
 
-import prisma from '../services/prisma';
-import { Prisma, User as PrismaUser } from '@prisma/client';
-import { logger } from '../utils/logger';
+const prisma = new PrismaClient();
 
 export class UserRepository {
-    static async createUser(email: string, passwordHash: string, name: string, dateOfBirth: Date, supermarkets: string[]) {
-        return await prisma.user.create({
-            data: {
-                email,
-                passwordHash,
-                name,
-                dateOfBirth,
-                supermarkets,
-            },
+    /**
+     * Trova un utente per ID
+     * @param id - ID dell'utente
+     * @returns Utente o null
+     */
+    static async findUserById(id: string): Promise<PrismaUser | null> {
+        return prisma.user.findUnique({
+            where: { id },
         });
     }
 
-    static async findUserByEmail(email: string) {
-        return await prisma.user.findUnique({
-            where: {
-                email,
-            },
-        });
-    }
-
-    static async findUserById(id: string) {
-        return await prisma.user.findUnique({
-            where: {
-                id,
-            },
-        });
-    }
-
-    static async findManyUsers() {
-        return await prisma.user.findMany();
-    }
-
-    // Aggiungi il metodo updateUser corretto
-    static async updateUser(
-        id: string,
-        data: Prisma.UserUpdateInput
-    ): Promise<PrismaUser | null> {
+    /**
+     * Aggiorna i dati di un utente
+     * @param id - ID dell'utente
+     * @param data - Dati da aggiornare
+     * @returns Utente aggiornato o null
+     */
+    static async updateUser(id: string, data: UpdateUserDTO): Promise<PrismaUser | null> {
         try {
-            const updatedUser = await prisma.user.update({
+            return prisma.user.update({
                 where: { id },
                 data,
             });
-            return updatedUser;
         } catch (error) {
-            logger.error(`Failed to update user with id ${id}: ${error}`);
+            console.error(`Errore durante l'aggiornamento dell'utente con id ${id}:`, error);
             return null;
         }
+    }
+
+    /**
+     * Crea un nuovo utente
+     * @param data - Dati dell'utente
+     * @returns Utente creato
+     */
+    static async createUser(data: {
+        email: string;
+        name: string;
+        dateOfBirth: Date;
+        supermarkets: string[];
+        passwordHash: string;
+    }): Promise<PrismaUser> {
+        return prisma.user.create({
+            data,
+        });
+    }
+
+    /**
+     * Trova un utente per email
+     * @param email - Email dell'utente
+     * @returns Utente o null
+     */
+    static async findUserByEmail(email: string): Promise<PrismaUser | null> {
+        return prisma.user.findUnique({
+            where: { email },
+        });
     }
 }

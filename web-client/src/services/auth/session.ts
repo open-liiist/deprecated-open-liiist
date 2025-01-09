@@ -13,7 +13,7 @@ const API_BASE_URL = process.env.API_BASE_URL || "/api"; // Usa localhost se non
 
 export async function verifyToken(input: string): Promise<SessionData | null> {
     try {
-        const res = await fetchClient.post('/auth/verify', { token: input }, { credentials: 'include' });
+        const res = await fetchClient.post('/auth/verify-token', {token: input});
         if (res.status >= 400)
             return null;
         const payload = (await res.json()).data;
@@ -23,6 +23,7 @@ export async function verifyToken(input: string): Promise<SessionData | null> {
         return null;
     }
 }
+
 
 export async function getSession() {
     // Le cookie httpOnly non sono accessibili dal client-side

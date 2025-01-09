@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 
 export function getPathNameWithoutLocale(): string {
-	const pathname = usePathname();
-	return pathname.replace(/^\/[a-z]{2}-[A-Z]{2}/, '');
+    const pathname = usePathname();
+    return pathname.replace(/^\/(en|pt-BR)/, '');
 }
+

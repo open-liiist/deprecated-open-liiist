@@ -1,3 +1,4 @@
+//auth-service/src/utils/apiError.ts
 import { ApiErrorCodes } from "../config/types/api";
 
 export class ApiError extends Error {

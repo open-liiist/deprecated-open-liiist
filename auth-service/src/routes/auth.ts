@@ -5,7 +5,7 @@ import { AuthController } from '../controllers/auth';
 
 const router = Router();
 
-// Rotte di Autenticazione
+// Rotte di Autenticazione con logging
 router.post('/login', (req, res, next) => {
     console.log('Received POST /auth/login');
     AuthController.login(req, res, next);
@@ -38,26 +38,3 @@ router.get('/', (req, res) => {
 });
 
 export { router };
-
-
-// Default code
-// ---
-
-// import { Router } from 'express';
-// import { AuthController } from '../controllers/auth';
-
-// const router = Router();
-
-// router.post('/login', AuthController.login);
-// router.post('/register', AuthController.register);
-// router.post('/verify-token', AuthController.verifyToken);
-// router.post('/refresh-token', AuthController.refreshToken);
-// router.post('/revoke-token', AuthController.revokeToken);
-// router.post('/logout', AuthController.logout);
-
-// router.get('/', (req, res) => {
-//     res.send('Auth Service is up');
-// });
-
-// export { router };
-// ---

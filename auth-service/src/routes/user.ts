@@ -1,3 +1,5 @@
+// auth-service/src/routes/user.ts
+
 import { Router } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import { UserController } from "../controllers/user";

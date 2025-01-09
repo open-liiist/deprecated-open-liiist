@@ -1,3 +1,4 @@
+//web-client/src/services/auth/middleware.ts
 import { User } from '@/types/user';
 import { z } from 'zod';
 import { getUser } from '../user';

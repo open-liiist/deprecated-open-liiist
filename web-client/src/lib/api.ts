@@ -17,7 +17,7 @@ class FetchClient {
     private headers: Record<string, string>;
 
     private constructor() {
-        this.baseURL = environment.apiBaseUrl; // e.g., 'http://localhost:4000'
+        this.baseURL = environment.apiBaseUrl || ''; // e.g., 'http://localhost:4000'
         this.timeout = 10000;
         this.headers = {
             'Content-Type': 'application/json',

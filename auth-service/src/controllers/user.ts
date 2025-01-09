@@ -5,11 +5,17 @@ import { ApiResponse } from '../utils/apiResponse';
 import { logger } from '../utils/logger';
 import { UserRepository } from '../repositories/userRepository';
 import { User as PrismaUser } from '@prisma/client';
-import { User } from '../config/types/api';
+import { User, UpdateUserDTO } from '../config/types/api';
 
 function sanitizeUser(user: PrismaUser): User {
     const { passwordHash, updatedAt, deletedAt, ...sanitizedUser } = user;
-    return sanitizedUser;
+    return {
+        ...sanitizedUser,
+        dateOfBirth: user.dateOfBirth.toISOString(), // Converti Date in stringa
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
+        deletedAt: user.deletedAt ? user.deletedAt.toISOString() : null,
+    };
 }
 
 export class UserController {
@@ -35,7 +41,7 @@ export class UserController {
 
     static async updateUser(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        const updateData = req.body;
+        const updateData: UpdateUserDTO = req.body;
 
         try {
             logger.info(`Updating user with id ${id} with data ${JSON.stringify(updateData)}`);
@@ -53,3 +59,4 @@ export class UserController {
         }
     }
 }
+
