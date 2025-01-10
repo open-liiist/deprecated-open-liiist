@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "id": "f81f4143-ff1a-49ff-a023-a7bcb4fe8636",
+    "name": "Lista",
+    "products": [
+      {
+        "name": "Sauce",
+        "quantity": 6
+      },
+      {
+        "name": "Miao",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-10T16:27:29.689Z",
+    "updatedAt": "2025-01-10T16:27:29.689Z"
+  }
+]

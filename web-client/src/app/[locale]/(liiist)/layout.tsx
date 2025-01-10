@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		<section className="relative min-h-screen">
 			<Header />
 			{/* Aggiungi margine superiore per lasciare spazio alla navbar */}
-			<main className="mt-navbar flex-grow">{children}</main>
+			<main className="pt-navbar flex-grow">{children}</main>
 		</section>
 	);
 }

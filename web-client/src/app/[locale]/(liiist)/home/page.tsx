@@ -16,7 +16,7 @@ const UserHomepage = () => {
     return (
         <main
             id="home-page"
-            className="mt-navbar flex flex-col items-center min-h-screen bg-liiist_white"
+            className="absolute max-w-full w-full justify-center p-5 bg-liiist_white"
         >
             {/* Header Section */}
             <header className="w-full max-w-xl mt-4 px-4">

@@ -98,8 +98,11 @@
 //     );
 // };
 import React, { useState } from "react";
-import { FiPlus, FiMinus } from "react-icons/fi"; // react-icons
-import { FaTimes } from "react-icons/fa"; // react-icons
+import { FiPlus, FiMinus, FiX } from "react-icons/fi"; // react-icons
+import { foodEmojisItalian } from "./foodEmojis";
+import styles from './TagInput.module.css';
+
+
 
 interface TagInputProps {
     placeholder: string;
@@ -122,13 +125,35 @@ export const TagInput: React.FC<TagInputProps> = ({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && inputValue.trim() !== "") {
-            onAdd({ name: inputValue.trim(), quantity: 1 });
+            // Rendi il nome del tag in lowercase per la mappa
+            const tagName = inputValue.trim();
+            const lowerCaseName = tagName.toLowerCase();
+    
+            // Aggiungi l'emoji se esiste nella mappa
+            const tagWithEmoji = foodEmojisItalian[lowerCaseName]
+                ? `${tagName}${foodEmojisItalian[lowerCaseName]}`
+                : tagName;
+    
+            const existingTagIndex = tags.findIndex(
+                (tag) => tag.name.toLowerCase() === tagWithEmoji.toLowerCase()
+            );
+    
+            if (existingTagIndex !== -1) {
+                // Se il tag esiste già, aumenta la quantità
+                onIncreaseQuantity(existingTagIndex);
+            } else {
+                // Altrimenti, aggiungi un nuovo tag
+                onAdd({ name: tagWithEmoji, quantity: 1 });
+            }
+    
             setInputValue("");
         }
     };
+    
+    
 
     return (
-        <div className="bg-white border border-gray-300 rounded-lg p-4">
+        <div className="bg-white">
             {/* Campo di Input per Aggiungere Tag */}
             <input
     type="text"
@@ -136,14 +161,14 @@ export const TagInput: React.FC<TagInputProps> = ({
     value={inputValue}
     onChange={(e) => setInputValue(e.target.value)}
     onKeyDown={handleKeyDown}
-    className="w-full pt-3 pr-3 pb-3 pl-0 mb-4 border-transparent text-left text-lg placeholder-gray-400 focus:outline-none focus:ring-0"
+    className="w-full pt-3 pr-3 pb-3 pl-0 mb-4 border-transparent text-left text-3xl placeholder-gray-500 focus:outline-none focus:ring-0"
 />
 
             {/* Contenitore dei Tag */}
             <div
-                id="product-container"
-                className="flex flex-wrap gap-y-3 gap-x-3 max-h-[60vh] overflow-y-auto relative"
-            >
+  id="product-container"
+  className={`${styles.productContainer} flex flex-wrap gap-y-3 gap-x-3 relative`}
+>
                 {tags.length > 0 ? (
                     tags.map((tag, index) => (
                         <div
@@ -157,15 +182,15 @@ export const TagInput: React.FC<TagInputProps> = ({
                                     <>
                                         <button
                                             onClick={() => onRemove(index)}
-                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                            className="p-0.5 rounded-full bg-gray-200 flex justify-center items-center hover:bg-gray-300"
                                             aria-label={`Rimuovi tag ${tag.name}`}
                                         >
-                                            <FaTimes style={{ fontSize: "12px" }} />
+                                            <FiX style={{ fontSize: "12px" }} />
                                         </button>
                                         <span className="px-2">{tag.quantity}</span>
                                         <button
                                             onClick={() => onIncreaseQuantity(index)}
-                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                            className="p-0.5 rounded-full bg-gray-200 flex justify-center items-center hover:bg-gray-300"
                                             aria-label={`Aumenta quantità di ${tag.name}`}
                                         >
                                             <FiPlus />
@@ -176,7 +201,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                                     <>
                                         <button
                                             onClick={() => onDecreaseQuantity(index)}
-                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-100"
+                                            className="p-0.5 rounded-full bg-gray-200 flex justify-center items-center hover:bg-gray-300"
                                             aria-label={`Diminuisci quantità di ${tag.name}`}
                                         >
                                             <FiMinus />
@@ -184,7 +209,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                                         <span className="px-2">{tag.quantity}</span>
                                         <button
                                             onClick={() => onIncreaseQuantity(index)}
-                                            className="p-0.5 rounded-full border border-gray-300 flex justify-center items-center hover:bg-gray-200"
+                                            className="p-0.5 rounded-full bg-gray-200 flex justify-center items-center hover:bg-gray-300"
                                             aria-label={`Aumenta quantità di ${tag.name}`}
                                         >
                                             <FiPlus />
@@ -195,7 +220,7 @@ export const TagInput: React.FC<TagInputProps> = ({
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500">Nessun tag aggiunto.</p>
+                    <p className="text-gray-300">Nessun prodotto aggiunto.</p>
                 )}
             </div>
         </div>
