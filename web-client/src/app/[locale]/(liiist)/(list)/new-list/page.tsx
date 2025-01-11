@@ -89,7 +89,7 @@ const NewListPage = () => {
     };
 
     return (
-        <div id="new-list-base" className=" flex absolute max-w-full w-full justify-center text-liiist_black">
+        <div id="new-list-base" className=" flex p-5 absolute max-w-full w-full justify-center text-liiist_black">
             <div id="new-list-card" className="max-w-2xl w-full">
                 <div id="new-list-form"  className="w-full flex-col">
                     <div id="title input" className="flex mb-10 items-center">

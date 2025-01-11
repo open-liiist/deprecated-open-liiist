@@ -26,7 +26,7 @@ body {
 
 /* Personalizzazione globale della scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 0px;
 }
 
 ::-webkit-scrollbar-track {
@@ -69,4 +69,14 @@ body {
 
 .pt-navbar {
   padding-top: var(--navbar-height); /* Compensa l'altezza della navbar */
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  /*border: 2px solid red;*/
+
 }

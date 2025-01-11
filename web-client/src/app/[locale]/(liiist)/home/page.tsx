@@ -16,10 +16,10 @@ const UserHomepage = () => {
     return (
         <main
             id="home-page"
-            className="absolute max-w-full w-full justify-center p-5 bg-liiist_white"
+            className="flex flex-col items-center justify-start min-h-screen max-w-full w-full p-5 bg-white"
         >
             {/* Header Section */}
-            <header className="w-full max-w-xl mt-4 px-4">
+            <header className="w-full max-w-xl">
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-liiist_black mb-4">
                     Le Tue Liste
                 </h3>
@@ -27,7 +27,7 @@ const UserHomepage = () => {
 
             {/* Contenitore della lista */}
             <section 
-                className="w-full max-w-xl px-4 mb-20" 
+                className="w-full max-w-xl mb-20" 
                 aria-label="Lista delle tue liste"
             >
                 <ListOfListComponents />
