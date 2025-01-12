@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Temi globali */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbar-height: 64px; /* Altezza della navbar */
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,49 +16,67 @@
     --foreground: #ededed;
   }
 }
-@media (max-width: 768px) {
-  ::-webkit-scrollbar {
-    display: none; /* @ Current State: Help to center <ListOfComponents> */
-  }
 
-  body {
-    scrollbar-width: none; /* Per Firefox */
-  }
-}
-
+/* Stili globali */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Personalizzazione globale della scrollbar */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #dfdfdf;
+}
+
+body {
+  scrollbar-width: none; /* Firefox */
+}
+
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .no-space {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
 }
 
-/* Personalizzazione della scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
-  margin-left: 10px; /* Larghezza della scrollbar */
+.h-navbar {
+  height: var(--navbar-height);
 }
 
-::-webkit-scrollbar-track {
-  background: transparent; /* Colore dello sfondo della track della scrollbar */
-  margin-left: 10px;
+.pt-navbar {
+  padding-top: var(--navbar-height); /* Compensa l'altezza della navbar */
 }
 
-::-webkit-scrollbar-thumb {
-  background: transparent; /* Colore del thumb della scrollbar */
-  border-radius: 6px; /* Bordo arrotondato per il thumb */
-}
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  /*border: 2px solid red;*/
 
-::-webkit-scrollbar-thumb:hover {
-  background: #dfdfdf; /* Colore del thumb quando si passa sopra */
-}
-
-.no-space {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
 }

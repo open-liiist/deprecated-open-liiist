@@ -1,6 +1,5 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import {noto_Sans} from "@/components/ui/fonts"
 
 
 export interface InputProps
@@ -30,7 +29,7 @@ const Input2 = React.forwardRef<HTMLInputElement, InputProps>(
 			<input
 				type={type}
 				className={cn(
-					"flex h-full w-full bg-transparent px-3 py-1 text-3xl transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed",
+					"flex h-full w-full bg-transparent py-1 text-5xl transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed",
 					className
 				)}
 				ref={ref}

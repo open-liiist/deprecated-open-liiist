@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { Input2, Input } from "@/components/ui/input";
 import { ActionButton2 } from "@/components/ui/ActionButton";
 import { TagInput } from "@/components/ui/tag-input";
-import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FaMagnifyingGlassArrowRight } from "react-icons/fa6";
 import { handleCalculate } from "@/services/shoppingListService";
 import { GoArrowDownRight } from "react-icons/go";
 
@@ -21,6 +19,10 @@ const NewListPage = () => {
     const [mode, setMode] = useState("convenience");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    
+    const handleReorderProducts = (updatedTags: { name: string; quantity: number }[]) => {
+        setProducts(updatedTags);
+    };
 
     const handleProductAdd = (product: { name: string; quantity: number }) => {
         setProducts([product, ...products]);
@@ -45,16 +47,16 @@ const NewListPage = () => {
             setProducts(updatedProducts);
         }
     };
-    
+
     const handleSaveList = async () => {
         if (listTitle.trim() === "" || products.length === 0) {
             setError("Please enter a list title and add at least one product.");
             return;
         }
-    
+
         setIsLoading(true);
         setError(null);
-    
+
         try {
             const response = await fetch("/api/postShoppingList", {
                 method: "POST",
@@ -69,12 +71,12 @@ const NewListPage = () => {
                 }),
                 credentials: 'include', 
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData?.error || "Failed to save the shopping list");
             }
-    
+
             const result = await response.json();
             console.log("Lista creata con successo:", result);
             router.push("/home");
@@ -85,50 +87,78 @@ const NewListPage = () => {
             setIsLoading(false);
         }
     };
-    
-    
-    const handleToggleMode = () => {
-        setMode(mode === "convenience" ? "savings" : "convenience");
+
+    const handleModeChange = (selectedMode: string) => {
+        setMode(selectedMode);
     };
-    
+
     return (
-        <div id="new-list-base" className="mt-navbar fixed max-w-full w-full flex justify-center p-5 text-liiist_black">
+        <div id="new-list-base" className=" flex p-5 absolute max-w-full w-full justify-center text-liiist_black">
             <div id="new-list-card" className="max-w-2xl w-full">
                 <div id="new-list-form"  className="w-full flex-col">
                     <div id="title input" className="flex mb-10 items-center">
                         <Input2
                         autoComplete="off"
                             id="listTitle"
-                            placeholder="Enter list title"
+                            placeholder="enter list title"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
-                            className="w-full border-transparent font-bold "
+                            className="w-full border-transparent text-5xl"
                         />
                         <ActionButton2
                             onClick={handleSaveList}
                             disabled={isLoading || products.length === 0 || listTitle.trim() === ""}
-                            className="mr-2 border-2 rounded-lg hover:scale-105 h-min"
+                            className="border-2 rounded-lg hover:scale-105 h-min"
                         >
                             <AiOutlinePlus className="text-3xl"/>
                         </ActionButton2>
                     </div>
-                    <div className="border-transparent px-2 min-h-[30vh]">
+                    <div className="border-transparent min-h-[30vh]">
                         <TagInput
-                            placeholder="Add a product"
+                            placeholder="add a product"
                             onAdd={handleProductAdd}
                             onRemove={handleProductRemove}
                             onIncreaseQuantity={handleIncreaseQuantity}
                             onDecreaseQuantity={handleDecreaseQuantity}
                             tags={products}
+                            onReorder={handleReorderProducts}
                             />
                     </div>
                 </div>
                 <div id="bottom_area" className="w-full flex flex-row justify-between">
-                    <ToggleSwitch
-                        checked={mode === "savings"}
-                        onChange={handleToggleMode}
-                        labels={["Convenience", "Savings"]}
-                        />
+                    <div className="flex flex-col items-start">
+                        {mode === "convenience" ? (
+                            <>
+                                <div 
+                                    className="text-2xl font-bold cursor-pointer"
+                                    onClick={() => handleModeChange("convenience")}
+                                >
+                                    Comodità
+                                </div>
+                                <div 
+                                    className="text-xl cursor-pointer"
+                                    onClick={() => handleModeChange("savings")}
+                                >
+                                    Risparmio
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div 
+                                    className="text-2xl font-bold cursor-pointer"
+                                    onClick={() => handleModeChange("savings")}
+                                >
+                                    Risparmio
+                                </div>
+                                <div 
+                                    className="text-xl cursor-pointer"
+                                    onClick={() => handleModeChange("convenience")}
+                                >
+                                    Comodità
+                                </div>
+                            </>
+                        )}
+                    </div>
                     <ActionButton2
                         onClick={() =>
                             handleCalculate(
@@ -159,41 +189,3 @@ const NewListPage = () => {
 };
 
 export default NewListPage;
-
-
-//old save list
-    // const handleSaveList = async () => {
-    //     if (listTitle.trim() === "" || products.length === 0) {
-    //         setError("Please enter a list title and add at least one product.");
-    //         return;
-    //     }
-
-    //     setIsLoading(true);
-    //     setError(null);
-
-    //     try {
-    //         const response = await fetch("/api/shopping-lists", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({
-    //                 name: listTitle,
-    //                 products,
-    //                 budget,
-    //                 mode,
-    //                 userId: "12345",
-    //             }),
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error("Failed to save the shopping list");
-    //         }
-
-    //         router.push("/home");
-    //     } catch (err) {
-    //         setError("Failed to save the shopping list");
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };

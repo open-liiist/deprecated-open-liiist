@@ -34,7 +34,7 @@ export default async function RootLayout({
 	return (
 		<html lang="en" className={poppins.className}>
 			<body
-				className={`${poppins.className} antialiased bg-liiist_white`}
+				className={`${poppins.className} antialiased bg-white text-black`}
 			>
 				<UserProvider userPromise={userPromise}>
 					<NextIntlClientProvider messages={messages}>
