@@ -1351,6 +1351,3 @@ curl -X GET http://localhost:3002/store/Esselunga/Milano
 2.  URL: `http://localhost:3002/store/Esselunga/Milano`.
 
 ----------
-    
-    
-    ```
