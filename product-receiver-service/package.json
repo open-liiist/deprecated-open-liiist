@@ -25,13 +25,13 @@
 	},
 	"homepage": "https://github.com/gabref/grocygo/tree/main#readme",
 	"devDependencies": {
+		"@types/express": "^4.17.21",
+		"@types/node": "^18.19.70",
 		"prisma": "^6.0.1",
 		"typescript": "^5.6.3"
 	},
 	"dependencies": {
 		"@prisma/client": "^6.0.1",
-		"@types/express": "^5.0.0",
-		"@types/node": "^22.7.5",
 		"express": "^4.21.1"
 	}
 }

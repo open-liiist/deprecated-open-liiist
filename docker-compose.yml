@@ -42,6 +42,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
@@ -73,9 +76,9 @@ services:
       POSTGRES_DB: appdb
     healthcheck:
       test: "pg_isready -h db"
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      interval: 10s
+      timeout: 10s
+      retries: 10
     volumes:
       - pgdata:/var/lib/postgresql/data
 
