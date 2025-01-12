@@ -6,12 +6,12 @@ a smart grocery list app that helps users find the best prices at nearby markets
 
 
 ## Features
-- Create and manage grocery lists.
-- Search for nearby markets based on your location.
-- Compare prices across multiple stores.
-- Get recommendations for the most cost-effective markets.
+- Create and manage grocery lists. 🛒
+- Search for nearby markets based on your location.📍🗺️
+- Compare prices across multiple stores. 🏷️
+- Get recommendations for the most cost-effective markets. 📉💸
 
-## Tech Stack
+## Tech Stack🏗️
 - **Frontend**: Next.js, TypeScript
 - **Microservices**:
   - Authentication/Authorization: Node.js, Express
@@ -39,7 +39,7 @@ a smart grocery list app that helps users find the best prices at nearby markets
    cd liiist
    ```
 
-2. Build and start services:
+2. Build and start services: 👷‍♀️👷▶️
    ```bash
    docker-compose up --build
    ```
