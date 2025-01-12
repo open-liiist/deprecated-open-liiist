@@ -4,3 +4,4 @@ target
 __pycache__
 data
 test-run-report.json*
+.DS_Store

@@ -110,7 +110,8 @@ services:
       # enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro
+      - /run/docker.sock:/run/docker.sock:ro #For Linux
+      #- /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
