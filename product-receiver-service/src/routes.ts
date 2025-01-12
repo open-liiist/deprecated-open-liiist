@@ -64,7 +64,7 @@ router.post('/product', async (req: Request, res: Response) => {
 			full_name,
 			name,
 			description,
-			discounted_price: discount,
+			discount,
 			localization,
 			quantity,
 			img_url,
@@ -72,8 +72,6 @@ router.post('/product', async (req: Request, res: Response) => {
 			price_for_kg,
 		} = req.body;
 
-		console.log("stamapa per favore")
-		console.log("cosa ho ricevuto dal body:", req.body);
 		if (!full_name || !price || !localization || !localization.grocery ||
 			!localization.lat || !localization.long) {
 			res.status(400).json({ error: 'Missing required fields' });
@@ -95,7 +93,9 @@ router.post('/product', async (req: Request, res: Response) => {
 			const product = await prisma.product.upsert({
 				where: { name_id },
 				create: {
-					name_id, full_name, discount, quantity,
+					name_id, full_name, 
+					discount: discount || 0.0, 
+					quantity,
 					description: description || '',
 					name: name_id,
 					current_price: price,
