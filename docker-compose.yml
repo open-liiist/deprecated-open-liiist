@@ -135,7 +135,9 @@ services:
       "
     environment:
       node.name: elasticsearch
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      #ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+
       discovery.type: single-node
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
     restart: unless-stopped

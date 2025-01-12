@@ -19,6 +19,10 @@ const NewListPage = () => {
     const [mode, setMode] = useState("convenience");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    
+    const handleReorderProducts = (updatedTags: { name: string; quantity: number }[]) => {
+        setProducts(updatedTags);
+    };
 
     const handleProductAdd = (product: { name: string; quantity: number }) => {
         setProducts([product, ...products]);
@@ -96,7 +100,7 @@ const NewListPage = () => {
                         <Input2
                         autoComplete="off"
                             id="listTitle"
-                            placeholder="Enter list title"
+                            placeholder="enter list title"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
                             className="w-full border-transparent text-5xl"
@@ -111,12 +115,13 @@ const NewListPage = () => {
                     </div>
                     <div className="border-transparent min-h-[30vh]">
                         <TagInput
-                            placeholder="Add a product"
+                            placeholder="add a product"
                             onAdd={handleProductAdd}
                             onRemove={handleProductRemove}
                             onIncreaseQuantity={handleIncreaseQuantity}
                             onDecreaseQuantity={handleDecreaseQuantity}
                             tags={products}
+                            onReorder={handleReorderProducts}
                             />
                     </div>
                 </div>
@@ -125,13 +130,13 @@ const NewListPage = () => {
                         {mode === "convenience" ? (
                             <>
                                 <div 
-                                    className="font-bold cursor-pointer"
+                                    className="text-2xl font-bold cursor-pointer"
                                     onClick={() => handleModeChange("convenience")}
                                 >
                                     Comodità
                                 </div>
                                 <div 
-                                    className="cursor-pointer"
+                                    className="text-xl cursor-pointer"
                                     onClick={() => handleModeChange("savings")}
                                 >
                                     Risparmio
@@ -140,13 +145,13 @@ const NewListPage = () => {
                         ) : (
                             <>
                                 <div 
-                                    className="font-bold cursor-pointer"
+                                    className="text-2xl font-bold cursor-pointer"
                                     onClick={() => handleModeChange("savings")}
                                 >
                                     Risparmio
                                 </div>
                                 <div 
-                                    className="cursor-pointer"
+                                    className="text-xl cursor-pointer"
                                     onClick={() => handleModeChange("convenience")}
                                 >
                                     Comodità
