@@ -1,4 +1,5 @@
-beautifulsoup4
+geocoder
 requests
 selenium
 python-dotenv
+undetected-chromedriver

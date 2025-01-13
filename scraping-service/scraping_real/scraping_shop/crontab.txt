@@ -1,0 +1,27 @@
+0 0 */14 * * python /app/oasi_tigre/scraping_tigre.py >> /var/log/tigre_shop.log 2>&1
+
+0 0 */14 * * python /app/conad/scraping_conad.py >> /var/log/conad_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/cts/scraping_cts_shop.py >> /var/log/cts_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/castoro/scraping_il_castoro_shop.py >> /var/log/il_castoro_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/idromarket/scraping_idromarket_shop.py >> /var/log/idromarket_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/effepiù/scraping_effepiù_shop.py >> /var/log/effepiù_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/dem/scraping_dem_shop.py >> /var/log/dem_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/ma/scraping_ma_shop.py >> /var/log/ma_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/ipercarni/scraping_ipercarni_shop.py >> /var/log/ipercarni_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/ipertriscount/scraping_ipertriscount_shop.py >> /var/log/ipertriscount_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/pewex/scraping_pewex_shop.py >> /var/log/pewex_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/pim/scraping_pim_shop.py >> /var/log/pim_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/sacoph/scraping_sacoph_shop.py >> /var/log/sacoph_shop.log 2>&1
+
+0 0 */14 * * python /app/gros_group/top/scraping_top_shop.py >> /var/log/top_shop.log 2>&1
