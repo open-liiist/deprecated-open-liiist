@@ -1,0 +1,1912 @@
+[
+    {
+        "name": "dem",
+        "street": "Via Lago di Lesi, snc",
+        "lat": 41.9555527,
+        "long": 12.7748976,
+        "city": "Tivoli (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00010"
+    },
+    {
+        "name": "dem",
+        "street": "Via delle Cave, 99/A",
+        "lat": 41.8718485,
+        "long": 12.5305851,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00181"
+    },
+    {
+        "name": "dem",
+        "street": "Via Tuscolana, 761",
+        "lat": 41.8608612,
+        "long": 12.5563865,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00175"
+    },
+    {
+        "name": "dem",
+        "street": "Via Santorre di Santarosa, 29",
+        "lat": 41.66684739999999,
+        "long": 12.505978,
+        "city": "Pomezia (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00071"
+    },
+    {
+        "name": "dem",
+        "street": "Via Antonio Angeloni, snc",
+        "lat": 41.7558891,
+        "long": 12.237061,
+        "city": "Fiumicino (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00054"
+    },
+    {
+        "name": "dem",
+        "street": "Via Armando Vona, 20 - c/o C.C. Le Sorgenti",
+        "lat": 41.6210567,
+        "long": 13.2851666,
+        "city": "Frosinone (FR)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "03100"
+    },
+    {
+        "name": "dem",
+        "street": "Via Castelli Romani 10/11, C.C. \"I Padiglioni\"",
+        "lat": 41.6791639,
+        "long": 12.5037437,
+        "city": "Pomezia (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00071"
+    },
+    {
+        "name": "dem",
+        "street": "Via Renato Castellani, 22",
+        "lat": 41.7878885,
+        "long": 12.697507,
+        "city": "Grottaferrata (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00046"
+    },
+    {
+        "name": "dem",
+        "street": "Via Casal Selce, 296",
+        "lat": 41.9099165,
+        "long": 12.3497177,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00166"
+    },
+    {
+        "name": "dem",
+        "street": "Via Costa Caselle, snc",
+        "lat": 41.7622637,
+        "long": 12.6730441,
+        "city": "Marino (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "dem",
+        "street": "Via Tiburtina Valeria, Km. 111,700",
+        "lat": 42.0523935,
+        "long": 13.3996013,
+        "city": "Scurcola Marsicana (AQ)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "dem",
+        "street": "Via di Santa Maria Ausiliatrice, 63/A",
+        "lat": 41.8726397,
+        "long": 12.5283795,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00181"
+    },
+    {
+        "name": "dem",
+        "street": "Via Sofia De Filippi Mariani, 1",
+        "lat": 42.0898973,
+        "long": 11.7979568,
+        "city": "Civitavecchia (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00053"
+    },
+    {
+        "name": "dem",
+        "street": "Via Maria, 85",
+        "lat": 41.6501811,
+        "long": 13.3509922,
+        "city": "Frosinone (FR)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "03100"
+    },
+    {
+        "name": "dem",
+        "street": "Via Cesare Pascarella, 29",
+        "lat": 41.8768047,
+        "long": 12.46742,
+        "city": "Roma",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 13:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00153"
+    },
+    {
+        "name": "dem",
+        "street": "Via Aurelia km. 66,600",
+        "lat": 42.0153009,
+        "long": 11.9758327,
+        "city": "Santa Marinella (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "dem",
+        "street": "Via Casilina, 769",
+        "lat": 41.8762272,
+        "long": 12.5567647,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00172"
+    },
+    {
+        "name": "dem",
+        "street": "Via Mura dei Francesi, snc - ang. Via Niccolo Tommaseo",
+        "lat": 41.7945332,
+        "long": 12.6110576,
+        "city": "Ciampino (RM)",
+        "working_hours": "['0669417993']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "dem",
+        "street": "Via Mura dei Francesi, 1",
+        "lat": 41.7897005,
+        "long": 12.6161942,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "dem",
+        "street": "Via Maremmana Inferiore km 2,00 (civ. 86)",
+        "lat": 41.842447,
+        "long": 13.0232298,
+        "city": "Tivoli (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00035"
+    },
+    {
+        "name": "dem",
+        "street": "Via Tiberina, 81/B",
+        "lat": 42.1155475,
+        "long": 12.5889171,
+        "city": "Capena (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00060"
+    },
+    {
+        "name": "dem",
+        "street": "Via Pontina, km 27,800",
+        "lat": 41.6612994,
+        "long": 12.5213626,
+        "city": "Pomezia (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "dem",
+        "street": "Via Prenestina Nuova, 10",
+        "lat": 41.82799060000001,
+        "long": 12.8143038,
+        "city": "San Cesareo (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00030"
+    },
+    {
+        "name": "dem",
+        "street": "Via delle Ciliegie, 100",
+        "lat": 41.8866052,
+        "long": 12.5755235,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00172"
+    },
+    {
+        "name": "dem",
+        "street": "Strada Acque Alte, 101",
+        "lat": 41.5013242,
+        "long": 12.8589471,
+        "city": "Loc. Borgo Podgora (LT)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "04100"
+    },
+    {
+        "name": "ma",
+        "street": "Largo Emanuele Ruspoli, 24",
+        "lat": 41.8499413,
+        "long": 12.4533064,
+        "city": "Roma, Villa Bonelli",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00149"
+    },
+    {
+        "name": "ma",
+        "street": "Via dei Garofani, 2 ang. Via del Campo sportivo",
+        "lat": 41.9562839,
+        "long": 12.0834552,
+        "city": "Ladispoli (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00055"
+    },
+    {
+        "name": "ma",
+        "street": "Via di Acilia, 171",
+        "lat": 41.7791488,
+        "long": 12.3701188,
+        "city": "Roma, Acilia",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00125"
+    },
+    {
+        "name": "ma",
+        "street": "Via Padre Semeria, 56",
+        "lat": 41.8651033,
+        "long": 12.4946516,
+        "city": "Roma, Ostiense",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00154"
+    },
+    {
+        "name": "ma",
+        "street": "Via Carlo Sigonio, 15",
+        "lat": 41.8749081,
+        "long": 12.5210949,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00179"
+    },
+    {
+        "name": "ma",
+        "street": "Via Tiburtina Valeria, km 35",
+        "lat": 41.9562902,
+        "long": 12.8192717,
+        "city": "Tivoli (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00019"
+    },
+    {
+        "name": "ma",
+        "street": "Via Amalia Bettini, 52/56",
+        "lat": 41.964554,
+        "long": 12.5289032,
+        "city": "Roma",
+        "working_hours": "['Dal lunedì al sabato 8:00-20:30 (continuato)', 'Aperto la domenica8:30-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00139"
+    },
+    {
+        "name": "ma",
+        "street": "Via Tiburtina, 472",
+        "lat": 41.9080745,
+        "long": 12.5400717,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00185"
+    },
+    {
+        "name": "ma",
+        "street": "Via Prenestina, 150",
+        "lat": 41.89174819999999,
+        "long": 12.5314595,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "ma",
+        "street": "Via delle ombrine, 2",
+        "lat": 41.7721238,
+        "long": 12.2335008,
+        "city": "Fiumicino (RM)",
+        "working_hours": "['06.96031570', 'Dal lunedì al sabato 8:00-21:00 (continuato)', 'Aperto la domenica8:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00054"
+    },
+    {
+        "name": "ma",
+        "street": "Viale Palmiro Togliatti, 234",
+        "lat": 41.86408160000001,
+        "long": 12.5698789,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00175"
+    },
+    {
+        "name": "ma",
+        "street": "Via Federico Ozanam, 34/a 46/a",
+        "lat": 41.8757501,
+        "long": 12.4477769,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00152"
+    },
+    {
+        "name": "ma",
+        "street": "Via Tiburtina, 427/431",
+        "lat": 41.9085936,
+        "long": 12.5373067,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00157"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Domenico De Dominicis, 42",
+        "lat": 41.90210769999999,
+        "long": 12.5358778,
+        "city": "Roma, Casal Bertone",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00159"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Braccianese Claudia, 57",
+        "lat": 42.0860861,
+        "long": 12.1855137,
+        "city": "Bracciano (RM)",
+        "working_hours": "['dal lunedì al sabato 8:00 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00062"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via delle Molette, 245",
+        "lat": 42.0019877,
+        "long": 12.6682688,
+        "city": "Fonte Nuova (RM)",
+        "working_hours": "['Dal lunedì al sabato 8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00013"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Piani di Santa Maria, 83 - Via Nettunense km 12,2",
+        "lat": 41.67035610000001,
+        "long": 12.6513584,
+        "city": "Ariccia (RM)",
+        "working_hours": "['dal lunedì al sabato 7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "S.S. Cassia Nord km 86,400",
+        "lat": 42.4323894,
+        "long": 12.0959488,
+        "city": "Viterbo",
+        "working_hours": "['Dal lunedì al sabato 8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "01100"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Don Primo Mazzolari, 169/181/183 - C.C. Unico",
+        "lat": 41.8945836,
+        "long": 12.6733169,
+        "city": "Roma",
+        "working_hours": "['7:30 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00132"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Orvieto, 44",
+        "lat": 41.8851243,
+        "long": 12.5170723,
+        "city": "Roma",
+        "working_hours": "['07:30 - 20:30 (continuato)', 'Aperto la domenica08:00 - 13:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00182"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Enrico Ferri, 8",
+        "lat": 41.8509698,
+        "long": 12.5991978,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00173"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via dell'Arco di Travertino, 88/94",
+        "lat": 41.8650337,
+        "long": 12.5336598,
+        "city": "Roma",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00179"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Ostiense, 2193",
+        "lat": 41.7681013,
+        "long": 12.3224347,
+        "city": "Ostia Antica (RM)",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00124"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Carlo Santarelli, 91",
+        "lat": 41.8610365,
+        "long": 12.6076008,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00133"
+    },
+    {
+        "name": "ipertriscount",
+        "street": "Via Salaria, 1380",
+        "lat": 42.0015842,
+        "long": 12.5191373,
+        "city": "Roma, Settebagni",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via dei Durantini, 408",
+        "lat": 41.9203044,
+        "long": 12.5465064,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica9:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00157"
+    },
+    {
+        "name": "sacoph",
+        "street": "Viale Etiopia, 38",
+        "lat": 41.9329618,
+        "long": 12.5216765,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 13:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00199"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via G. Leopardi, 29",
+        "lat": 41.9430555,
+        "long": 12.6495929,
+        "city": "Setteville di Guidonia (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica9:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via Maremmana Inferiore, 189",
+        "lat": 41.9627133,
+        "long": 12.7565275,
+        "city": "Villanova di Guidonia (RM)",
+        "working_hours": "['8:00 - 21:30 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via Cineto Romano, 28",
+        "lat": 41.952161,
+        "long": 12.6430842,
+        "city": "Setteville di Guidonia (RM)",
+        "working_hours": "['dal lunedì al venerdì 8:00 - 20:30 / sabato 8:00 - 20:00 (continuato)', 'Aperto la domenica9:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via G.B. Manzella, 20",
+        "lat": 41.9377022,
+        "long": 12.5794586,
+        "city": "Roma",
+        "working_hours": "['7:00 - 21:00 (continuato)', 'Aperto la domenica7:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00156"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via Pontina, 414",
+        "lat": 41.791799,
+        "long": 12.4512096,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00128"
+    },
+    {
+        "name": "sacoph",
+        "street": "Piazza Alessandria, 7",
+        "lat": 41.911339,
+        "long": 12.501965,
+        "city": "Roma",
+        "working_hours": "['7:00 - 20:30 (continuato)', 'Aperto la domenica9:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00198"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via Tuscolana, 585/b",
+        "lat": 41.864155,
+        "long": 12.5483354,
+        "city": "Roma",
+        "working_hours": "['24 H (continuato)', 'Aperto la domenica24 H']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00175"
+    },
+    {
+        "name": "sacoph",
+        "street": "Tiburtina, 605/a",
+        "lat": 41.9089532,
+        "long": 12.5451512,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica9:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00157"
+    },
+    {
+        "name": "sacoph",
+        "street": "Via Caffaro, 45-47",
+        "lat": 41.8652429,
+        "long": 12.4857189,
+        "city": "Roma",
+        "working_hours": "['8:00-21:30 (continuato)', 'Aperto la domenica8:30-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00154"
+    },
+    {
+        "name": "top",
+        "street": "Via Appia Nuova km 20,800",
+        "lat": 41.7590557,
+        "long": 12.6249355,
+        "city": "Marino (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "top",
+        "street": "Via Nettunense km 7,100",
+        "lat": 41.690639,
+        "long": 12.6483749,
+        "city": "Ariccia (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 20.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "top",
+        "street": "Via Ariana km 10,400",
+        "lat": 41.7469194,
+        "long": 12.8597182,
+        "city": "Artena (RM)",
+        "working_hours": "['8:30 - 20.00 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00031"
+    },
+    {
+        "name": "top",
+        "street": "Via Domenico Seghetti, 24",
+        "lat": 41.80935969999999,
+        "long": 12.6777529,
+        "city": "Frascati (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00044"
+    },
+    {
+        "name": "top",
+        "street": "Via Riserva Nuova, km 44,000",
+        "lat": 41.5905477,
+        "long": 12.6294323,
+        "city": "Aprilia (LT)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "04011"
+    },
+    {
+        "name": "top",
+        "street": "Via San Francesco d'Assisi, 11",
+        "lat": 41.8035489,
+        "long": 12.5991322,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00-20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "top",
+        "street": "Via Roma, 209",
+        "lat": 41.7231602,
+        "long": 12.8299021,
+        "city": "Lariano (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "top",
+        "street": "Via dell'ospedaletto, 20",
+        "lat": 41.7789777,
+        "long": 12.6162839,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "top",
+        "street": "Via San Giovanni Vecchio, 84/86",
+        "lat": 41.688755,
+        "long": 12.7732379,
+        "city": "Velletri (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00049"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via dell'Acqua Bullicante, 162",
+        "lat": 41.8862293,
+        "long": 12.5435782,
+        "city": "Roma",
+        "working_hours": "['7:45 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00177"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nazionale Tiburtina, km 23,500",
+        "lat": 41.9524095,
+        "long": 12.7209934,
+        "city": "Tivoli Terme (RM)",
+        "working_hours": "['Dal lunedì al sabato 8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Dell'Idroscalo, 12 (ang. Via dell'Appagliatore, 5)",
+        "lat": 41.7371434,
+        "long": 12.2648973,
+        "city": "Ostia(RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00121"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via dei Laterani, 39/41",
+        "lat": 41.88339209999999,
+        "long": 12.5033268,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00184"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Renzo da Ceri, 71/89",
+        "lat": 41.8896951,
+        "long": 12.5389903,
+        "city": "Roma (RM)",
+        "working_hours": "['Lun.-Sab. 07:45 – 20:30 (continuato)', 'Aperto la domenica08:00 – 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Palombarese, km 19,900",
+        "lat": 42.0183697,
+        "long": 12.6877857,
+        "city": "Guidonia Moncelio (RM)",
+        "working_hours": "['Lun.-Sab. 8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nomentana, 6",
+        "lat": 41.9346809,
+        "long": 12.5359324,
+        "city": "Roma",
+        "working_hours": "['7:30 - 20.30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Prenestina, 1221",
+        "lat": 41.8928614,
+        "long": 12.6312284,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00132"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Ugo Ojetti, 14",
+        "lat": 41.9437079,
+        "long": 12.5482895,
+        "city": "Roma",
+        "working_hours": "['8:00 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00137"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Nomentana, 433",
+        "lat": 41.9278159,
+        "long": 12.5242318,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00199"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Erasmo Gattamelata, 124",
+        "lat": 41.88804409999999,
+        "long": 12.5364129,
+        "city": "Roma",
+        "working_hours": "['7:30 - 21:00 (continuato)', 'Aperto la domenica8:00 – 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via San Leo, 9",
+        "lat": 41.979683,
+        "long": 12.5131321,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Val Pellice, 12",
+        "lat": 41.9444392,
+        "long": 12.5210324,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Casal Bianco, 2",
+        "lat": 41.9841416,
+        "long": 12.7142662,
+        "city": "Guidonia Montecelio (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via Conca d'oro, 386",
+        "lat": 41.9452994,
+        "long": 12.5169032,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00141"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Circonvallazione Appia, 190",
+        "lat": 41.8742685,
+        "long": 12.5110112,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00179"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Via della Casetta Mattei, 53",
+        "lat": 41.8520448,
+        "long": 12.4221221,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00148"
+    },
+    {
+        "name": "il_castoro",
+        "street": "Piazza Santa Maria Maggiore, 5/b",
+        "lat": 41.8973997,
+        "long": 12.499561,
+        "city": "Roma",
+        "working_hours": "['7:30 - 22:00 (continuato)', 'Aperto la domenica8:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00185"
+    },
+    {
+        "name": "pim",
+        "street": "Via Boccea, 632/640",
+        "lat": 41.9200247,
+        "long": 12.377768,
+        "city": "AGORA Roma",
+        "working_hours": "['7:00-22:00 (continuato)', 'Aperto la domenica8:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00166"
+    },
+    {
+        "name": "pim",
+        "street": "Via della Giustiniana, 271",
+        "lat": 42.0066287,
+        "long": 12.4754766,
+        "city": "Roma",
+        "working_hours": "['7:00 - 22:00 (continuato)', 'Aperto la domenica7:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00188"
+    },
+    {
+        "name": "pim",
+        "street": "Via Sant'Elia, 13",
+        "lat": 41.8967068,
+        "long": 12.4822025,
+        "city": "Roma",
+        "working_hours": "['7:00 - 22:00 (continuato)', 'Aperto la domenica7:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "pim",
+        "street": "Via Portuense, 265",
+        "lat": 41.8683056,
+        "long": 12.4650361,
+        "city": "Roma",
+        "working_hours": "['7:30-21:00 (continuato)', 'Aperto la domenica8:00-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00146"
+    },
+    {
+        "name": "pim",
+        "street": "Via Isacco Newton ang. Via Bellotti",
+        "lat": 41.8967068,
+        "long": 12.4822025,
+        "city": "Roma",
+        "working_hours": "['8:00-22:00 (continuato)', 'Aperto la domenica8:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "pim",
+        "street": "Via Flaminia Nuova, 276",
+        "lat": 41.9520387,
+        "long": 12.4729286,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00191"
+    },
+    {
+        "name": "pim",
+        "street": "Via Tripoli, 134",
+        "lat": 41.9291564,
+        "long": 12.5174155,
+        "city": "Roma",
+        "working_hours": "['7:00 - 22:00 (continuato)', 'Aperto la domenica7:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00199"
+    },
+    {
+        "name": "pim",
+        "street": "Via Teresa De Gubernatis snc",
+        "lat": 41.9393689,
+        "long": 12.4271317,
+        "city": "AGORA Roma",
+        "working_hours": "['7:00-22:00 (continuato)', 'Aperto la domenica8:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00135"
+    },
+    {
+        "name": "pim",
+        "street": "Viale Giuseppe Mazzini, 153",
+        "lat": 41.9159924,
+        "long": 12.4554465,
+        "city": "Roma",
+        "working_hours": "['7:30-22:00 (continuato)', 'Aperto la domenica7:30-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00195"
+    },
+    {
+        "name": "pim",
+        "street": "Via Luigi Zambarelli, 31",
+        "lat": 41.8777841,
+        "long": 12.446102,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00152"
+    },
+    {
+        "name": "pim",
+        "street": "Via Bravetta, 415",
+        "lat": 41.8748767,
+        "long": 12.4242659,
+        "city": "Roma",
+        "working_hours": "['7:00-22:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00164"
+    },
+    {
+        "name": "pim",
+        "street": "Via dei Monti di San Paolo, 51",
+        "lat": 41.7889494,
+        "long": 12.3570006,
+        "city": "Roma",
+        "working_hours": "['7:30 - 21:30 (continuato)', 'Aperto la domenica7:30 - 13:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00126"
+    },
+    {
+        "name": "pim",
+        "street": "Via Piedicavallo, 37",
+        "lat": 41.9237244,
+        "long": 12.3603832,
+        "city": "Roma",
+        "working_hours": "['7:00-21:00 (continuato)', 'Aperto la domenica8:00-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00166"
+    },
+    {
+        "name": "pim",
+        "street": "Via Pineta Sacchetti, 65",
+        "lat": 41.9116445,
+        "long": 12.4230704,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00167"
+    },
+    {
+        "name": "pim",
+        "street": "Via Andrea Barbato, 31 - C.C. Torresina",
+        "lat": 41.9291588,
+        "long": 12.4008798,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00168"
+    },
+    {
+        "name": "pim",
+        "street": "Via di Macchia Saponara, 251",
+        "lat": 41.7585345,
+        "long": 12.3661528,
+        "city": "Roma, Casal Palocco",
+        "working_hours": "['7:00 - 22:00 (continuato)', 'Aperto la domenica7:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00125"
+    },
+    {
+        "name": "pim",
+        "street": "Via Massimo Troisi, 15",
+        "lat": 41.7858919,
+        "long": 12.3907496,
+        "city": "Roma",
+        "working_hours": "['7:00-22:00', 'Aperto la domenica7:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00125"
+    },
+    {
+        "name": "pim",
+        "street": "Via Casal Tidei, 20",
+        "lat": 41.9422423,
+        "long": 12.5781827,
+        "city": "AGORA Roma",
+        "working_hours": "['06 4120 5920', '8:00-22:00 (continuato)', 'Aperto la domenica8:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00156"
+    },
+    {
+        "name": "pim",
+        "street": "Via di Torrevecchia, 1050",
+        "lat": 41.9133191,
+        "long": 12.402817,
+        "city": "IPERFAMILY Roma",
+        "working_hours": "['7:00-22:00 (continuato)', 'Aperto la domenica7:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00168"
+    },
+    {
+        "name": "pim",
+        "street": "Via di Torrevecchia, 313",
+        "lat": 41.9270263,
+        "long": 12.4159683,
+        "city": "Roma",
+        "working_hours": "['7:30-21:00 (continuato)', 'Aperto la domenica8:00-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00168"
+    },
+    {
+        "name": "pim",
+        "street": "Via Gregorio VII, 242",
+        "lat": 41.8965735,
+        "long": 12.4413222,
+        "city": "AGORA Roma",
+        "working_hours": "['8:00-22:00 (continuato)', 'Aperto la domenica8:00-22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00165"
+    },
+    {
+        "name": "pim",
+        "street": "Via delle Petunie, 5",
+        "lat": 41.9778756,
+        "long": 12.7068691,
+        "city": "Guidonia Montecelio (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00012"
+    },
+    {
+        "name": "pim",
+        "street": "Via Oderisi da Gubbio, 133/183",
+        "lat": 41.86496750000001,
+        "long": 12.4652797,
+        "city": "Roma",
+        "working_hours": "['7:00 - 21:00 (continuato)', 'Aperto la domenica7:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00146"
+    },
+    {
+        "name": "pim",
+        "street": "Via di Torrevecchia, 590 - C.C. \"Il Fontanile\"",
+        "lat": 41.9227166,
+        "long": 12.4105739,
+        "city": "Roma",
+        "working_hours": "['7:00-21:00 (continuato)', 'Aperto la domenica8:00-14:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00168"
+    },
+    {
+        "name": "pim",
+        "street": "Via Trionfale, 8044",
+        "lat": 41.937812,
+        "long": 12.4309107,
+        "city": "Roma",
+        "working_hours": "['7:00-22:00 (continuato)', 'Aperto la domenica7:30-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00135"
+    },
+    {
+        "name": "pim",
+        "street": "Via Igea, 42",
+        "lat": 41.9345562,
+        "long": 12.4422935,
+        "city": "Roma",
+        "working_hours": "['7:30-21:00 (continuato)', 'Aperto la domenica8:00-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00135"
+    },
+    {
+        "name": "pim",
+        "street": "Via Pietro Maffi, 114",
+        "lat": 41.9257227,
+        "long": 12.4200156,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00168"
+    },
+    {
+        "name": "pim",
+        "street": "Via Carlo Gherardini, 2",
+        "lat": 41.98248419999999,
+        "long": 12.4133887,
+        "city": "Roma",
+        "working_hours": "['7:00 - 22:00 (continuato)', 'Aperto la domenica7:00 - 22:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00135"
+    },
+    {
+        "name": "effepiu",
+        "street": "Via delle Ebridi, 4",
+        "lat": 41.7399451,
+        "long": 12.2634652,
+        "city": "Roma, Ostia",
+        "working_hours": "['8:00 - 20:00 (continuato)', 'Aperto la domenica8:30 - 13:30 / 16:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00121"
+    },
+    {
+        "name": "effepiu",
+        "street": "Via Dobbiaco, 3 ang. Via Castel Porziano",
+        "lat": 41.7397021,
+        "long": 12.3831026,
+        "city": "Roma, Infernetto",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00124"
+    },
+    {
+        "name": "effepiu",
+        "street": "Via Sarsina, 78",
+        "lat": 41.7927829,
+        "long": 12.4066262,
+        "city": "Roma, Vitinia",
+        "working_hours": "['8:00 - 14:00 / 16:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00127"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via del Torraccio di Terranova, 222",
+        "lat": 41.8510245,
+        "long": 12.6533311,
+        "city": "Roma, Torre Angela",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00133"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Antonio Roiti, 26/28/30/32",
+        "lat": 41.8622989,
+        "long": 12.4690545,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00146"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via dei Platani, 47/52",
+        "lat": 41.8812924,
+        "long": 12.5647588,
+        "city": "Roma, Centocelle",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00172"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via L. Einaudi ang. Via L. Sturzo 3/5",
+        "lat": 42.037213,
+        "long": 12.643324,
+        "city": "Mentana",
+        "working_hours": "['dal lunedì al sabato 7.30-20.00 (continuato)', 'Aperto la domenicadomenica 8.00-13.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00013"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Ugo Ojetti, 370 (Via Carlo Lorenzini, 91)",
+        "lat": 41.9457621,
+        "long": 12.5539286,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00137"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via di Pietralata, 434",
+        "lat": 41.9155854,
+        "long": 12.5553519,
+        "city": "Roma, Tiburtina",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00157"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Marco Papio, 30",
+        "lat": 41.865677,
+        "long": 12.5514651,
+        "city": "Roma, Tuscolano-Quadraro",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00175"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Alessandrino, 320",
+        "lat": 41.875995,
+        "long": 12.579349,
+        "city": "Roma, Casilino",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00172"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Piazza Giuseppe Impastato 10/13",
+        "lat": 41.70027160000001,
+        "long": 12.6885436,
+        "city": "Genzano di Roma (RM)",
+        "working_hours": "['Dal lunedì al sabato 8:00 - 20:00 (continuato)', 'Aperto la domenica8:00 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00045"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Claudio Asello, 25/33",
+        "lat": 41.8634753,
+        "long": 12.5578358,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00175"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Viale dell'Esercito, 38",
+        "lat": 41.8132522,
+        "long": 12.4862925,
+        "city": "Roma, Cecchignola",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00143"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via delle Vigne Nuove, 232",
+        "lat": 41.951474,
+        "long": 12.536854,
+        "city": "Roma, Montesacro-Fidene",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00139"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Casilina, 1846",
+        "lat": 41.8623807,
+        "long": 12.6858475,
+        "city": "Roma, Finocchio",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00132"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Casilina, 2834",
+        "lat": 41.8514128,
+        "long": 12.7313413,
+        "city": "Laghetto (RM)",
+        "working_hours": "['dal lunedi al sabato 8:00-20:00 (continuato)', 'Aperto la domenica8:00-20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Casilina, 366",
+        "lat": 41.8804642,
+        "long": 12.5409943,
+        "city": "Roma, Tor Pignattara",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00176"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Viale Giorgio Morandi, 193",
+        "lat": 41.8990032,
+        "long": 12.585842,
+        "city": "Roma, Tor Sapienza",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00155"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Viale Partenope, 117/123",
+        "lat": 41.8902734,
+        "long": 12.5514772,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00177"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Viale Africa, 92",
+        "lat": 42.06356710000001,
+        "long": 12.3735608,
+        "city": "Formello - Le Rughe (RM)",
+        "working_hours": "['dal lunedì al sabato 7.30-20.00', 'Aperto la domenica8.00-20.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00060"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via Palombarese, 583",
+        "lat": 41.9953365,
+        "long": 12.6654739,
+        "city": "Santa Lucia di Fonte Nuova (RM)",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00013"
+    },
+    {
+        "name": "ipercarni",
+        "street": "Via di Casal Marmo, 329",
+        "lat": 41.8967068,
+        "long": 12.4822025,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica8:30 - 13:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "idromarket",
+        "street": "Via del Ponte Pisano, 210",
+        "lat": 41.85697,
+        "long": 12.39812,
+        "city": "Roma",
+        "working_hours": "['Questo indirizzo email è protetto dagli spambots. È necessario abilitare JavaScript per vederlo.', '8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00148"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via Tenuta di S.Cecilia, 2/6",
+        "lat": 41.8469056,
+        "long": 12.3453977,
+        "city": "Roma",
+        "working_hours": "['Questo indirizzo email è protetto dagli spambots. È necessario abilitare JavaScript per vederlo.', '8:00 - 20:30 (continuato)', 'Aperto la domenica8:00-13:30 / 16:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00163"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via Altagnana, 9",
+        "lat": 41.9761343,
+        "long": 12.5157908,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00138"
+    },
+    {
+        "name": "idromarket",
+        "street": "Via Michele Rosi, 203",
+        "lat": 41.9314806,
+        "long": 12.2402592,
+        "city": "Aranova (RM)",
+        "working_hours": "['8:00-20:30 (continuato)', 'Aperto la domenica8:00-13:30 e 16:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00054"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Casilina, 414",
+        "lat": 41.8230618,
+        "long": 12.802938,
+        "city": "San Cesareo (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00030"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Merulana, 45/47/49",
+        "lat": 41.8945453,
+        "long": 12.5006832,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00185"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Umberto Barbaro, 24 (zona vigne nuove)",
+        "lat": 41.95836,
+        "long": 12.5393422,
+        "city": "Roma",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00139"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Rubicone, 37/39",
+        "lat": 41.9201601,
+        "long": 12.5001254,
+        "city": "Roma (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00198"
+    },
+    {
+        "name": "pewex",
+        "street": "Piazza Santa Maria Liberatrice",
+        "lat": 41.8804091,
+        "long": 12.4749338,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00153"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Ennio Quirino Visconti, 22",
+        "lat": 41.9076716,
+        "long": 12.4701475,
+        "city": "Roma (RM)",
+        "working_hours": "['06.99.58.83.09', '8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00193"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Ravenna, 35",
+        "lat": 41.9132807,
+        "long": 12.5192388,
+        "city": "Roma (RM)",
+        "working_hours": "['Lun.-Sab. 8:00-22:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00161"
+    },
+    {
+        "name": "pewex",
+        "street": "Via del Tintoretto, 320",
+        "lat": 41.8332932,
+        "long": 12.4913812,
+        "city": "Roma",
+        "working_hours": "['7:30-21:00 (continuato)', 'Aperto la domenica7:30-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00142"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Pacinotti, 10",
+        "lat": 41.8709856,
+        "long": 12.4687136,
+        "city": "Roma (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00146"
+    },
+    {
+        "name": "pewex",
+        "street": "Via XX Settembre, 52",
+        "lat": 41.9073171,
+        "long": 12.4982738,
+        "city": "Roma (RM)",
+        "working_hours": "['8:00-20:30 (continuato)', 'Aperto la domenica9:00-14:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00187"
+    },
+    {
+        "name": "pewex",
+        "street": "Piazza Testaccio, 21/22/23",
+        "lat": 41.8795291,
+        "long": 12.4765137,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00153"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Isole del Capo Verde, ang. via Velieri",
+        "lat": 41.737954,
+        "long": 12.2743547,
+        "city": "Lido di Ostia (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00121"
+    },
+    {
+        "name": "pewex",
+        "street": "P.zza San Giovanni Battista de La Salle, 36",
+        "lat": 41.8116083,
+        "long": 12.4459002,
+        "city": "Roma (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00144"
+    },
+    {
+        "name": "pewex",
+        "street": "Via di Grotta Perfetta, 360",
+        "lat": 41.8448682,
+        "long": 12.4906705,
+        "city": "Roma",
+        "working_hours": "['7:30 - 24:00 (continuato)', 'Aperto la domenica7:30-21:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00142"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Morin, 32/36",
+        "lat": 41.9123258,
+        "long": 12.4557696,
+        "city": "Roma (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00195"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Edoardo d'Onofrio, 122/146",
+        "lat": 41.913048,
+        "long": 12.5743019,
+        "city": "Roma (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00155"
+    },
+    {
+        "name": "pewex",
+        "street": "Via di Santa Petronilla, 10a-18a",
+        "lat": 41.8587519,
+        "long": 12.499256,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00147"
+    },
+    {
+        "name": "pewex",
+        "street": "Via di Tor Bella Monaca, 469-495",
+        "lat": 41.8712956,
+        "long": 12.6331204,
+        "city": "Roma",
+        "working_hours": "['7:30-21:00 (continuato)', 'Aperto la domenica7:30-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00133"
+    },
+    {
+        "name": "pewex",
+        "street": "Viale Kennedy, 80",
+        "lat": 41.816078,
+        "long": 12.5904987,
+        "city": "Ciampino (RM)",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00043"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Cassia, 1705/1707",
+        "lat": 42.0069788,
+        "long": 12.3790693,
+        "city": "Roma",
+        "working_hours": "['8:00-24:00 (continuato)', 'Aperto la domenica8:00-21:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00123"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Cervia, 43",
+        "lat": 41.8606294,
+        "long": 12.2016432,
+        "city": "Fregene (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00054"
+    },
+    {
+        "name": "pewex",
+        "street": "Via P. Quaglia, 120",
+        "lat": 41.8682197,
+        "long": 12.6411331,
+        "city": "Roma",
+        "working_hours": "['7:30-20:30 (continuato)', 'Aperto la domenica7:30-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00133"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Gela, 57",
+        "lat": 41.8787872,
+        "long": 12.520268,
+        "city": "Roma",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00182"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Casilina Km. 20,800 Pantano, Montecompatri",
+        "lat": 41.865665,
+        "long": 12.707708,
+        "city": "Roma",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "pewex",
+        "street": "Piazzale Sandro Pertini - C.C. La Nave",
+        "lat": 41.7611257,
+        "long": 12.6137197,
+        "city": "Marino Loc. Frattocchie (RM)",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Pian Due Torri, 83 (zona Magliana)",
+        "lat": 41.84794110000001,
+        "long": 12.4640184,
+        "city": "Roma",
+        "working_hours": "['0699588526', 'Lun.-Dom. 7:30-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00146"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Cassia, 2019 (zona Olgiata)",
+        "lat": 42.0323563,
+        "long": 12.3755488,
+        "city": "Roma",
+        "working_hours": "['8:00-24:00 (continuato)', 'Aperto la domenica8:00-21:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00123"
+    },
+    {
+        "name": "pewex",
+        "street": "Via della Lucchina, 96 - C.C. Gulliver",
+        "lat": 41.958356,
+        "long": 12.399207,
+        "city": "Roma",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:00 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00135"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Anguillarese, km 5,600",
+        "lat": 42.0723234,
+        "long": 12.2911008,
+        "city": "Anguillara Sabazia (RM)",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "pewex",
+        "street": "Piazza Cola di Rienzo, 86/c",
+        "lat": 41.9083325,
+        "long": 12.467646,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00192"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Acerenza, 4d",
+        "lat": 41.8406739,
+        "long": 12.5520057,
+        "city": "Roma",
+        "working_hours": "['06 20 19 21 49', '8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00178"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Tiburtina Valeria km 22,300, C.C. \"Le Palme\"",
+        "lat": 41.95371069999999,
+        "long": 12.7176661,
+        "city": "Tivoli Terme (RM)",
+        "working_hours": "['8:00-20:30 (continuato)', 'Aperto la domenica8:00-20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00011"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Milano,19",
+        "lat": 42.1411162,
+        "long": 12.600274,
+        "city": "Fiano Romano (RM)",
+        "working_hours": "['8:00-22:00 (continuato)', 'Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00065"
+    },
+    {
+        "name": "pewex",
+        "street": "Piazza Minucciano, 20",
+        "lat": 41.9534657,
+        "long": 12.5130767,
+        "city": "Roma (RM)",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00139"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Tuscolana km 14,500 - Angolo Via A. Anile",
+        "lat": 41.8286668,
+        "long": 12.6259247,
+        "city": "Vermicino (RM)",
+        "working_hours": "['8:00-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00173"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Fabio Massimo, 35/37",
+        "lat": 41.9082104,
+        "long": 12.4621859,
+        "city": "Roma",
+        "working_hours": "['Aperto la domenica']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00192"
+    },
+    {
+        "name": "pewex",
+        "street": "Via Filippo Serafini, 73",
+        "lat": 41.8618431,
+        "long": 12.5745858,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00173"
+    },
+    {
+        "name": "cts",
+        "street": "Via delle Cerquette, snc",
+        "lat": 41.7282338,
+        "long": 12.6822863,
+        "city": "Ariccia (RM)",
+        "working_hours": "['8:30 - 21.00 (continuato)', 'Aperto la domenica8:45 - 21.00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00040"
+    },
+    {
+        "name": "cts",
+        "street": "Via degli Alberini, 19",
+        "lat": 41.9193217,
+        "long": 12.5703974,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00155"
+    },
+    {
+        "name": "cts",
+        "street": "Via Raffaele Conforti, 95/97",
+        "lat": 41.8936399,
+        "long": 12.4084841,
+        "city": "Roma (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00166"
+    },
+    {
+        "name": "cts",
+        "street": "Via Fiume Giallo,19",
+        "lat": 41.8089979,
+        "long": 12.4291993,
+        "city": "Roma (RM)",
+        "working_hours": "[]",
+        "picks_up_in_shop": "True",
+        "zip_code": "00144"
+    },
+    {
+        "name": "cts",
+        "street": "Viale dell'Oceano Atlantico, 271",
+        "lat": 41.8174993,
+        "long": 12.4650631,
+        "city": "Roma (RM)",
+        "working_hours": "['Dal lunedì al sabato 7:30-21:00 (continuato)', 'Aperto la domenica8:00-21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00144"
+    },
+    {
+        "name": "cts",
+        "street": "Via Anton Cechov, 76",
+        "lat": 41.8392872,
+        "long": 12.5085024,
+        "city": "Roma (RM)",
+        "working_hours": "['7:50 - 13:30 / 16:00 - 20:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00142"
+    },
+    {
+        "name": "cts",
+        "street": "Via Flaminia km 24,200",
+        "lat": 42.0993423,
+        "long": 12.4964633,
+        "city": "Riano (RM)",
+        "working_hours": "['8:30 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "cts",
+        "street": "Via Cassia, 340",
+        "lat": 41.9541533,
+        "long": 12.4576621,
+        "city": "Roma",
+        "working_hours": "['7:00 - 21:00 (continuato)', 'Aperto la domenica7:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00191"
+    },
+    {
+        "name": "cts",
+        "street": "Via A. Millevoi, 57",
+        "lat": 41.82174,
+        "long": 12.5185996,
+        "city": "Roma",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica9:00 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": "00178"
+    },
+    {
+        "name": "cts",
+        "street": "Via Flaminia km 27,300",
+        "lat": 42.1298411,
+        "long": 12.4956465,
+        "city": "Castelnuovo di Porto (RM)",
+        "working_hours": "['8:00 - 21:00 (continuato)', 'Aperto la domenica8:30 - 21:00']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    },
+    {
+        "name": "cts",
+        "street": "Via Casilina km 35,700",
+        "lat": 41.7912667,
+        "long": 12.873514,
+        "city": "Labico (RM)",
+        "working_hours": "['8:00 - 20:30 (continuato)', 'Aperto la domenica8:30 - 20:30']",
+        "picks_up_in_shop": "True",
+        "zip_code": null
+    }
+]

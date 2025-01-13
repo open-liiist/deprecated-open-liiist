@@ -186,6 +186,22 @@ services:
     ports:
       - "5000:5000"
 
+  scraping-service:
+    user: root
+    build: 
+      context: ./scraping-service
+      dockerfile: Dockerfile
+    container_name: scraping-service
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scraping-service:/app
+    depends_on:
+      - db
+      - notification-alert
+      - product-receiver-service
+    stop_grace_period: 30s
+    restart: unless-stopped
+
 volumes:
   pgdata: 
   elasticsearch:
