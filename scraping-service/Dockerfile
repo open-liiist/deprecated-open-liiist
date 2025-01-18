@@ -10,7 +10,7 @@ COPY libft ./libft
 COPY produtti_send.py ./produtti_send.py
 
 COPY all_oasi_tigre.json ./all_oasi_tigre.json
-COPY /oasi_tigre_shop.json ./oasi_tigre_shop.json
+COPY oasi_tigre_shop.json ./oasi_tigre_shop.json
 
 COPY all_gros.json ./all_gros.json
 COPY all_gros_shop.json ./all_gros_shop.json
@@ -21,4 +21,3 @@ ENV PYTHONPATH=/app
 RUN chmod +x produtti_send.py
 
 CMD ["python3", "produtti_send.py"]
-

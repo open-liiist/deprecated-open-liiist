@@ -58,159 +58,171 @@ function sendToLogstash(productData: ProductData): Promise<void> {
 }
 
 router.post('/product', async (req: Request, res: Response) => {
+    try {
+        console.log('Dati ricevuti per il prodotto:', req.body);
 
-	try {
-		const {
-			full_name,
-			name,
-			description,
-			discount,
-			localization,
-			quantity,
-			img_url,
-			price,
-			price_for_kg,
-		} = req.body;
+        const {
+            full_name,
+            name,
+            description,
+            discount,
+            localization,
+            quantity,
+            img_url,
+            price,
+            price_for_kg,
+        } = req.body;
 
-		if (!full_name || !price || !localization || !localization.grocery ||
-			!localization.lat || !localization.long) {
-			res.status(400).json({ error: 'Missing required fields' });
-			return;
-		}
+        if (!full_name || !price || !localization || !localization.grocery ||
+            !localization.lat || !localization.long) {
+            console.error('Campi mancanti:', req.body);
+            res.status(400).json({ error: 'Missing required fields' });
+            return;
+        }
 
-		console.log('typeof full_name', typeof full_name);
+        // Validazione dei tipi di dati
+        if (typeof full_name !== 'string' || typeof price !== 'number' ||
+            (description && typeof description !== 'string') ||
+            (quantity && typeof quantity !== 'string')) {
+            console.error('Tipi di dati non validi:', req.body);
+            res.status(400).json({ error: 'Invalid data types' });
+            return;
+        }
 
-		if (typeof full_name !== 'string' || typeof price !== 'number' 
-			|| (description && typeof description !== 'string')
-		    || (quantity && typeof quantity !== 'string')) {
-			res.status(400).json({ error: 'Invalid data types' });
-			return;
-		}
+        const name_id = sanitizeString(full_name);
 
-		const name_id = sanitizeString(full_name);
+        const prismaTransaction = await prisma.$transaction(async (prisma) => {
+            const product = await prisma.product.upsert({
+                where: { name_id },
+                create: {
+                    name_id, full_name,
+                    discount: discount || 0.0,
+                    quantity,
+                    description: description || '',
+                    name: name_id,
+                    current_price: price,
+                    localization: {
+                        connectOrCreate: {
+                            where: {
+                                grocery_lat_lng: {
+                                    grocery: localization.grocery,
+                                    lat: localization.lat,
+                                    lng: localization.long,
+                                }
+                            },
+                            create: {
+                                grocery: localization.grocery,
+                                lat: localization.lat,
+                                lng: localization.long,
+                            }
+                        }
+                    }
+                },
+                update: {
+                    full_name, discount,
+                    description: description || '',
+                    name: name_id,
+                    current_price: price,
+                    image_url: img_url,
+                    price_for_kg,
+                }
+            });
 
-		const prismaTransaction = await prisma.$transaction(async (prisma) => {
-			const product = await prisma.product.upsert({
-				where: { name_id },
-				create: {
-					name_id, full_name, 
-					discount: discount || 0.0, 
-					quantity,
-					description: description || '',
-					name: name_id,
-					current_price: price,
-					localization: {
-						connectOrCreate: {
-							where: {
-								grocery_lat_lng: {
-									grocery: localization.grocery,
-									lat: localization.lat,
-									lng: localization.long,
-								}
-							},
-							create: {
-								grocery: localization.grocery,
-								lat: localization.lat,
-								lng: localization.long,
-							}
-						}
-					}
-				},
-				update: {
-					full_name, discount,
-					description: description || '',
-					name: name_id,
-					current_price: price,
-					image_url: img_url,
-					price_for_kg,
-				}
-			});
+            await prisma.productHistory.create({
+                data: {
+                    productId: product.id,
+                    price, discount
+                }
+            });
 
-			await prisma.productHistory.create({
-				data: {
-					productId: product.id,
-					price, discount
-				}
-			});
+            console.log('Prodotto salvato con successo:', product);
 
-			// prepare data to send to elasticsearch via logstash
-			const productData: ProductData = {
-				full_name, name, description, price, discount, name_id, quantity,
-				document_id: `${name_id}_${sanitizeString(localization.grocery)
-					}_${sanitizeString(localization.lat)
-					}_${sanitizeString(localization.long)
-					}`,
-				localization: {
-					grocery: localization.grocery,
-					lat: localization.lat,
-					lon: localization.long,
-				},
-				location: { lat: localization.lat, lon: localization.long },
-			}
+            // Invio a Logstash
+            const productData: ProductData = {
+                full_name, name, description, price, discount, name_id, quantity,
+                document_id: `${name_id}_${sanitizeString(localization.grocery)
+                    }_${sanitizeString(localization.lat)
+                    }_${sanitizeString(localization.long)
+                    }`,
+                localization: {
+                    grocery: localization.grocery,
+                    lat: localization.lat,
+                    lon: localization.long,
+                },
+                location: { lat: localization.lat, lon: localization.long },
+            };
 
-			try {
-				await sendToLogstash(productData);
-				console.log('Product saved in RDBMS and sent to logstash', productData);
-				return product;
-			} catch (err) {
-				console.error('Failed to send data to logstash, rolling back transaction', err);
-			}
-		});
+            try {
+                await sendToLogstash(productData);
+                console.log('Dati inviati a Logstash:', productData);
+                return product;
+            } catch (err) {
+                console.error('Errore durante l\'invio a Logstash:', err);
+                throw err;
+            }
+        });
 
-
-		if (!prismaTransaction) {
-			res.status(500).json({ error: 'Failed to save product' });
-			return;
-		}
-		res.status(201).json({ message: 'Product saved', prismaTransaction });
-	} catch (error) {
-		console.error('Failed to save product', error);
-		res.status(500).json({ error: 'Failed to save product', details: error });
-	}
+        if (!prismaTransaction) {
+            res.status(500).json({ error: 'Failed to save product' });
+            return;
+        }
+        res.status(201).json({ message: 'Product saved', prismaTransaction });
+    } catch (error) {
+        console.error('Errore durante il salvataggio del prodotto:', error);
+        res.status(500).json({ error: 'Failed to save product', details: error });
+    }
 });
 
+
 router.post('/store', async (req: Request, res: Response) => {
-	try {
-		const {
-			name,
-			lat,
-			long,
-			street,
-			city,
-			working_hours,
-			picks_up_in_shop,
-			zip_code
-		} = req.body;
+    try {
+        console.log('Dati ricevuti per il negozio:', req.body);
 
-		if (!name || !lat || !long) {
-			res.status(400).json({ error: 'Missing required fields' });
-			return;
-		}
+        const {
+            name,
+            lat,
+            long,
+            street,
+            city,
+            working_hours,
+            picks_up_in_shop,
+            zip_code
+        } = req.body;
 
-		if (typeof name !== 'string' || typeof lat !== 'number' || typeof long !== 'number') {
-			res.status(400).json({ error: 'Invalid data types' });
-			return;
-		}
+        if (!name || !lat || !long) {
+            console.error('Campi mancanti per il negozio:', req.body);
+            res.status(400).json({ error: 'Missing required fields' });
+            return;
+        }
 
-		const store = await prisma.localization.create({
-			data: {
-				grocery: name,
-				lat,
-				lng: long,
-				street,
-				city,
-				working_hours,
-				picks_up_in_store: picks_up_in_shop,
-				zip_code,
-			}
-		});
+        if (typeof name !== 'string' || typeof lat !== 'number' || typeof long !== 'number') {
+            console.error('Tipi di dati non validi per il negozio:', req.body);
+            res.status(400).json({ error: 'Invalid data types' });
+            return;
+        }
 
-		res.status(201).json({ message: 'Store saved', store });
-	} catch (error) {
-		console.error('Failed to save store', error);
-		res.status(500).json({ error: 'Failed to save store', details: error });
-	}
-})
+        const store = await prisma.localization.create({
+            data: {
+                grocery: name,
+                lat,
+                lng: long,
+                street,
+                city,
+                working_hours,
+                picks_up_in_store: picks_up_in_shop,
+                zip_code,
+            }
+        });
+
+        console.log('Negozio salvato con successo:', store);
+
+        res.status(201).json({ message: 'Store saved', store });
+    } catch (error) {
+        console.error('Errore durante il salvataggio del negozio:', error);
+        res.status(500).json({ error: 'Failed to save store', details: error });
+    }
+});
+
 
 router.get('/store', async (_: Request, res: Response) => {
 	try {

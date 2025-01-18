@@ -50,17 +50,18 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   product-receiver-service:
+    container_name: product-receiver-service
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
-    depends_on:
-      db: 
-          condition: service_healthy
+    #depends_on:
+    #  db: 
+    #      condition: service_healthy
     ports:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=${REMOTE_DATABASE_URL}
     volumes:
       - ./product-receiver-service:/app
 
@@ -110,8 +111,8 @@ services:
       # enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro #For Linux
-      #- /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
+      #- /run/docker.sock:/run/docker.sock:ro #For Linux
+      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -196,8 +197,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./scraping-service:/app
     depends_on:
-      - db
-      - notification-alert
+      #- db
+      #- notification-alert
       - product-receiver-service
     stop_grace_period: 30s
     restart: unless-stopped
