@@ -61,9 +61,13 @@ services:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - DATABASE_URL=${REMOTE_DATABASE_URL}
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Usa solo REMOTE_DATABASE_URL
+      #- DATABASE_URL=${DATABASE_URL}
+      - LOGSTASH_HOST=logstash
+      - LOGSTASH_PORT=5000
     volumes:
       - ./product-receiver-service:/app
+      - product_receiver_data:/app/data  # Volume persistente aggiunto
 
   db:
     image: postgres:13
@@ -155,6 +159,8 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - logstash_data:/usr/share/logstash/data  # Volume persistente aggiunto
+
     ports:
       - 5044:5044
       - 50000:50000/tcp
@@ -176,6 +182,8 @@ services:
       - "5601:5601"
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - kibana_data:/usr/share/kibana/data  # Volume persistente aggiunto
+
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
     depends_on:
@@ -206,6 +214,9 @@ services:
 volumes:
   pgdata: 
   elasticsearch:
+  kibana_data:
+  logstash_data:  # Definizione del volume per Logstash
+  product_receiver_data:  # Definizione del volume per product-receiver-service
 
 networks:
   shared-network:
