@@ -2,7 +2,8 @@ import os
 import sys
 import json
 import requests
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+import pandas as pd
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from libft import to_float, create_store
 
 def scraping_shop():
@@ -33,20 +34,17 @@ def scraping_shop():
 		if (info_need['click_collect'] == "true") | (info_need['click_drive'] == "true") and "RM" in info_need['address']:
 			shop_info = {
 				"name" : info_need['name'],
-				"lat": (to_float(info_need['lat'])),
-				"long": (to_float(info_need['lon'])),
 				"street": info_need['address'],
+				"lat": (to_float(info_need['lat'])),
+				"lng": (to_float(info_need['lon'])),
 				"city": info_need['city'],
 				"working_hours": (f"{info_need['hours']}"),
 				"picks_up_in_shop": True,
 				}
-	# 		list_shop.append(shop_info)
-	# json_object = json.dumps(list_shop, indent=4, ensure_ascii=False)
-	
-	# # Writing to sample.json
-	# with open("oasi_tigre_shop.json", "w", encoding='utf-8') as outfile:
-	# 	outfile.write(json_object)
-			create_store(shop_info)
+			list_shop.append(shop_info)
+			# create_store(shop_info)
+	df = pd.DataFrame(list_shop)
+	df.to_csv('oasi_tigre_shop.csv', index=False)
 
 if __name__ == "__main__":
 	scraping_shop()
