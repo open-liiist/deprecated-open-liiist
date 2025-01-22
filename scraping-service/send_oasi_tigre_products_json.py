@@ -30,7 +30,7 @@ PRODUCT_RECEIVER_BASE_URL = os.getenv("PRODUCT_RECEIVER_BASE_URL", "http://local
 PRODUCT_ENDPOINT = "product"  # endpoint /api/product
 MAX_RETRIES = int(os.getenv("MAX_RETRIES", 3))
 BACKOFF_FACTOR = int(os.getenv("BACKOFF_FACTOR", 2))
-MAX_THREADS = int(os.getenv("MAX_THREADS", 20))
+MAX_THREADS = int(os.getenv("MAX_THREADS", 15))
 
 def wait_for_service(endpoint: str, timeout: int = 60) -> None:
     """
@@ -137,8 +137,6 @@ def validate_and_prepare_product_data(product: dict) -> Optional[dict]:
         product["discount"] = float(product.get("discount", 0.0))
     except (ValueError, TypeError):
         product["discount"] = 0.0
-    if product["discount"] > 1.0:
-        product["discount"] = 1.0
 
     # price_for_kg
     try:

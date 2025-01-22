@@ -149,7 +149,7 @@ curl -X GET http://localhost:3002/api/health
   "name": "Banana Chiquita",
   "description": "Fresh bananas",
   "price": 2.55,
-  "discount": 0.1,
+  "discount": 1.2,
   "quantity": "1 bunch",
   "img_url": "https://example.com/banana.jpg",
   "price_for_kg": 2.50,

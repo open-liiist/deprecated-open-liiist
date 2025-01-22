@@ -37,7 +37,7 @@ The **Scraping Service** runs a variety of **scrapers** (one per supermarket/gro
 Key tasks:
 
 - Scrape data → e.g., price, discount, lat/lng, store name, etc.  
-- Format/validate/clean → rename `long`→`lng`, (**IT NEEDS TO BE RESOLVE URGENTLY**) handle float conversions, clamp discount, etc.  
+- Format/validate/clean → rename `long`→`lng`, (**IT NEEDS TO BE RESOLVE URGENTLY**)
 - Call `POST http://localhost:3002/api/product` or `POST http://localhost:3002/api/store` with **retry** logic.  
 
 ---
@@ -137,7 +137,7 @@ These scripts are the final step in your pipeline: they read **JSON or CSV** out
 
 ### 1. **send_gros_products_json.py**
 
-- **Usage**: Reads a (potentially large) JSON file with product data from the Gros chain, normalizes fields (`price`, `discount`, `localization`) and sends each item to `POST /api/product`.  
+- **Usage**: Reads a (potentially large) JSON file with product data from the Gros chain, normalizes fields (`price`, `localization`) and sends each item to `POST /api/product`.  
 - **Key Features**:
   - Uses **ijson** for streaming large JSON.  
   - **Retry** logic on network/5xx errors.  
@@ -155,7 +155,6 @@ These scripts are the final step in your pipeline: they read **JSON or CSV** out
 
 - **Usage**: Reads a **CSV** file with Oasi/Tigre products. Each row maps to columns like `name,full_name,img_url,price,discount,localization.grocery, ...`.  
 - **Key Features**:
-  - Converts discount > 1.0 to 1.0 to meet Zod’s `0..1` requirement.  
   - Skips rows missing essential fields like `full_name`.  
   - Posts to `/api/product`.
 
@@ -163,7 +162,6 @@ These scripts are the final step in your pipeline: they read **JSON or CSV** out
 
 - **Usage**: Reads a **JSON** array of product data from Oasi/Tigre.  
 - **Key Features**:
-  - Clamps `discount` to <= 1.0.  
   - Renames `long` → `lng`.  
   - Sends data to `POST /api/product`.
 
@@ -207,13 +205,13 @@ Inside `scraping_services/` you have a variety of brand-specific scrapers (e.g. 
 }
 ```
 
-### 2. Product Example (Invalid discount)
+### 2. Product Example (Valid discount)
 ```json
 {
   "full_name": "Treccine patate e rosmarino 400 gr",
   "img_url": "https://www.oasitigre.it/content/.../main-360x360.jpeg",
   "price": 2.35,
-  "discount": 1.89,     // > 1.0
+  "discount": 1.89,     // >= 0
   "localization": {
     "grocery": "Supermercato Tigre",
     "lat": 41.959978,
@@ -252,8 +250,7 @@ Inside `scraping_services/` you have a variety of brand-specific scrapers (e.g. 
 
 ## Troubleshooting
 
-- **Validation errors** (`discount: Number must be less or equal to 1`):  
-  Make sure to clamp or convert `discount` if it’s meant to be a fraction (0..1).  
+  
 - **Connection errors**:  
   If the product-receiver is not running at `localhost:3002`, set the `PRODUCT_RECEIVER_BASE_URL` environment variable to the correct host.  
 - **Docker issues**:  

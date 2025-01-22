@@ -18,7 +18,7 @@ const productSchema = z.object({
   name: z.string().optional(),
   description: z.string().nullable().optional(),
   price: z.number().min(0),
-  discount: z.number().min(0).max(1).optional(),
+  discount: z.number().min(0).optional(),
   quantity: z.string().nullable().optional(),
   img_url: z.string().url().optional(),
   price_for_kg: z.number().min(0).optional(),
