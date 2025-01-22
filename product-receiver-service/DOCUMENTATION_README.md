@@ -1,4 +1,4 @@
-Below is the **updated** and **expanded** documentation (@ 21 Jen 2021) for the **Product Receiver Service**.
+Below is the **updated** and **expanded** documentation (@ 22 Jan 2025) for the **Product Receiver Service**.
 
 - Use of **Zod** for validation.  
 - Automatic renaming of `long` to `lng`. (*)
