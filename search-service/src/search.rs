@@ -1,3 +1,4 @@
+//search-service/src/search.rs
 use crate::models::{Localization, ProductResult};
 use crate::AppState;
 use elasticsearch::SearchParts;

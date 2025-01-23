@@ -1,5 +1,5 @@
 /**
- * src/routes.ts
+ * PRODUCT-RECIEVER-SERVICE/src/routes.ts
  */
 import express, { Request, Response, NextFunction } from 'express';
 import net from 'node:net';
@@ -210,6 +210,7 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
         // 4) Invia a Logstash (facoltativo)
         try {
           await sendToLogstash({
+            id: product.id,  // Campo id del prodotto
             ...data,
             name_id,
             action,

@@ -1,3 +1,4 @@
+//search-service/src/handlers.rs
 use crate::models::{
     LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
     ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
