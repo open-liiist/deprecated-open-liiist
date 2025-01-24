@@ -256,6 +256,13 @@ async function createOrUpdateProductHandler(req: Request, res: Response) {
     }
     const { product, action } = result;
     console.info(`Prodotto ${action}: ${product.full_name}`);
+    await sendToLogstash({
+      id: product.id,  
+      ...data,
+      name_id: product.name_id,
+      name: product.name,  // Assicurati che 'name' sia incluso
+      action,
+    });
 
     return res.status(201).json({ message: 'Product saved', product, action });
   } catch (error: any) {
