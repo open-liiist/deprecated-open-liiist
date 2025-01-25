@@ -7,7 +7,6 @@ A smart grocery list app that helps users find the best prices at nearby markets
 
 # 🥦🥑🍌🍕🥛🍳🥫🍅🍝🍋🌽🍊🍎🍐🥝🍒🍪🍆🥕🧄🥐🥖🍐🍉🥚🫑🥬🥗
 
-
 ```mermaid
 flowchart LR
     subgraph Frontend
