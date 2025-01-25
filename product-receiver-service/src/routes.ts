@@ -207,18 +207,6 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
 
         const action = existingProduct ? 'updated' : 'created';
 
-        // 4) Invia a Logstash (facoltativo)
-        try {
-          await sendToLogstash({
-            id: product.id,  // Campo id del prodotto
-            ...data,
-            name_id,
-            action,
-          });
-        } catch (logErr) {
-          console.error('Errore Logstash:', logErr);
-        }
-
         return { product, action };
       });
       return result;
