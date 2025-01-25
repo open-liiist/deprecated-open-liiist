@@ -1,4 +1,5 @@
 # Global Data Flow Visualization
+This document contains **Mermaid** diagrams illustrating the data flows within the system, focusing on **Products**, **Stores**, **Search-Service**, **Elasticsearch**, and their interactions with the database and API endpoints.
 
 
 ```mermaid
@@ -69,13 +70,7 @@ flowchart LR
 
 
 ```
-Understood. Below is a consolidated **Mermaid**-based data flow visualization document that includes all the diagrams you've provided. The diagrams are optimized for GitHub rendering, arranged horizontally for better readability, and structured within a single markdown file.
 
----
-
-# Data Flow Visualization
-
-This document contains **Mermaid** diagrams illustrating the data flows within the system, focusing on **Products**, **Stores**, **Search-Service**, **Elasticsearch**, and their interactions with the database and API endpoints.
 
 ---
 
