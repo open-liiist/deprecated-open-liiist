@@ -7,6 +7,75 @@ A smart grocery list app that helps users find the best prices at nearby markets
 
 # 🥦🥑🍌🍕🥛🍳🥫🍅🍝🍋🌽🍊🍎🍐🥝🍒🍪🍆🥕🧄🥐🥖🍐🍉🥚🫑🥬🥗
 
+
+```mermaid
+flowchart LR
+    subgraph Frontend
+        WebClient[Web Client]
+    end
+
+    subgraph Backend
+        AuthService[Auth Service]
+        SearchService[Search Service]
+        ProductReceiver[Product Receiver Service]
+        ScrapingService[Scraping Service]
+        NotificationAlert[Notification Alert]
+    end
+
+    subgraph Database
+        DB[(PostgreSQL)]
+    end
+
+    subgraph Monitoring
+        UptimeKuma[Uptime Kuma]
+    end
+
+    subgraph Logging
+        Logstash[Logstash]
+        Elasticsearch[Elasticsearch]
+        Kibana[Kibana]
+    end
+
+    subgraph Proxy
+        Traefik[Traefik]
+    end
+
+    subgraph Management
+        Adminer[Adminer]
+    end
+
+    %% Frontend Interactions
+    WebClient -->|API Requests| AuthService
+    WebClient -->|API Requests| SearchService
+    WebClient -->|API Requests| ProductReceiver
+
+    %% Backend Interactions
+    AuthService --> DB
+    SearchService --> Elasticsearch
+    SearchService -->|Fetch Data| DB
+    ProductReceiver -->|Fetch Data| DB
+    ProductReceiver --> Logstash
+    ScrapingService --> ProductReceiver
+    ScrapingService --> Logstash
+    Logstash --> Elasticsearch
+    Elasticsearch --> Kibana
+    Logstash -->|Send Logs| Kibana
+    Traefik --> WebClient
+    Traefik --> AuthService
+    Traefik --> SearchService
+    Traefik --> ProductReceiver
+    Traefik --> NotificationAlert
+
+    %% Monitoring Interactions
+    UptimeKuma -->|Monitor| Traefik
+    UptimeKuma -->|Monitor| AuthService
+    UptimeKuma -->|Monitor| SearchService
+    UptimeKuma -->|Monitor| ProductReceiver
+
+    %% Management Interactions
+    Adminer --> DB
+
+```
 ## Table of Contents
 
 1. [Features](#features)
