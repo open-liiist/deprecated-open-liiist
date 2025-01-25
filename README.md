@@ -10,34 +10,53 @@ A smart grocery list app that helps users find the best prices at nearby markets
 flowchart LR
     %% Define subgraphs for logical grouping
     subgraph Frontend
+        style Frontend fill:#DCE2AA,stroke:#4B543B,stroke-width:2px,color:#000
         WebClient[Web Client]
+        style WebClient fill:#8ED081,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     subgraph Proxy
+        style Proxy fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
         Traefik[Traefik]
+        style Traefik fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     subgraph Backend
+        style Backend fill:#DCE2AA,stroke:#4B543B,stroke-width:2px,color:#000
         AuthService[Auth Service]
+        style AuthService fill:#8ED081,stroke:#4B543B,stroke-width:2px,color:#000
         SearchService[Search Service]
+        style SearchService fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
         ProductReceiver[Product Receiver Service]
+        style ProductReceiver fill:#DCE2AA,stroke:#4B543B,stroke-width:2px,color:#000
         NotificationAlert[Notification Alert]
+        style NotificationAlert fill:#B57F50,stroke:#4B543B,stroke-width:2px,color:#000
         ScrapingService[Scraping Service]
+        style ScrapingService fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     subgraph Database
+        style Database fill:#B57F50,stroke:#4B543B,stroke-width:2px,color:#000
         DB[(PostgreSQL)]
+        style DB fill:#B57F50,stroke:#4B543B,stroke-width:2px,color:#000
         Adminer[Adminer]
+        style Adminer fill:#8ED081,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     subgraph Search
+        style Search fill:#DCE2AA,stroke:#4B543B,stroke-width:2px,color:#000
         Elasticsearch[Elasticsearch]
+        style Elasticsearch fill:#8ED081,stroke:#4B543B,stroke-width:2px,color:#000
         Logstash[Logstash]
+        style Logstash fill:#B57F50,stroke:#4B543B,stroke-width:2px,color:#000
         Kibana[Kibana]
+        style Kibana fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     subgraph Monitoring
+        style Monitoring fill:#B4D2BA,stroke:#4B543B,stroke-width:2px,color:#000
         UptimeKuma[Uptime Kuma]
+        style UptimeKuma fill:#DCE2AA,stroke:#4B543B,stroke-width:2px,color:#000
     end
 
     %% Frontend to Proxy
@@ -72,6 +91,8 @@ flowchart LR
     %% Logging
     Logstash --> Kibana
 
+    %% Set line colors to black
+    linkStyle default stroke:#000,stroke-width:1px
 
 ```
 
