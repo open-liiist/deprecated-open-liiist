@@ -42,12 +42,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+      # db:
+      #   condition: service_healthy
+    #env_file:
+    #  - ./search-service/.env  # Add this line to load the env file
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Added to point to the remote DB
+
 
   product-receiver-service:
     container_name: product-receiver-service
@@ -64,7 +68,7 @@ services:
       - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Usa solo REMOTE_DATABASE_URL
       #- DATABASE_URL=${DATABASE_URL}
       - LOGSTASH_HOST=logstash
-      - LOGSTASH_PORT=5000
+      - LOGSTASH_PORT=50000
     volumes:
       - ./product-receiver-service:/app
       - product_receiver_data:/app/data  # Volume persistente aggiunto
@@ -157,8 +161,8 @@ services:
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:rw,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:rw,Z
       - logstash_data:/usr/share/logstash/data  # Volume persistente aggiunto
 
     ports:

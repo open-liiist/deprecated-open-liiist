@@ -1,3 +1,4 @@
+//search-service/src/search.rs
 use crate::models::{Localization, ProductResult};
 use crate::AppState;
 use elasticsearch::SearchParts;
@@ -18,7 +19,7 @@ pub async fn fetch_most_similar(
                 "multi_match": {
                     "fields": ["full_name", "name", "description"],
                     "query": query,
-                    "type": "phrase_prefix"
+                    "type": "phrase" // "phrase_prefix" changed in "phrase"
                 }
             },
             "size": 10
@@ -41,7 +42,7 @@ pub async fn fetch_lowest_price(
                 "multi_match": {
                     "fields": ["full_name", "name", "description"],
                     "query": query,
-                    "type": "phrase_prefix"
+                    "type": "phrase" // "phrase_prefix" changed in "phrase"
                 }
             },
             "size": 10,
@@ -153,7 +154,7 @@ pub async fn fetch_lowest_price_shops(
                         "filter": {
                             "geo_distance": {
                                 "distance": "100km",
-                                "localization": {
+                                "location": {
                                     "lat": latitude,
                                     "lon": longitude
                                 }
@@ -188,7 +189,12 @@ async fn parse_response(
             ProductResult {
                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
-                name: source["name"].as_str().unwrap_or("").to_string(),
+                // Fallback a `name_id` se `name` non è presente
+                name: source
+                .get("name")
+                .and_then(|v| v.as_str())
+                .unwrap_or_else(|| source.get("name_id").and_then(|v| v.as_str()).unwrap_or(""))
+                .to_string(),
                 description: source["description"].as_str().unwrap_or("").to_string(),
                 price: source["price"].as_f64().unwrap_or(0.0),
                 discount: source["discount"].as_f64(),

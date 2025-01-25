@@ -1,5 +1,5 @@
 /**
- * src/routes.ts
+ * PRODUCT-RECIEVER-SERVICE/src/routes.ts
  */
 import express, { Request, Response, NextFunction } from 'express';
 import net from 'node:net';
@@ -207,17 +207,6 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
 
         const action = existingProduct ? 'updated' : 'created';
 
-        // 4) Invia a Logstash (facoltativo)
-        try {
-          await sendToLogstash({
-            ...data,
-            name_id,
-            action,
-          });
-        } catch (logErr) {
-          console.error('Errore Logstash:', logErr);
-        }
-
         return { product, action };
       });
       return result;
@@ -255,6 +244,13 @@ async function createOrUpdateProductHandler(req: Request, res: Response) {
     }
     const { product, action } = result;
     console.info(`Prodotto ${action}: ${product.full_name}`);
+    await sendToLogstash({
+      id: product.id,  
+      ...data,
+      name_id: product.name_id,
+      name: product.name,  // Assicurati che 'name' sia incluso
+      action,
+    });
 
     return res.status(201).json({ message: 'Product saved', product, action });
   } catch (error: any) {
