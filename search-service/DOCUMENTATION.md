@@ -1,46 +1,50 @@
 ---
 
-# Documentazione Tecnica: `search-service`
+# Technical Documentation: `search-service`
 
 ---
 
-## **Indice della Documentazione**
+## **Table of Contents**
 
-1. [Configurazione di Elasticsearch](#1-configurazione-di-elasticsearch)
-   - [Creazione dell'Indice con Mapping e Settings](#creazione-dellindice-con-mapping-e-settings)
-   - [Inserimento dei Prodotti](#inserimento-dei-prodotti)
-2. [Struttura del Servizio di Ricerca (`search-service`)](#2-struttura-del-servizio-di-ricerca-search-service)
-   - [Modelli (`models.rs`)](#modelli-modelsrs)
-   - [Handler (`handlers.rs`)](#handler-handlersrs)
-   - [Funzioni di Ricerca (`search.rs`)](#funzioni-di-ricerca-searchrs)
-   - [Utility (`utils.rs`)](#utility-utilsrs)
-   - [Main (`main.rs`)](#main-mainrs)
-3. [Dipendenze di Cargo](#3-dipendenze-di-cargo)
-4. [Configurazione di Docker Compose](#4-configurazione-di-docker-compose)
-   - [Servizio `search-service`](#servizio-search-service)
-   - [Altri Servizi](#altri-servizi)
-   - [Dockerfile del `search-service`](#dockerfile-del-search-service)
-5. [Test delle API](#5-test-delle-api)
-   - [Verifica Indicizzazione](#verifica-indicizzazione)
-   - [Test Endpoint `/search`](#test-endpoint-search)
-   - [Test Endpoint `/product/exists`](#test-endpoint-productexists)
-   - [Test Endpoint `/product/in-shop`](#test-endpoint-productin-shop)
-   - [Test Endpoint `/product/lowest-price`](#test-endpoint-productlowest-price)
-6. [Debug della Modalità "Risparmio"](#6-debug-della-modalità-risparmio)
-   - [Analisi del Problema](#analisi-del-problema)
-   - [Passaggi di Debug](#passaggi-di-debug)
-   - [Soluzioni Potenziali](#soluzioni-potenziali)
-7. [Considerazioni Finali](#7-considerazioni-finali)
+1. [Elasticsearch Configuration](#1-elasticsearch-configuration)
+   - [Creating the Index with Mapping and Settings](#creating-the-index-with-mapping-and-settings)
+   - [Inserting Products](#inserting-products)
+2. [Structure of the Search Service (`search-service`)](#2-structure-of-the-search-service-search-service)
+   - [Models (`models.rs`)](#21-models-modelsrs)
+   - [Handlers (`handlers.rs`)](#22-handlers-handlersrs)
+   - [Search Functions (`search.rs`)](#23-search-functions-searchrs)
+   - [Utility (`utils.rs`)](#24-utility-utilsrs)
+   - [Main (`main.rs`)](#25-main-mainrs)
+3. [Cargo Dependencies](#3-cargo-dependencies)
+4. [Docker Compose Configuration](#4-docker-compose-configuration)
+   - [`search-service` Service](#41-search-service-service)
+   - [Other Services](#42-other-services)
+   - [`search-service` Dockerfile](#43-search-service-dockerfile)
+5. [API Testing](#5-api-testing)
+   - [Indexing Verification](#51-indexing-verification)
+   - [Testing `/search` Endpoint](#52-testing-search-endpoint)
+   - [Testing `/product/exists` Endpoint](#53-testing-productexists-endpoint)
+   - [Testing `/product/in-shop` Endpoint](#54-testing-productin-shop-endpoint)
+   - [Testing `/product/lowest-price` Endpoint](#55-testing-productlowest-price-endpoint)
+6. [Debugging the "Savings" Mode](#6-debugging-the-savings-mode)
+   - [Problem Analysis](#61-problem-analysis)
+   - [Debugging Steps](#62-debugging-steps)
+   - [Potential Solutions](#63-potential-solutions)
+7. [Final Considerations](#7-final-considerations)
+   - [Key Points](#71-key-points)
+   - [Action List (TODO LIST)](#72-action-list-todo-list)
+   - [Example of Additional Logs in the Code](#73-example-of-additional-logs-in-the-code)
+   - [Example of Manual Query for Debugging](#74-example-of-manual-query-for-debugging)
 
 ---
 
-## **1. Configurazione di Elasticsearch**
+## **1. Elasticsearch Configuration**
 
-### **1.1 Creazione dell'Indice con Mapping e Settings**
+### **1.1 Creating the Index with Mapping and Settings**
 
-È stata creata un'indice Elasticsearch denominata `products` con configurazioni specifiche per gestire correttamente i campi di testo e le query di ricerca. È stato definito un `normalizer` per garantire ricerche case-insensitive sui campi di tipo `keyword`.
+An Elasticsearch index named `products` has been created with specific configurations to correctly handle text fields and search queries. A `normalizer` has been defined to ensure case-insensitive searches on `keyword` type fields.
 
-**Comando per la Creazione dell'Indice:**
+**Command to Create the Index:**
 
 ```bash
 curl -X PUT "http://localhost:9200/products" -H 'Content-Type: application/json' -d'
@@ -126,14 +130,14 @@ curl -X PUT "http://localhost:9200/products" -H 'Content-Type: application/json'
           }
         }
       }
-      // Aggiungere ulteriori campi se necessario
+      // Add additional fields if necessary
     }
   }
 }
 '
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 {
@@ -143,19 +147,19 @@ curl -X PUT "http://localhost:9200/products" -H 'Content-Type: application/json'
 }
 ```
 
-**Descrizione:**
+**Description:**
 
-- **`normalizer`**: Applicabile ai campi di tipo `keyword`, garantisce ricerche case-insensitive.
-- **`analyzer`**: Configurato per i campi di tipo `text`. L'analizzatore `whitespace_analyzer` suddivide il testo in token basandosi sugli spazi e applica il filtro `lowercase`.
-- **Campi Geolocalizzazione**: Il campo `location` è di tipo `geo_point` per permettere query geografiche.
+- **`normalizer`**: Applicable to `keyword` type fields, ensuring case-insensitive searches.
+- **`analyzer`**: Configured for `text` type fields. The `whitespace_analyzer` splits text into tokens based on whitespace and applies the `lowercase` filter.
+- **Geolocation Fields**: The `location` field is of type `geo_point` to allow geographic queries.
 
-### **1.2 Inserimento dei Prodotti**
+### **1.2 Inserting Products**
 
-I prodotti sono stati inseriti nell'indice `products` seguendo la struttura definita nel mapping.
+Products have been inserted into the `products` index following the structure defined in the mapping.
 
-**Esempi di Inserimento di Prodotti:**
+**Examples of Inserting Products:**
 
-#### **Prodotto 1: Pasta Barilla Spaghetti 500g**
+#### **Product 1: Pasta Barilla Spaghetti 500g**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_doc/1" -H 'Content-Type: application/json' -d'
@@ -186,7 +190,7 @@ curl -X POST "http://localhost:9200/products/_doc/1" -H 'Content-Type: applicati
 '
 ```
 
-#### **Prodotto 2: Mozzarella Fresca 125g**
+#### **Product 2: Fresh Mozzarella 125g**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_doc/2" -H 'Content-Type: application/json' -d'
@@ -217,7 +221,7 @@ curl -X POST "http://localhost:9200/products/_doc/2" -H 'Content-Type: applicati
 '
 ```
 
-#### **Prodotto 3: Latte Intero 1L**
+#### **Product 3: Whole Milk 1L**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_doc/3" -H 'Content-Type: application/json' -d'
@@ -248,7 +252,7 @@ curl -X POST "http://localhost:9200/products/_doc/3" -H 'Content-Type: applicati
 '
 ```
 
-#### **Prodotto 4: Pane Integrale 500g**
+#### **Product 4: Whole Wheat Bread 500g**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_doc/4" -H 'Content-Type: application/json' -d'
@@ -279,33 +283,33 @@ curl -X POST "http://localhost:9200/products/_doc/4" -H 'Content-Type: applicati
 '
 ```
 
-**Risposta Attesa per Ogni Inserimento:**
+**Expected Response for Each Insertion:**
 
 ```json
 {
   "_index": "products",
-  "_id": "1", // O "2", "3", "4" a seconda del prodotto
+  "_id": "1", // Or "2", "3", "4" depending on the product
   "_version": 1,
-  "result": "created", // O "updated" se si tratta di un aggiornamento
+  "result": "created", // Or "updated" if it's an update
   "_shards": {
     "total": 2,
     "successful": 1,
     "failed": 0
   },
-  "_seq_no": 0, // Incrementa con ogni inserimento
+  "_seq_no": 0, // Increments with each insertion
   "_primary_term": 1
 }
 ```
 
 ---
 
-## **2. Struttura del Servizio di Ricerca (`search-service`)**
+## **2. Structure of the Search Service (`search-service`)**
 
-Il servizio di ricerca è sviluppato in **Rust** utilizzando il framework **Axum** per la gestione delle API e **Elasticsearch** come motore di ricerca. La struttura del progetto è suddivisa nei seguenti componenti principali:
+The search service is developed in **Rust** using the **Axum** framework for API handling and **Elasticsearch** as the search engine. The project structure is divided into the following main components:
 
-### **2.1 Modelli (`models.rs`)**
+### **2.1 Models (`models.rs`)**
 
-Definiscono le strutture dati utilizzate all'interno del servizio, rappresentando i dati provenienti dal database e quelli elaborati dalle API.
+Defines the data structures used within the service, representing data from the database and those processed by the APIs.
 
 ```rust
 use serde::{Deserialize, Serialize};
@@ -335,13 +339,13 @@ pub struct ProductDB {
     image_url: Option<String>,
 }
 
-/// Parametri della query di ricerca
+/// Search query parameters
 #[derive(Deserialize)]
 pub struct SearchQuery {
     pub query: String,
 }
 
-/// Struttura per ogni risultato di prodotto
+/// Structure for each product result
 #[derive(Debug, Serialize, Clone)]
 pub struct ProductResult {
     pub _id: String,
@@ -354,7 +358,7 @@ pub struct ProductResult {
     pub distance: Option<f64>,
 }
 
-/// Informazioni di localizzazione per ogni prodotto
+/// Localization information for each product
 #[derive(Debug, Serialize, Clone)]
 pub struct Localization {
     pub grocery: String,
@@ -362,7 +366,7 @@ pub struct Localization {
     pub lon: f64,
 }
 
-/// Struttura per organizzare la risposta finale
+/// Structure to organize the final response
 #[derive(Serialize)]
 pub struct SearchResponse {
     pub most_similar: Vec<ProductResult>,
@@ -407,30 +411,30 @@ pub struct ProductInShopResponse {
 pub struct ProductsLowestPriceRequest {
     pub products: Vec<String>,
     pub position: Position,
-    pub mode: Option<String>,  // "risparmio" | "comodita" (o altro)
+    pub mode: Option<String>,  // "savings" | "convenience" (or others)
 }
 
 #[derive(Debug, Serialize, Clone)]
 pub struct LowestPriceResponse {
-    pub shop: String,               // Nome del negozio
-    pub total_price: f64,           // Prezzo totale per i prodotti da questo negozio
-    pub products: Vec<ShopProduct>, // Lista dei prodotti acquistati da questo negozio
+    pub shop: String,               // Store name
+    pub total_price: f64,           // Total price for products from this store
+    pub products: Vec<ShopProduct>, // List of products purchased from this store
 }
 
 #[derive(Debug, Serialize, Clone)]
 pub struct ShopProduct {
-    pub shop: String,          // Nome del negozio
-    pub name: String,          // Nome del prodotto
-    pub description: String,   // Descrizione del prodotto
-    pub price: f64,            // Prezzo del prodotto
-    pub discount: Option<f64>, // Sconto sul prodotto, se applicabile
-    pub distance: f64,         // Distanza dall'utente al negozio
+    pub shop: String,          // Store name
+    pub name: String,          // Product name
+    pub description: String,   // Product description
+    pub price: f64,            // Product price
+    pub discount: Option<f64>, // Product discount, if applicable
+    pub distance: f64,         // Distance from user to store
 }
 ```
 
-### **2.2 Handler (`handlers.rs`)**
+### **2.2 Handlers (`handlers.rs`)**
 
-Gestiscono le richieste HTTP, orchestrano le interazioni con le funzioni di ricerca e restituiscono le risposte appropriate.
+Handles HTTP requests, orchestrates interactions with search functions, and returns appropriate responses.
 
 ```rust
 use crate::models::{
@@ -463,10 +467,10 @@ pub async fn search_handler(
     let mut most_similar = match most_similar_result {
         Ok(products) => products,
         Err(e) => {
-            tracing::error!("Errore nel recupero dei prodotti più simili: {:?}", e);
+            tracing::error!("Error fetching most similar products: {:?}", e);
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": "Errore interno del server" })),
+                Json(serde_json::json!({ "error": "Internal server error" })),
             ))
         }
     };
@@ -519,15 +523,15 @@ pub async fn check_product_exist(
     {
         Ok(products) => products,
         Err(e) => {
-            tracing::error!("Errore nel recupero del prodotto: {:?}", e);
+            tracing::error!("Error fetching product: {:?}", e);
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": "Errore interno del server" })),
+                Json(serde_json::json!({ "error": "Internal server error" })),
             ))
         }
     };
 
-    tracing::info!("Prodotti trovati: {:#?}", products);
+    tracing::info!("Found products: {:#?}", products);
     if let Some(product) = products.first() {
         let distance = haversine_distance(
             payload.position.latitude,
@@ -567,15 +571,15 @@ pub async fn search_product_in_shop(
     {
         Ok(products) => products,
         Err(e) => {
-            tracing::error!("Errore nel recupero del prodotto: {:?}", e);
+            tracing::error!("Error fetching product: {:?}", e);
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": "Errore interno del server" })),
+                Json(serde_json::json!({ "error": "Internal server error" })),
             ))
         }
     };
 
-    tracing::info!("Prodotti trovati: {:#?}", products);
+    tracing::info!("Found products: {:#?}", products);
     if let Some(product) = products.first() {
         let distance = haversine_distance(
             payload.position.latitude,
@@ -606,7 +610,7 @@ pub async fn find_lowest_price(
     State(app_state): State<Arc<AppState>>,
     Json(payload): Json<ProductsLowestPriceRequest>,
 ) -> Result<Json<Vec<LowestPriceResponse>>, (StatusCode, Json<serde_json::Value>)> {
-    // Step 1: Recupera i prezzi dei prodotti dai negozi vicini tramite Elasticsearch
+    // Step 1: Retrieve product prices from nearby stores via Elasticsearch
     let product_prices = match fetch_lowest_price_shops(
         &app_state,
         &payload.products,
@@ -616,25 +620,25 @@ pub async fn find_lowest_price(
     .await
     {
         Ok(prices) => {
-            tracing::info!("Recuperati i prezzi dei prodotti da Elasticsearch con successo.");
+            tracing::info!("Successfully retrieved product prices from Elasticsearch.");
             prices
         },
         Err(e) => {
-            tracing::error!("Errore nel recupero dei prodotti da Elasticsearch: {:?}", e);
+            tracing::error!("Error retrieving products from Elasticsearch: {:?}", e);
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(json!({ "error": "Errore interno del server" })),
+                Json(json!({ "error": "Internal server error" })),
             ));
         }
     };
 
-    tracing::debug!("Prezzi dei prodotti recuperati: {:?}", product_prices);
+    tracing::debug!("Retrieved product prices: {:?}", product_prices);
 
-    // Step 2: Costruzione della mappa "nome_negozio -> elenco di ShopProduct"
+    // Step 2: Build the "store_name -> list of ShopProduct" map
     let mut shop_combinations: HashMap<String, Vec<ShopProduct>> = HashMap::new();
 
     for (product_name, product_list) in &product_prices {
-        tracing::debug!("Elaborazione del prodotto: {}", product_name);
+        tracing::debug!("Processing product: {}", product_name);
         for product_result in product_list {
             let distance = haversine_distance(
                 payload.position.latitude,
@@ -654,48 +658,48 @@ pub async fn find_lowest_price(
                     distance,
                 });
             tracing::debug!(
-                "Aggiunto ShopProduct a '{}': {:?}",
+                "Added ShopProduct to '{}': {:?}",
                 product_result.localization.grocery,
                 shop_combinations[&product_result.localization.grocery].last()
             );
         }
     }
 
-    tracing::info!("Combinazioni dei negozi costruite: {:?}", shop_combinations);
+    tracing::info!("Built store combinations: {:?}", shop_combinations);
 
-    // Step 3: Determinazione della modalità ("risparmio" o "comodita")
-    let mode = payload.mode.as_deref().unwrap_or("comodita"); 
-    tracing::info!("Modalità selezionata: {}", mode);
+    // Step 3: Determine the mode ("savings" or "convenience")
+    let mode = payload.mode.as_deref().unwrap_or("convenience"); 
+    tracing::info!("Selected mode: {}", mode);
 
     let required_products = &payload.products;
     let required_count = required_products.len();
-    tracing::debug!("Prodotti richiesti: {:?} (numero: {})", required_products, required_count);
+    tracing::debug!("Required products: {:?} (count: {})", required_products, required_count);
 
-    // Vettore finale di LowestPriceResponse da restituire
+    // Final vector of LowestPriceResponse to return
     let mut results: Vec<LowestPriceResponse> = Vec::new();
 
     match mode {
-        "risparmio" => {
-            tracing::info!("Elaborazione in modalità 'risparmio'.");
-            // Modalità "Risparmio"
+        "savings" => {
+            tracing::info!("Processing in 'savings' mode.");
+            // "Savings" Mode
 
-            // (A) Verifica esistenza di un singolo negozio che possiede tutti i prodotti
+            // (A) Check if a single store has all required products
             let mut best_single: Option<LowestPriceResponse> = None;
 
             for (shop_name, products_in_shop) in &shop_combinations {
-                tracing::debug!("Verifica negozio singolo: {}", shop_name);
+                tracing::debug!("Checking single store: {}", shop_name);
                 let found_names: HashSet<String> = products_in_shop
                     .iter()
                     .map(|sp| sp.name.clone())
                     .collect();
-                tracing::debug!("Prodotti trovati in '{}': {:?}", shop_name, found_names);
+                tracing::debug!("Products found in '{}': {:?}", shop_name, found_names);
 
                 let match_count = required_products.iter()
                     .filter(|needed| found_names.contains(*needed))
                     .count();
 
                 tracing::debug!(
-                    "Negozi '{}': match_count = {} (richiesto: {})",
+                    "Store '{}': match_count = {} (required: {})",
                     shop_name,
                     match_count,
                     required_count
@@ -704,14 +708,14 @@ pub async fn find_lowest_price(
                 if match_count == required_count {
                     let total_price: f64 = products_in_shop.iter().map(|p| p.price).sum();
                     tracing::info!(
-                        "Negozi '{}' possiede tutti i prodotti richiesti con prezzo totale: {}",
+                        "Store '{}' has all required products with total price: {}",
                         shop_name,
                         total_price
                     );
                     if let Some(ref mut current_best) = best_single {
                         if total_price < current_best.total_price {
                             tracing::debug!(
-                                "Trovato un negozio singolo migliore: '{}' (precedente: {})",
+                                "Found a better single store option: '{}' (previous: {})",
                                 shop_name,
                                 current_best.shop
                             );
@@ -725,48 +729,48 @@ pub async fn find_lowest_price(
                             total_price,
                             products: products_in_shop.clone(),
                         });
-                        tracing::debug!("Impostato best_single iniziale a '{}'", shop_name);
+                        tracing::debug!("Set initial best_single to '{}'", shop_name);
                     }
                 }
             }
 
-            // (B) Ricerca di combinazioni di due negozi che coprono tutti i prodotti al prezzo minore
+            // (B) Search for combinations of two stores that cover all required products at the lowest price
             let shop_names: Vec<String> = shop_combinations.keys().cloned().collect();
-            tracing::debug!("Negozi disponibili per la combinazione: {:?}", shop_names);
+            tracing::debug!("Available stores for combination: {:?}", shop_names);
             let mut best_pair: Option<LowestPriceResponse> = None;
 
             for i in 0..shop_names.len() {
                 for j in (i+1)..shop_names.len() {
                     let shop1 = &shop_names[i];
                     let shop2 = &shop_names[j];
-                    tracing::debug!("Verifica combinazione negozi: '{}' + '{}'", shop1, shop2);
+                    tracing::debug!("Checking store combination: '{}' + '{}'", shop1, shop2);
 
                     let products_in_shop1 = &shop_combinations[shop1];
                     let products_in_shop2 = &shop_combinations[shop2];
 
-                    // Unione dei prodotti dei due negozi
+                    // Union of products from both stores
                     let mut combined_products = products_in_shop1.clone();
                     combined_products.extend(products_in_shop2.clone());
 
-                    // Costruzione del set di nomi prodotti combinati
+                    // Building the set of combined product names
                     let found_names: HashSet<String> = combined_products
                         .iter()
                         .map(|sp| sp.name.clone())
                         .collect();
                     tracing::debug!(
-                        "Prodotti combinati per '{}' + '{}': {:?}",
+                        "Combined products for '{}' + '{}': {:?}",
                         shop1,
                         shop2,
                         found_names
                     );
 
-                    // Verifica copertura dei prodotti richiesti
+                    // Check if all required products are covered
                     let match_count = required_products.iter()
                         .filter(|needed| found_names.contains(*needed))
                         .count();
                     
                     tracing::debug!(
-                        "Combinazione '{} + {}': match_count = {} (richiesto: {})",
+                        "Combination '{} + {}': match_count = {} (required: {})",
                         shop1,
                         shop2,
                         match_count,
@@ -776,7 +780,7 @@ pub async fn find_lowest_price(
                     if match_count == required_count {
                         let total_price: f64 = combined_products.iter().map(|p| p.price).sum();
                         tracing::info!(
-                            "Combinazione '{} + {}' copre tutti i prodotti con prezzo totale: {}",
+                            "Combination '{} + {}' covers all products with total price: {}",
                             shop1,
                             shop2,
                             total_price
@@ -784,7 +788,7 @@ pub async fn find_lowest_price(
                         if let Some(ref mut current_best) = best_pair {
                             if total_price < current_best.total_price {
                                 tracing::debug!(
-                                    "Trovata combinazione di negozi migliore: '{}' + '{}' (precedente: {})",
+                                    "Found a better pair of stores: '{}' + '{}' (previous: {})",
                                     shop1,
                                     shop2,
                                     current_best.shop
@@ -799,68 +803,64 @@ pub async fn find_lowest_price(
                                 total_price,
                                 products: combined_products,
                             });
-                            tracing::debug!(
-                                "Impostata best_pair iniziale a '{} + {}'",
-                                shop1,
-                                shop2
-                            );
+                            tracing::debug!("Set initial best_pair to '{} + {}'", shop1, shop2);
                         }
                     }
                 }
             }
 
-            // (C) Confronto tra singolo negozio e combinazione di due negozi
+            // (C) Compare single store vs pair of stores
             match (best_single, best_pair) {
                 (Some(s), Some(p)) => {
                     tracing::info!(
-                        "Confronto tra best_single (negozio: '{}', prezzo totale: {}) e best_pair (negozi: '{}', prezzo totale: {})",
+                        "Comparing best_single (store: '{}', total price: {}) and best_pair (stores: '{}', total price: {})",
                         s.shop,
                         s.total_price,
                         p.shop,
                         p.total_price
                     );
                     if s.total_price <= p.total_price {
-                        tracing::info!("Selezionato best_single: '{}'", s.shop);
+                        tracing::info!("Selected best_single: '{}'", s.shop);
                         results.push(s);
                     } else {
-                        tracing::info!("Selezionata best_pair: '{}'", p.shop);
+                        tracing::info!("Selected best_pair: '{}'", p.shop);
                         results.push(p);
                     }
                 }
                 (Some(s), None) => {
-                    tracing::info!("Disponibile solo best_single: '{}'", s.shop);
+                    tracing::info!("Only best_single available: '{}'", s.shop);
                     results.push(s);
                 }
                 (None, Some(p)) => {
-                    tracing::info!("Disponibile solo best_pair: '{}'", p.shop);
+                    tracing::info!("Only best_pair available: '{}'", p.shop);
                     results.push(p);
                 }
                 (None, None) => {
-                    tracing::warn!("Nessun negozio singolo o combinazione di negozi copre tutti i prodotti richiesti.");
+                    tracing::warn!("No single store or store combination covers all required products.");
                 }
             }
         }
 
-        "comodita" => {
-            tracing::info!("Elaborazione in modalità 'comodita'.");
-            // Modalità "Comodità"
+        "convenience" => {
+            tracing::info!("Processing in 'convenience' mode.");
+            // "Convenience" Mode
 
             let mut best_option: Option<LowestPriceResponse> = None;
 
             for (shop_name, products_in_shop) in &shop_combinations {
-                tracing::debug!("Verifica negozio per 'comodita': {}", shop_name);
+                tracing::debug!("Checking store for 'convenience': {}", shop_name);
                 let found_names: HashSet<String> = products_in_shop
                     .iter()
                     .map(|sp| sp.name.clone())
                     .collect();
-                tracing::debug!("Prodotti trovati in '{}': {:?}", shop_name, found_names);
+                tracing::debug!("Products found in '{}': {:?}", shop_name, found_names);
 
                 let match_count = required_products.iter()
                     .filter(|needed| found_names.contains(*needed))
                     .count();
 
                 tracing::debug!(
-                    "Negozi '{}': match_count = {} (richiesto: {})",
+                    "Store '{}': match_count = {} (required: {})",
                     shop_name,
                     match_count,
                     required_count
@@ -869,7 +869,7 @@ pub async fn find_lowest_price(
                 if match_count == required_count {
                     let total_price: f64 = products_in_shop.iter().map(|p| p.price).sum();
                     tracing::info!(
-                        "Negozi '{}' possiede tutti i prodotti richiesti con prezzo totale: {}",
+                        "Store '{}' has all required products with total price: {}",
                         shop_name,
                         total_price
                     );
@@ -877,7 +877,7 @@ pub async fn find_lowest_price(
                     if let Some(ref mut current_best) = best_option {
                         if total_price < current_best.total_price {
                             tracing::debug!(
-                                "Trovata opzione 'comodita' migliore: '{}' (precedente: {})",
+                                "Found a better 'convenience' option: '{}' (previous: {})",
                                 shop_name,
                                 current_best.shop
                             );
@@ -891,29 +891,29 @@ pub async fn find_lowest_price(
                             total_price,
                             products: products_in_shop.clone(),
                         });
-                        tracing::debug!("Impostata best_option iniziale a '{}'", shop_name);
+                        tracing::debug!("Set initial best_option to '{}'", shop_name);
                     }
                 }
             }
 
             if let Some(best) = best_option {
-                tracing::info!("Selezionata migliore opzione 'comodita': '{}'", best.shop);
+                tracing::info!("Selected best 'convenience' option: '{}'", best.shop);
                 results.push(best);
             } else {
-                tracing::warn!("Nessun negozio singolo copre tutti i prodotti richiesti in modalità 'comodita'.");
+                tracing::warn!("No single store covers all required products in 'convenience' mode.");
             }
         }
 
         _ => {
-            tracing::warn!("Modalità '{}' sconosciuta ricevuta. Defaulting a 'comodita'.", mode);
-            // Implementare la logica di default o restituire un errore
+            tracing::warn!("Unknown mode '{}' received. Defaulting to 'convenience'.", mode);
+            // Implement default logic or return an error
         }
     }
 
     if results.is_empty() {
-        tracing::info!("Nessuna combinazione valida di negozi trovata per coprire tutti i prodotti.");
+        tracing::info!("No valid store combination found to cover all products.");
     } else {
-        tracing::info!("Restituzione dei risultati: {:?}", results);
+        tracing::info!("Returning results: {:?}", results);
     }
 
     Ok(Json(results))
@@ -935,7 +935,7 @@ pub async fn get_all_stores(
     .fetch_all(db_pool)
     .await
     .map_err(|e| {
-        eprintln!("Errore nella query del database: {:?}", e);
+        eprintln!("Database query error: {:?}", e);
         axum::http::StatusCode::INTERNAL_SERVER_ERROR
     })?;
 
@@ -961,7 +961,7 @@ pub async fn get_products_by_store(
     .fetch_all(db_pool)
     .await
     .map_err(|e| {
-        eprintln!("Errore nella query del database: {:?}", e);
+        eprintln!("Database query error: {:?}", e);
         axum::http::StatusCode::INTERNAL_SERVER_ERROR
     })?;
 
@@ -969,9 +969,9 @@ pub async fn get_products_by_store(
 }
 ```
 
-### **2.3 Funzioni di Ricerca (`search.rs`)**
+### **2.3 Search Functions (`search.rs`)**
 
-Contengono le funzioni che interagiscono con Elasticsearch per eseguire le query di ricerca, recuperare prodotti simili, prezzi più bassi e verificare la disponibilità dei prodotti nei negozi.
+Contains functions that interact with Elasticsearch to execute search queries, retrieve similar products, lowest prices, and verify product availability in stores.
 
 ```rust
 use crate::models::{Localization, ProductResult};
@@ -982,7 +982,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
-/// Recupera i prodotti più simili alla query fornita
+/// Retrieves the most similar products to the provided query
 pub async fn fetch_most_similar(
     app_state: &Arc<AppState>,
     query: &str,
@@ -1006,7 +1006,7 @@ pub async fn fetch_most_similar(
     parse_response(response).await
 }
 
-/// Recupera i prodotti con il prezzo più basso, escludendo determinati ID
+/// Retrieves products with the lowest price, excluding certain IDs
 pub async fn fetch_lowest_price(
     app_state: &Arc<AppState>,
     query: &str,
@@ -1037,7 +1037,7 @@ pub async fn fetch_lowest_price(
     Ok(unique_products)
 }
 
-/// Recupera un prodotto vicino a una posizione specifica
+/// Retrieves a product near a specific location
 pub async fn fetch_product_nearby(
     app_state: &Arc<AppState>,
     product: &str,
@@ -1076,7 +1076,7 @@ pub async fn fetch_product_nearby(
     parse_response(response).await
 }
 
-/// Recupera un prodotto specifico in uno shop specifico
+/// Retrieves a specific product in a specific shop
 pub async fn fetch_product_in_shop(
     app_state: &Arc<AppState>,
     product: &str,
@@ -1112,7 +1112,7 @@ pub async fn fetch_product_in_shop(
     parse_response(response).await
 }
 
-/// Recupera i prezzi di ogni prodotto presso negozi vicini
+/// Retrieves the prices of each product at nearby stores
 pub async fn fetch_lowest_price_shops(
     app_state: &Arc<AppState>,
     products: &[String],
@@ -1159,12 +1159,12 @@ pub async fn fetch_lowest_price_shops(
     Ok(product_prices)
 }
 
-/// Funzione di supporto per il parsing della risposta di Elasticsearch in un vettore di `ProductResult`
+/// Helper function to parse Elasticsearch response into a vector of `ProductResult`
 pub async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let json_resp = response.json::<serde_json::Value>().await?;
-    tracing::debug!("Risposta Elasticsearch: {:#?}", json_resp);
+    tracing::debug!("Elasticsearch Response: {:#?}", json_resp);
     let empty_vec = vec![];
     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
     let products = hits
@@ -1196,21 +1196,21 @@ pub async fn parse_response(
 
 ### **2.4 Utility (`utils.rs`)**
 
-Contiene funzioni di supporto, tra cui il calcolo della distanza tra due punti geografici utilizzando la formula dell'Haversine.
+Contains support functions, including calculating the distance between two geographic points using the Haversine formula.
 
 ```rust
-/// Calcola la distanza tra due punti geografici utilizzando la formula di Haversine.
-/// 
-/// # Parametri
-/// - `lat1`: Latitudine del primo punto.
-/// - `lon1`: Longitudine del primo punto.
-/// - `lat2`: Latitudine del secondo punto.
-/// - `lon2`: Longitudine del secondo punto.
-/// 
-/// # Ritorna
-/// - Distanza in chilometri.
+/// Calculates the distance between two geographic points using the Haversine formula.
+///
+/// # Parameters
+/// - `lat1`: Latitude of the first point.
+/// - `lon1`: Longitude of the first point.
+/// - `lat2`: Latitude of the second point.
+/// - `lon2`: Longitude of the second point.
+///
+/// # Returns
+/// - Distance in kilometers.
 pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
-    let r = 6371.0; // Raggio della Terra in chilometri
+    let r = 6371.0; // Earth's radius in kilometers
     let dlat = (lat2 - lat1).to_radians();
     let dlon = (lon2 - lon1).to_radians();
     let a = (dlat / 2.0).sin().powi(2)
@@ -1218,13 +1218,13 @@ pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
             * lat2.to_radians().cos()
             * (dlon / 2.0).sin().powi(2);
     let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
-    r * c // Distanza in chilometri
+    r * c // Distance in kilometers
 }
 ```
 
 ### **2.5 Main (`main.rs`)**
 
-Configura l'applicazione Axum, definisce le rotte, inizializza Elasticsearch e il pool di connessione al database PostgreSQL, e avvia il server.
+Configures the Axum application, defines routes, initializes Elasticsearch and the PostgreSQL connection pool, and starts the server.
 
 ```rust
 mod handlers;
@@ -1240,7 +1240,7 @@ use axum::{
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-/// Struttura dello stato dell'applicazione condiviso tra le rotte
+/// Structure of the application's shared state across routes
 pub struct AppState {
     client: Mutex<Elasticsearch>,
     db_pool: sqlx::PgPool,
@@ -1248,36 +1248,36 @@ pub struct AppState {
 
 #[tokio::main]
 async fn main() {
-    // Inizializzazione del logger
+    // Initialize the logger
     tracing_subscriber::fmt()
         .with_target(false)
         .with_level(true)
         .pretty()
         .init();
 
-    // Inizializzazione del client Elasticsearch
+    // Initialize the Elasticsearch client
     let transport =
         elasticsearch::http::transport::Transport::single_node("http://elasticsearch:9200")
-            .expect("Errore nella creazione del trasporto Elasticsearch");
+            .expect("Error creating Elasticsearch transport");
     
-    // Recupero dell'URL del database remoto dalle variabili d'ambiente
+    // Retrieve the remote database URL from environment variables
     let database_url = std::env::var("REMOTE_DATABASE_URL")
-        .expect("REMOTE_DATABASE_URL deve essere impostato per connettersi al database remoto");
+        .expect("REMOTE_DATABASE_URL must be set to connect to the remote database");
         
-    println!("Connessione al database all'URL: {}", database_url);
+    println!("Connecting to database at URL: {}", database_url);
 
-    // Connessione al database PostgreSQL
+    // Connect to the PostgreSQL database
     let db_pool = sqlx::PgPool::connect(&database_url)
         .await
-        .expect("Connessione al database fallita");
+        .expect("Failed to connect to the database");
     
-    // Creazione dello stato dell'applicazione
+    // Create the application's shared state
     let app_state = Arc::new(AppState {
         client: Mutex::new(Elasticsearch::new(transport)),
         db_pool,
     });
 
-    // Configurazione del router Axum con le rotte e lo stato condiviso
+    // Configure the Axum router with routes and shared state
     let app = Router::new()
         .route("/search", get(handlers::search_handler))
         .route("/product/exists", post(handlers::check_product_exist))
@@ -1287,20 +1287,20 @@ async fn main() {
         .route("/store/:id/products", get(handlers::get_products_by_store))
         .with_state(app_state);
 
-    // Avvio del server sulla porta specificata
+    // Start the server on the specified port
     let port = std::env::var("SEARCH_SERVICE_PORT").unwrap_or_else(|_| "4001".to_string());
     let url = format!("0.0.0.0:{port}");
-    let listener = tokio::net::TcpListener::bind(url).await.expect("Errore nel binding della porta");
-    println!("Servizio di ricerca avviato sulla porta {}", port);
+    let listener = tokio::net::TcpListener::bind(url).await.expect("Error binding to port");
+    println!("Search service started on port {}", port);
     axum::serve(listener, app).await.unwrap();
 }
 ```
 
 ---
 
-## **3. Dipendenze di Cargo**
+## **3. Cargo Dependencies**
 
-Il file `Cargo.toml` definisce le dipendenze necessarie per il progetto `search-service`.
+The `Cargo.toml` file defines the necessary dependencies for the `search-service` project.
 
 ```toml
 [package]
@@ -1319,31 +1319,31 @@ tokio = { version = "1.40.0", features = ["full"] }
 tower-http = "0.6.1"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["json", "env-filter", "fmt"] }
-hyper = "0.14"  # Aggiunto per compatibilità con Axum
+hyper = "0.14"  # Added for compatibility with Axum
 sqlx = { version = "0.7", features = ["postgres", "runtime-tokio-native-tls"] }
 aide = "0.13.4"
 ```
 
-**Note:**
+**Notes:**
 
-- **`axum` e `axum-macros`**: Framework per la costruzione di API HTTP in Rust.
-- **`elasticsearch`**: Client per interagire con Elasticsearch.
-- **`reqwest`**: Client HTTP asincrono.
-- **`serde` e `serde_json`**: Serializzazione e deserializzazione dei dati.
-- **`tokio`**: Runtime asincrono per Rust.
-- **`tower-http`**: Middleware per Axum.
-- **`tracing` e `tracing-subscriber`**: Logging e tracciamento delle operazioni.
-- **`hyper`**: Aggiunto per garantire la compatibilità con Axum.
-- **`sqlx`**: Interazione asincrona con PostgreSQL.
-- **`aide`**: Generazione automatica della documentazione delle API.
+- **`axum` and `axum-macros`**: Framework for building HTTP APIs in Rust.
+- **`elasticsearch`**: Client for interacting with Elasticsearch.
+- **`reqwest`**: Asynchronous HTTP client.
+- **`serde` and `serde_json`**: Serialization and deserialization of data.
+- **`tokio`**: Asynchronous runtime for Rust.
+- **`tower-http`**: Middleware for Axum.
+- **`tracing` and `tracing-subscriber`**: Logging and tracing operations.
+- **`hyper`**: Added for ensuring compatibility with Axum.
+- **`sqlx`**: Asynchronous interaction with PostgreSQL.
+- **`aide`**: Automatic API documentation generation.
 
 ---
 
-## **4. Configurazione di Docker Compose**
+## **4. Docker Compose Configuration**
 
-La configurazione di Docker Compose definisce i vari servizi necessari per l'applicazione, inclusi `search-service`, Elasticsearch, PostgreSQL e altri servizi ausiliari.
+The Docker Compose configuration defines the various services required for the application, including `search-service`, Elasticsearch, PostgreSQL, and other auxiliary services.
 
-### **4.1 Servizio `search-service`**
+### **4.1 `search-service` Service**
 
 ```yaml
 services:
@@ -1357,15 +1357,15 @@ services:
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Impostato per puntare al DB remoto
-      - RUST_LOG=debug  # Imposta il livello di log a DEBUG
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Set to point to the remote DB
+      - RUST_LOG=debug  # Set log level to DEBUG
 ```
 
-### **4.2 Altri Servizi**
+### **4.2 Other Services**
 
-La configurazione completa include servizi aggiuntivi come `web-client`, `auth-service`, `product-receiver-service`, `db` (PostgreSQL), `adminer`, `uptime-kuma`, `traefik`, `elasticsearch`, `logstash`, `kibana`, `notification-alert`, e `scraping-service`.
+The complete configuration includes additional services such as `web-client`, `auth-service`, `product-receiver-service`, `db` (PostgreSQL), `adminer`, `uptime-kuma`, `traefik`, `elasticsearch`, `logstash`, `kibana`, `notification-alert`, and `scraping-service`.
 
-**Configurazione Completa di Docker Compose:**
+**Complete Docker Compose Configuration:**
 
 ```yaml
 version: '3.8'
@@ -1477,7 +1477,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080" # Dashboard (non utilizzare in produzione)
+      - "8080:8080" # Dashboard (do not use in production)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
@@ -1580,37 +1580,37 @@ networks:
     external: true
 ```
 
-**Note:**
+**Notes:**
 
-- **Servizio `search-service`:**
-  - **`SEARCH_SERVICE_PORT`**: Porta su cui il servizio ascolta (default: `4001`).
-  - **`ELASTICSEARCH_URL`**: URL di Elasticsearch (default: `http://elasticsearch:9200`).
-  - **`REMOTE_DATABASE_URL`**: URL del database remoto PostgreSQL.
-  - **`RUST_LOG`**: Livello di log (es. `debug`).
+- **`search-service` Service:**
+  - **`SEARCH_SERVICE_PORT`**: Port on which the service listens (default: `4001`).
+  - **`ELASTICSEARCH_URL`**: URL for Elasticsearch (default: `http://elasticsearch:9200`).
+  - **`REMOTE_DATABASE_URL`**: URL for the remote PostgreSQL database.
+  - **`RUST_LOG`**: Log level (e.g., `debug`).
 
-- **Altri Servizi:**
-  - **`web-client`**: Frontend dell'applicazione.
-  - **`auth-service`**: Servizio di autenticazione.
-  - **`product-receiver-service`**: Servizio per la ricezione dei prodotti.
-  - **`db`**: Database PostgreSQL.
-  - **`adminer`**: Interfaccia per la gestione del database.
-  - **`uptime-kuma`**: Monitoraggio dell'uptime.
-  - **`traefik`**: Reverse proxy e load balancer.
-  - **`elasticsearch`**: Motore di ricerca.
-  - **`logstash`**: Pipeline di elaborazione dei log.
-  - **`kibana`**: Dashboard per Elasticsearch.
-  - **`notification-alert`**: Servizio per notifiche e alert.
-  - **`scraping-service`**: Servizio per lo scraping dei dati.
+- **Other Services:**
+  - **`web-client`**: Application frontend.
+  - **`auth-service`**: Authentication service.
+  - **`product-receiver-service`**: Service for receiving products.
+  - **`db`**: PostgreSQL database.
+  - **`adminer`**: Interface for database management.
+  - **`uptime-kuma`**: Uptime monitoring.
+  - **`traefik`**: Reverse proxy and load balancer.
+  - **`elasticsearch`**: Search engine.
+  - **`logstash`**: Log processing pipeline.
+  - **`kibana`**: Dashboard for Elasticsearch.
+  - **`notification-alert`**: Notification and alert service.
+  - **`scraping-service`**: Data scraping service.
 
 - **Volumes:**
-  - **Persistenza dei dati** per PostgreSQL, Elasticsearch, Kibana, Logstash e `product-receiver-service`.
+  - **Data persistence** for PostgreSQL, Elasticsearch, Kibana, Logstash, and `product-receiver-service`.
 
 - **Networks:**
-  - Utilizzo di una rete condivisa esterna (`shared-network`) per la comunicazione tra i servizi.
+  - Uses an external shared network (`shared-network`) for communication between services.
 
-### **4.3 Dockerfile del `search-service`**
+### **4.3 `search-service` Dockerfile**
 
-Il `Dockerfile` per il `search-service` è configurato per costruire l'applicazione in modalità release, ottimizzando le prestazioni, e impostare le variabili d'ambiente necessarie.
+The `Dockerfile` for `search-service` is configured to build the application in release mode, optimizing performance, and setting the necessary environment variables.
 
 ```dockerfile
 # search-service/Dockerfile
@@ -1629,27 +1629,27 @@ EXPOSE 4001
 CMD ["sh", "-c", "echo REMOTE_DATABASE_URL=$REMOTE_DATABASE_URL && ./target/release/search-service"]
 ```
 
-**Descrizione:**
+**Description:**
 
-- **Compilazione in Modalità Release:** Utilizzo di `cargo build --release` per ottimizzare le prestazioni dell'applicazione.
-- **Esposizione della Porta:** Porta `4001` esposta per consentire l'accesso esterno al servizio.
-- **Impostazione delle Variabili d'Ambiente:** Stampa della variabile `REMOTE_DATABASE_URL` all'avvio per verificare la corretta configurazione.
+- **Build in Release Mode:** Uses `cargo build --release` to optimize application performance.
+- **Expose Port:** Exposes port `4001` to allow external access to the service.
+- **Set Environment Variables:** Prints the `REMOTE_DATABASE_URL` variable at startup to verify correct configuration.
 
 ---
 
-## **5. Test delle API**
+## **5. API Testing**
 
-### **5.1 Verifica Indicizzazione**
+### **5.1 Indexing Verification**
 
-Verificare che tutti i prodotti siano correttamente indicizzati in Elasticsearch.
+Verify that all products are correctly indexed in Elasticsearch.
 
-**Comando:**
+**Command:**
 
 ```bash
 curl -X GET "http://localhost:9200/products/_search?pretty"
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 {
@@ -1697,24 +1697,24 @@ curl -X GET "http://localhost:9200/products/_search?pretty"
           }
         }
       },
-      // Altri prodotti...
+      // Other products...
     ]
   }
 }
 ```
 
-### **5.2 Test Endpoint `/search`**
+### **5.2 Testing `/search` Endpoint**
 
-**Descrizione:**
-Esegue una ricerca dei prodotti più simili alla query fornita.
+**Description:**
+Performs a search for the most similar products based on the provided query.
 
-**Richiesta:**
+**Request:**
 
 ```bash
 curl -X GET "http://localhost:4001/search?query=mozzarella"
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 {
@@ -1753,12 +1753,12 @@ curl -X GET "http://localhost:4001/search?query=mozzarella"
 }
 ```
 
-### **5.3 Test Endpoint `/product/exists`**
+### **5.3 Testing `/product/exists` Endpoint**
 
-**Descrizione:**
-Verifica l'esistenza di un prodotto vicino a una posizione specifica.
+**Description:**
+Checks if a product exists near a specific location.
 
-**Richiesta:**
+**Request:**
 
 ```bash
 curl -X POST "http://localhost:4001/product/exists" \
@@ -1772,7 +1772,7 @@ curl -X POST "http://localhost:4001/product/exists" \
   }'
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 {
@@ -1795,12 +1795,12 @@ curl -X POST "http://localhost:4001/product/exists" \
 }
 ```
 
-### **5.4 Test Endpoint `/product/in-shop`**
+### **5.4 Testing `/product/in-shop` Endpoint**
 
-**Descrizione:**
-Verifica l'esistenza di un prodotto in uno specifico negozio.
+**Description:**
+Checks if a product is available in a specific shop.
 
-**Richiesta:**
+**Request:**
 
 ```bash
 curl -X POST "http://localhost:4001/product/in-shop" \
@@ -1815,7 +1815,7 @@ curl -X POST "http://localhost:4001/product/in-shop" \
   }'
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 {
@@ -1826,14 +1826,14 @@ curl -X POST "http://localhost:4001/product/in-shop" \
 }
 ```
 
-### **5.5 Test Endpoint `/product/lowest-price`**
+### **5.5 Testing `/product/lowest-price` Endpoint**
 
-**Descrizione:**
-Identifica la combinazione di negozi che offre i prodotti richiesti al prezzo più basso, in base alla modalità specificata (`risparmio` o `comodita`).
+**Description:**
+Identifies the combination of stores offering the requested products at the lowest total price, based on the specified mode (`savings` or `convenience`).
 
-#### **Modalità "risparmio"**
+#### **"savings" Mode**
 
-**Richiesta:**
+**Request:**
 
 ```bash
 curl -X POST "http://localhost:4001/product/lowest-price" \
@@ -1848,11 +1848,11 @@ curl -X POST "http://localhost:4001/product/lowest-price" \
       "latitude": 45.4642,
       "longitude": 9.1900
     },
-    "mode": "risparmio"
+    "mode": "savings"
   }'
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
 ```json
 [
@@ -1889,21 +1889,21 @@ curl -X POST "http://localhost:4001/product/lowest-price" \
 ]
 ```
 
-**Nota:** Attualmente, la modalità "risparmio" restituisce un array vuoto (`[]`), indicando che non viene trovata alcuna combinazione valida di negozi che copre tutti i prodotti richiesti.
+**Note:** Currently, the "savings" mode returns an empty array (`[]`), indicating that no valid combination of stores covering all requested products was found.
 
 ---
 
-## **6. Debug della Modalità "Risparmio"**
+## **6. Debugging the "Savings" Mode**
 
-### **6.1 Analisi del Problema**
+### **6.1 Problem Analysis**
 
-La modalità "risparmio" dovrebbe restituire una combinazione di negozi che copre tutti i prodotti richiesti al prezzo totale più basso. Tuttavia, la risposta vuota indica che **non viene trovata alcuna combinazione valida**.
+The "savings" mode should return a combination of stores covering all requested products at the lowest total price. However, the empty response indicates that **no valid combination** was found.
 
-### **6.2 Passaggi di Debug**
+### **6.2 Debugging Steps**
 
-#### **A. Verifica Log nella Funzione `fetch_lowest_price_shops`**
+#### **A. Verify Logs in the `fetch_lowest_price_shops` Function**
 
-Assicurarsi che la funzione `fetch_lowest_price_shops` recuperi correttamente i prezzi per ogni prodotto. Aggiungere log per monitorare i dati intermedi.
+Ensure that the `fetch_lowest_price_shops` function correctly retrieves prices for each product. Add logs to monitor intermediate data.
 
 ```rust
 pub async fn fetch_lowest_price_shops(
@@ -1947,26 +1947,26 @@ pub async fn fetch_lowest_price_shops(
             .await?;
 
         let shop_products = parse_response(response).await?;
-        tracing::info!("Recuperati prezzi per '{}': {:?}", product, shop_products);
+        tracing::info!("Retrieved prices for '{}': {:?}", product, shop_products);
         product_prices.insert(product.clone(), shop_products);
     }
     Ok(product_prices)
 }
 ```
 
-#### **B. Verifica Log nella Costruzione delle Combinazioni**
+#### **B. Verify Logs in Building Store Combinations**
 
-Aggiungere un log per visualizzare tutte le combinazioni create.
+Add a log to display all created combinations.
 
 ```rust
-tracing::info!("Combinazioni dei negozi: {:#?}", shop_combinations);
+tracing::info!("Store combinations: {:#?}", shop_combinations);
 ```
 
-#### **C. Verifica la Correttezza delle Query di Elasticsearch**
+#### **C. Verify the Correctness of Elasticsearch Queries**
 
-Eseguire manualmente una query per ciascun prodotto per verificarne i risultati.
+Manually execute a query for each product to verify the results.
 
-**Esempio:**
+**Example:**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: application/json' -d'
@@ -1980,46 +1980,46 @@ curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: applicat
 '
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
-Il prodotto "pane_integrale_500g" dovrebbe essere presente nell'indice.
+The product "pane_integrale_500g" should be present in the index.
 
-#### **D. Verifica la Logica della Funzione `find_lowest_price`**
+#### **D. Verify the Logic of the `find_lowest_price` Function**
 
-Assicurarsi che la combinazione di negozi venga costruita correttamente per coprire tutti i prodotti richiesti. Aggiungere log per monitorare le combinazioni e le scelte effettuate.
+Ensure that the store combination is correctly built to cover all requested products. Add logs to monitor combinations and choices made.
 
 ```rust
 tracing::info!("Best single: {:?}", best_single);
 tracing::info!("Best pair: {:?}", best_pair);
 ```
 
-### **6.3 Soluzioni Potenziali**
+### **6.3 Potential Solutions**
 
-1. **Verifica la Correttezza dei Nomi dei Prodotti nelle Query**
+1. **Verify the Correctness of Product Names in Queries**
 
-   Assicurarsi che i nomi dei prodotti nella richiesta JSON corrispondano esattamente a quelli indicizzati, inclusa la case sensitivity.
+   Ensure that the product names in the JSON request exactly match those indexed, including case sensitivity.
 
-2. **Assicurarsi che i Prodotti Siano Disponibili nelle Zone Geografiche Specificate**
+2. **Ensure Products Are Available in Specified Geographic Areas**
 
-   La configurazione delle `geo_distance` nelle query potrebbe limitare i risultati se i prodotti non sono presenti entro il raggio specificato.
+   The `geo_distance` settings in queries may limit results if products are not available within the specified radius.
 
-3. **Aumentare la Copertura dei Test**
+3. **Increase Test Coverage**
 
-   Aggiungere più prodotti e negozi per rendere i test più realistici. Ad esempio, prodotti disponibili in più negozi.
+   Add more products and stores to make tests more realistic. For example, products available in multiple stores.
 
-4. **Verificare la Logica di Combinazione dei Negozi**
+4. **Verify Store Combination Logic**
 
-   Assicurarsi che la funzione `find_lowest_price` combini correttamente i negozi per coprire tutti i prodotti richiesti.
+   Ensure that the `find_lowest_price` function correctly combines stores to cover all required products.
 
-5. **Ispezionare i Log di Elasticsearch e del Servizio di Ricerca**
+5. **Inspect Logs of Elasticsearch and the Search Service**
 
-   Controllare i log per eventuali errori o dati inattesi che possano indicare dove si verifica il problema.
+   Check logs for any errors or unexpected data that may indicate where the issue is occurring.
 
-6. **Eseguire Test Manuali delle Query**
+6. **Perform Manual Elasticsearch Query Tests**
 
-   Eseguire manualmente le query di Elasticsearch per assicurarsi che restituiscano i risultati attesi.
+   Manually execute Elasticsearch queries to ensure they return expected results.
 
-   **Esempio:**
+   **Example:**
 
    ```bash
    curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: application/json' -d'
@@ -2037,63 +2037,63 @@ tracing::info!("Best pair: {:?}", best_pair);
    '
    ```
 
-   **Risposta Attesa:**
+   **Expected Response:**
 
-   Probabilmente nessun risultato, poiché nessun singolo negozio offre tutti e tre i prodotti. Questo è atteso e la logica di combinazione dovrebbe gestire questa situazione.
+   Probably no results, as no single store offers all three products. This is expected, and the combination logic should handle this situation.
 
 ---
 
-## **7. Considerazioni Finali**
+## **7. Final Considerations**
 
-### **7.1 Punti Chiave**
+### **7.1 Key Points**
 
-- **Mapping Corretto:** È stato definito un mapping dettagliato con un `normalizer` per i campi di tipo `keyword`.
-- **Inserimento Prodotti:** I prodotti sono stati inseriti correttamente con tutti i campi richiesti.
-- **Servizio di Ricerca:** Il servizio di ricerca utilizza Axum e interagisce con Elasticsearch per eseguire le query.
-- **Modalità "Risparmio" Non Funziona:** La risposta vuota indica un problema nella logica di combinazione dei negozi o nelle query Elasticsearch.
+- **Correct Mapping:** A detailed mapping with a `normalizer` for `keyword` type fields has been defined.
+- **Product Insertion:** Products have been correctly inserted with all required fields.
+- **Search Service:** The search service uses Axum and interacts with Elasticsearch to execute queries.
+- **"Savings" Mode Not Working:** The empty response indicates an issue in store combination logic or Elasticsearch queries.
 
-### **7.2 Lista delle Azioni da Svolgere (TODO LIST)**
+### **7.2 Action List (TODO LIST)**
 
-1. **Aggiungere Log Dettagliati:**
-   - Migliorare il logging nelle funzioni di ricerca per monitorare i dati intermedi.
-   - Ad esempio, loggare `product_prices` e `shop_combinations`.
+1. **Add Detailed Logs:**
+   - Improve logging in search functions to monitor intermediate data.
+   - For example, log `product_prices` and `shop_combinations`.
 
-2. **Eseguire Manualmente le Query di Elasticsearch:**
-   - Verificare che le query restituiscano i risultati attesi per ciascun prodotto.
-   - Assicurarsi che i prodotti siano effettivamente disponibili nelle zone geografiche specificate.
+2. **Manually Execute Elasticsearch Queries:**
+   - Verify that queries return expected results for each product.
+   - Ensure that products are indeed available in the specified geographic areas.
 
-3. **Ispezionare la Logica di Combinazione dei Negozi:**
-   - Controllare che la funzione `find_lowest_price` combini correttamente i negozi per coprire tutti i prodotti richiesti.
-   - Verificare che non vi siano errori logici nel conteggio dei prodotti coperti da ciascuna combinazione.
+3. **Inspect Store Combination Logic:**
+   - Check that the `find_lowest_price` function correctly combines stores to cover all required products.
+   - Ensure there are no logical errors in counting products covered by each combination.
 
-4. **Aumentare la Varietà dei Prodotti e dei Negozi per Testare la Modalità "Risparmio":**
-   - Aggiungere prodotti disponibili in più negozi per rendere le combinazioni più realistiche.
+4. **Increase Product and Store Variety for Testing "Savings" Mode:**
+   - Add products available in multiple stores to make combinations more realistic.
 
-5. **Validazione delle Coordinate Geografiche:**
-   - Assicurarsi che le coordinate geografiche dei negozi siano corrette e che rientrino nel raggio specificato nelle query (`geo_distance`).
+5. **Validate Geographic Coordinates:**
+   - Ensure that the stores' geographic coordinates are correct and fall within the specified query radius (`geo_distance`).
 
-6. **Revisione del Codice Rust:**
-   - Controllare che tutte le funzioni siano implementate correttamente e che i filtri siano appropriati.
+6. **Review Rust Code:**
+   - Check that all functions are implemented correctly and that filters are appropriate.
 
-### **7.3 Esempio di Log Aggiuntivi nel Codice**
+### **7.3 Example of Additional Logs in the Code**
 
-Per facilitare il debug, è consigliabile aggiungere log dettagliati nelle funzioni di ricerca.
+To facilitate debugging, it is advisable to add detailed logs in the search functions.
 
 ```rust
-// Dopo aver recuperato i prezzi per ciascun prodotto
-tracing::info!("Recuperati prezzi per '{}': {:#?}", product, shop_products);
+// After retrieving prices for each product
+tracing::info!("Retrieved prices for '{}': {:#?}", product, shop_products);
 
-// Dopo aver costruito la mappa delle combinazioni di negozi
-tracing::info!("Combinazioni dei negozi: {:#?}", shop_combinations);
+// After building the store combinations map
+tracing::info!("Store combinations: {:#?}", shop_combinations);
 
-// Prima di confrontare le combinazioni
+// Before comparing combinations
 tracing::info!("Best single: {:?}", best_single);
 tracing::info!("Best pair: {:?}", best_pair);
 ```
 
-### **7.4 Esempio di Query Manuale per Debug**
+### **7.4 Example of Manual Query for Debugging**
 
-**Verifica la Disponibilità dei Prodotti:**
+**Verify Product Availability:**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: application/json' -d'
@@ -2107,11 +2107,11 @@ curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: applicat
 '
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
-Il prodotto "pane_integrale_500g" dovrebbe essere presente nell'indice.
+The product "pane_integrale_500g" should be present in the index.
 
-**Verifica la Disponibilità di Tutti i Prodotti in un Singolo Negozio:**
+**Verify Availability of All Products in a Single Store:**
 
 ```bash
 curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: application/json' -d'
@@ -2129,7 +2129,12 @@ curl -X POST "http://localhost:9200/products/_search" -H 'Content-Type: applicat
 '
 ```
 
-**Risposta Attesa:**
+**Expected Response:**
 
-Probabilmente: -> nessun risultato, poiché nessun singolo negozio offre tutti e tre i prodotti. Questo è atteso e la logica di combinazione dovrebbe gestire questa situazione.
+Probably no results, as no single store offers all three products. This is expected, and the combination logic should handle this situation.
+
+---
+
+**Thank you** for using the **search-service**! If you have any questions or encounter issues, please contact the development team or open an issue in the relevant repository.
+
 ---
