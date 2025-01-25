@@ -1,8 +1,8 @@
 ---
 
 # liiist 🥦🥑🍌🍕🥛🍳🥫🍅🍝🍋🌽🍊🍎🍐🥝🍒🍪🍆🥕🧄🥐🥖🍐🍉🥚🫑🥬🥗
+<< a smart grocery list app that helps users find the best prices at nearby markets >>
 
-A smart grocery list app that helps users find the best prices at nearby markets.  
 **Create your list, enter your location, and the app compares prices to recommend the most economical shopping options.**
 
 
