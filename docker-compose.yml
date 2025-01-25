@@ -51,6 +51,8 @@ services:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Added to point to the remote DB
+      - RUST_LOG=debug  # Imposta il livello di log a DEBUG
+
 
 
   product-receiver-service:

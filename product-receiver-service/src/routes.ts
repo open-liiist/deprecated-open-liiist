@@ -26,8 +26,8 @@ const productSchema = z.object({
     grocery: z.string().min(1, 'grocery is required'),
     lat: z.number().min(-90).max(90),
     lng: z.number().min(-180).max(180),
-    // Se vuoi gestire street anche nei product, puoi aggiungerlo qui
-    // street: z.string().optional(),
+    // x gestire street anche nei product
+    street: z.string().min(1, 'street is required'), // o .optional()
   }),
 });
 
@@ -129,7 +129,10 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
   // Se la street non è presente, usiamo stringa vuota
   // (solo se vuoi differenziare i negozi in base alla street
   //  se non la usi, puoi passare sempre '')
-  const streetForConstraint = data.localization?.street || '';
+  const streetForConstraint = data.localization?.street;
+  if (!streetForConstraint) {
+    throw new Error("Missing 'street' for product localization");
+  }
 
   while (attempt < maxRetries) {
     try {
