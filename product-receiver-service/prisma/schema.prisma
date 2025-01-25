@@ -4,26 +4,34 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url      = env("REMOTE_DATABASE_URL")
 }
 
 model Product {
     id             Int              @id @default(autoincrement())
-    name_id        String           @unique
+    name_id        String
     full_name      String
     name           String
     description    String
     current_price  Float
     discount       Float
-    localization   Localization     @relation(fields: [localizationId], references: [id])
     localizationId Int
     created_at     DateTime         @default(now())
     updated_at     DateTime         @updatedAt
     history        ProductHistory[]
     price_for_kg   Float?
     image_url      String?
-	quantity	   String?
+    quantity       String?
+
+    // RIMUOVI O COMMENTA: 
+    // document_id String? @unique
+
+    localization Localization @relation(fields: [localizationId], references: [id])
+
+    // ECCO LA COMPOSITE UNIQUE
+    @@unique([name_id, localizationId])
 }
+
 
 model ProductHistory {
     id          Int      @id @default(autoincrement())
@@ -35,16 +43,18 @@ model ProductHistory {
 }
 
 model Localization {
-    id                Int       @id @default(autoincrement())
-    grocery           String
-    lat               Float
-    lng               Float
-    products          Product[]
-    street            String?
-    city              String?
-    zip_code          String?
-    working_hours     String?
-    picks_up_in_store Boolean?
+  id                Int       @id @default(autoincrement())
+  grocery           String
+  lat               Float
+  lng               Float
+  street            String?
+  city              String?
+  zip_code          String?
+  working_hours     String?
+  picks_up_in_store Boolean?
+  products          Product[]
 
-    @@unique(name: "grocery_lat_lng", [grocery, lat, lng]) // composite unique contraint
+  @@unique(name: "grocery_lat_lng_street", [grocery, lat, lng, street])
 }
+
+

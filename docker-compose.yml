@@ -50,19 +50,24 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   product-receiver-service:
+    container_name: product-receiver-service
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
-    depends_on:
-      db: 
-          condition: service_healthy
+    #depends_on:
+    #  db: 
+    #      condition: service_healthy
     ports:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - DATABASE_URL=${DATABASE_URL}
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Usa solo REMOTE_DATABASE_URL
+      #- DATABASE_URL=${DATABASE_URL}
+      - LOGSTASH_HOST=logstash
+      - LOGSTASH_PORT=5000
     volumes:
       - ./product-receiver-service:/app
+      - product_receiver_data:/app/data  # Volume persistente aggiunto
 
   db:
     image: postgres:13
@@ -110,8 +115,8 @@ services:
       # enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro #For Linux
-      #- /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
+      #- /run/docker.sock:/run/docker.sock:ro #For Linux
+      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -154,6 +159,8 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - logstash_data:/usr/share/logstash/data  # Volume persistente aggiunto
+
     ports:
       - 5044:5044
       - 50000:50000/tcp
@@ -175,6 +182,8 @@ services:
       - "5601:5601"
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - kibana_data:/usr/share/kibana/data  # Volume persistente aggiunto
+
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
     depends_on:
@@ -196,8 +205,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./scraping-service:/app
     depends_on:
-      - db
-      - notification-alert
+      #- db
+      #- notification-alert
       - product-receiver-service
     stop_grace_period: 30s
     restart: unless-stopped
@@ -205,6 +214,9 @@ services:
 volumes:
   pgdata: 
   elasticsearch:
+  kibana_data:
+  logstash_data:  # Definizione del volume per Logstash
+  product_receiver_data:  # Definizione del volume per product-receiver-service
 
 networks:
   shared-network:

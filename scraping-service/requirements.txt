@@ -3,3 +3,7 @@ requests
 selenium
 python-dotenv
 undetected-chromedriver
+ijson
+aiohttp
+asyncio
+tqdm
