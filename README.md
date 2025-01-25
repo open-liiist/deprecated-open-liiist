@@ -1,80 +1,80 @@
 ---
 
-# liiist
+# liiist 🥦🥑🍌🍕🥛🍳🥫🍅🍝🍋🌽🍊🍎🍐🥝🍒🍪🍆🥕🧄🥐🥖🍐🍉🥚🫑🥬🥗
 
 A smart grocery list app that helps users find the best prices at nearby markets.  
 **Create your list, enter your location, and the app compares prices to recommend the most economical shopping options.**
 
-# 🥦🥑🍌🍕🥛🍳🥫🍅🍝🍋🌽🍊🍎🍐🥝🍒🍪🍆🥕🧄🥐🥖🍐🍉🥚🫑🥬🥗
 
 ```mermaid
 flowchart LR
+    %% Define subgraphs for logical grouping
     subgraph Frontend
         WebClient[Web Client]
-    end
-
-    subgraph Backend
-        AuthService[Auth Service]
-        SearchService[Search Service]
-        ProductReceiver[Product Receiver Service]
-        ScrapingService[Scraping Service]
-        NotificationAlert[Notification Alert]
-    end
-
-    subgraph Database
-        DB[(PostgreSQL)]
-    end
-
-    subgraph Monitoring
-        UptimeKuma[Uptime Kuma]
-    end
-
-    subgraph Logging
-        Logstash[Logstash]
-        Elasticsearch[Elasticsearch]
-        Kibana[Kibana]
     end
 
     subgraph Proxy
         Traefik[Traefik]
     end
 
-    subgraph Management
+    subgraph Backend
+        AuthService[Auth Service]
+        SearchService[Search Service]
+        ProductReceiver[Product Receiver Service]
+        NotificationAlert[Notification Alert]
+        ScrapingService[Scraping Service]
+    end
+
+    subgraph Database
+        DB[(PostgreSQL)]
         Adminer[Adminer]
     end
 
-    %% Frontend Interactions
-    WebClient -->|API Requests| AuthService
-    WebClient -->|API Requests| SearchService
-    WebClient -->|API Requests| ProductReceiver
+    subgraph Search
+        Elasticsearch[Elasticsearch]
+        Logstash[Logstash]
+        Kibana[Kibana]
+    end
 
-    %% Backend Interactions
-    AuthService --> DB
-    SearchService --> Elasticsearch
-    SearchService -->|Fetch Data| DB
-    ProductReceiver -->|Fetch Data| DB
-    ProductReceiver --> Logstash
-    ScrapingService --> ProductReceiver
-    ScrapingService --> Logstash
-    Logstash --> Elasticsearch
-    Elasticsearch --> Kibana
-    Logstash -->|Send Logs| Kibana
-    Traefik --> WebClient
+    subgraph Monitoring
+        UptimeKuma[Uptime Kuma]
+    end
+
+    %% Frontend to Proxy
+    WebClient -->|API Requests| Traefik
+
+    %% Proxy to Backend
     Traefik --> AuthService
     Traefik --> SearchService
     Traefik --> ProductReceiver
     Traefik --> NotificationAlert
 
-    %% Monitoring Interactions
-    UptimeKuma -->|Monitor| Traefik
-    UptimeKuma -->|Monitor| AuthService
-    UptimeKuma -->|Monitor| SearchService
-    UptimeKuma -->|Monitor| ProductReceiver
-
-    %% Management Interactions
+    %% Backend to Database
+    AuthService --> DB
+    SearchService --> DB
+    ProductReceiver --> DB
     Adminer --> DB
 
+    %% Backend to Search
+    SearchService --> Elasticsearch
+    ProductReceiver --> Logstash
+    ScrapingService --> ProductReceiver
+    ScrapingService --> Logstash
+    Logstash --> Elasticsearch
+    Elasticsearch --> Kibana
+
+    %% Monitoring
+    UptimeKuma --> Traefik
+    UptimeKuma --> AuthService
+    UptimeKuma --> SearchService
+    UptimeKuma --> ProductReceiver
+
+    %% Logging
+    Logstash --> Kibana
+
+
 ```
+
 ## Table of Contents
 
 1. [Features](#features)
