@@ -1,3 +1,5 @@
+
+
 //search-service/src/search.rs
 use crate::models::{Localization, ProductResult};
 use crate::AppState;
@@ -17,9 +19,10 @@ pub async fn fetch_most_similar(
         .body(json!({
             "query": {
                 "multi_match": {
-                    "fields": ["full_name", "name", "description"],
+                    "fields": ["full_name", "name", "name.keyword", "description"],
                     "query": query,
-                    "type": "phrase" // "phrase_prefix" changed in "phrase"
+                    "type": "best_fields",
+                    "fuzziness": "AUTO"
                 }
             },
             "size": 10
@@ -40,9 +43,10 @@ pub async fn fetch_lowest_price(
         .body(json!({
             "query": {
                 "multi_match": {
-                    "fields": ["full_name", "name", "description"],
+                    "fields": ["full_name", "name", "name.keyword", "description"],
                     "query": query,
-                    "type": "phrase" // "phrase_prefix" changed in "phrase"
+                    "type": "best_fields", // "phrase_prefix" changed in "phrase" & than -> "best_fields"
+                    "fuzziness": "AUTO"
                 }
             },
             "size": 10,
@@ -73,7 +77,9 @@ pub async fn fetch_product_nearby(
                     "must": {
                         "multi_match": {
                             "query": product,
-                            "fields": ["full_name", "name", "description"]
+                            "fields": ["full_name", "name", "description"],
+                            "type": "best_fields",
+                            "fuzziness": "AUTO"
                         }
                     },
                     "filter": {
@@ -108,7 +114,7 @@ pub async fn fetch_product_in_shop(
             "query": {
                 "bool": {
                     "must": [
-                        { "match": { "full_name": product } },
+                        { "match": { "name.keyword": product } },
                         { "match": { "localization.grocery": shop } }
                     ],
                     "filter": {
@@ -148,7 +154,9 @@ pub async fn fetch_lowest_price_shops(
                         "must": {
                             "multi_match": {
                                 "query": product,
-                                "fields": ["full_name", "name", "description"]
+                                "fields": ["full_name", "name", "description"],
+                                "type": "best_fields",
+                                "fuzziness": "AUTO"
                             }
                         },
                         "filter": {
@@ -175,7 +183,44 @@ pub async fn fetch_lowest_price_shops(
 }
 
 // Helper function to parse Elasticsearch response into Vec<ProductResult>
-async fn parse_response(
+// async fn parse_response(
+//     response: elasticsearch::http::response::Response,
+// ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
+//     let json_resp = response.json::<serde_json::Value>().await?;
+//     tracing::debug!("elasticsearch response: {:#?}", json_resp);
+//     let empty_vec = vec![];
+//     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
+//     let products = hits
+//         .iter()
+//         .map(|hit| {
+//             let source = &hit["_source"];
+//             ProductResult {
+//                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
+//                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
+//                 // Fallback a `name_id` se `name` non è presente
+//                 name: source
+//                 .get("name")
+//                 .and_then(|v| v.as_str())
+//                 .unwrap_or_else(|| source.get("name_id").and_then(|v| v.as_str()).unwrap_or(""))
+//                 .to_string(),
+//                 description: source["description"].as_str().unwrap_or("").to_string(),
+//                 price: source["price"].as_f64().unwrap_or(0.0),
+//                 discount: source["discount"].as_f64(),
+//                 distance: source["distance"].as_f64(),
+//                 localization: Localization {
+//                     grocery: source["localization"]["grocery"]
+//                         .as_str()
+//                         .unwrap_or("")
+//                         .to_string(),
+//                     lat: source["localization"]["lat"].as_f64().unwrap_or(0.0),
+//                     lon: source["localization"]["lon"].as_f64().unwrap_or(0.0),
+//                 },
+//             }
+//         })
+//         .collect();
+//     Ok(products)
+// }
+pub async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let json_resp = response.json::<serde_json::Value>().await?;
@@ -190,11 +235,7 @@ async fn parse_response(
                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
                 // Fallback a `name_id` se `name` non è presente
-                name: source
-                .get("name")
-                .and_then(|v| v.as_str())
-                .unwrap_or_else(|| source.get("name_id").and_then(|v| v.as_str()).unwrap_or(""))
-                .to_string(),
+                name: source["name"].as_str().unwrap_or("").to_string(),
                 description: source["description"].as_str().unwrap_or("").to_string(),
                 price: source["price"].as_f64().unwrap_or(0.0),
                 discount: source["discount"].as_f64(),

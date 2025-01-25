@@ -47,7 +47,7 @@ model Localization {
   grocery           String
   lat               Float
   lng               Float
-  street            String?
+  street            String
   city              String?
   zip_code          String?
   working_hours     String?
