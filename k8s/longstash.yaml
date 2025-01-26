@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: logstash
+        image: ghcr.io/fchieric/logstash:latest
+        ports:
+        - containerPort: 5044
+        - containerPort: 9600
+        env:
+        - name: LOGSTASH_INTERNAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: shared-secrets
+              key: LOGSTASH_INTERNAL_PASSWORD

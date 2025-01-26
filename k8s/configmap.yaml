@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-config
+data:
+  # Web Client
+  NODE_ENV: development
+  LOG_LEVEL: debug
+  API_BASE_URL: http://auth-service:4000
+  NAME_COOKIE_ACCESS: grocygo-access_token
+  NAME_COOKIE_REFRESH: grocygo-refresh_token
+
+  # Search Service
+  SEARCH_SERVICE_PORT: "4001"
+
+  # Kuma
+  UPTIME_KUMA_PORT: "3003"

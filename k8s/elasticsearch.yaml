@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+spec:
+  replicas: 1
+  serviceName: "elasticsearch"
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: ghcr.io/fchieric/elasticsearch:latest
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        env:
+        - name: discovery.type
+          value: single-node
+        - name: ELASTIC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: shared-secrets
+              key: ELASTIC_PASSWORD
+        - name: ES_JAVA_OPTS
+          value: "-Xms1g -Xmx1g"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: elasticsearch-data
+          mountPath: /usr/share/elasticsearch/data
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi

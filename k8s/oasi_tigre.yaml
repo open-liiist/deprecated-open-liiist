@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scraping-oasi-tigre
+spec:
+  schedule: "0 0 */14 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scraping-oasi-tigre
+            image: ghcr.io/fchieric/scraping-service-oasi-tigre:latest
+          restartPolicy: OnFailure
