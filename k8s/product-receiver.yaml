@@ -20,7 +20,5 @@ spec:
         ports:
         - containerPort: 3002
         env:
-        - name: PRODUCT_RECEIVER_SERVICE_PORT
-          value: "3002"
-        - name: DATABASE_URL
-          value: postgresql://user:postgrespw@postgres:5432/appdb
+        - name: REMOTE_DATABASE_URL
+          value: "postgresql://user:postgrespw@postgres:5432/appdb"
