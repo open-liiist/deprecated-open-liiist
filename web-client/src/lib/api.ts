@@ -80,6 +80,10 @@ class FetchClient {
 		}
 	}
 
+	public setBaseURL(baseURL: string): void {
+		this.baseURL = baseURL;
+	  }
+
 	public async post(url: string, body: object, accessToken?: string): Promise<Response> {
 		const options: RequestInit = {
 			method: 'POST',

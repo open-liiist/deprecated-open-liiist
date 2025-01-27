@@ -13,5 +13,24 @@
     "userId": "12345",
     "createdAt": "2025-01-04T17:04:58.249Z",
     "updatedAt": "2025-01-04T17:04:58.249Z"
+  },
+  {
+    "id": "cf1fd48b-2f78-4762-a5d7-6ff3ceb7fb39",
+    "name": "test",
+    "products": [
+      {
+        "name": "mela🍎",
+        "quantity": 1
+      },
+      {
+        "name": "carne",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-26T19:09:53.745Z",
+    "updatedAt": "2025-01-26T19:09:53.745Z"
   }
 ]

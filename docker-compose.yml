@@ -43,8 +43,8 @@ services:
     ports:
       - "4001:4001"
     # depends_on:
-      # db:
-      #   condition: service_healthy <- This is not needed with a remote database
+    #   db:
+    #     condition: service_healthy
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
@@ -58,15 +58,15 @@ services:
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
-    #depends_on:
+    # depends_on:
     #  db: 
-    #      condition: service_healthy <- This is not needed with a remote database
+    #      condition: service_healthy
     ports:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
       - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}
-      #- DATABASE_URL=${DATABASE_URL} <- This is not needed with a remote database
+    #  - DATABASE_URL=${DATABASE_URL} <- This is not needed with a remote database
       - LOGSTASH_HOST=logstash
       - LOGSTASH_PORT=50000
     volumes:
@@ -119,8 +119,8 @@ services:
       # enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      #- /run/docker.sock:/run/docker.sock:ro #For Linux
-      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
+      - /run/docker.sock:/run/docker.sock:ro #For Linux
+    #  - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -209,7 +209,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./scraping-service:/app
     depends_on:
-      #- db <- This is not needed with a remote database
+      - db
       #- notification-alert (* optional)
       - product-receiver-service
     stop_grace_period: 30s
