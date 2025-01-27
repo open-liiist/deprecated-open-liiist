@@ -12,9 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from utility_tigre import categories_dict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from libft import wait_for_element, wait_for_elements, wait_for_elements_conad, update_env_with_dotenv, to_float, send_data_to_receiver, get_store_by_grocery_and_city
-
-load_dotenv()
+from libft import wait_for_element, to_float, send_data_to_receiver, get_store_by_grocery_and_city
 
 def wait_fw(driver, xpath):
 
@@ -29,7 +27,7 @@ def wait_fw(driver, xpath):
 # Finds and processes information from product cards in a micro category
 # Returns: The number of processed items
 
-def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
+def find_and_send_info(driver, n_cards, micro_cate, shop):
 
 	active = 1
 	processed_items = 0
@@ -74,8 +72,7 @@ def find_and_send_info(driver, n_cards, micro_cate, shop, product_list):
 		product_data["price_for_kg"] = price_for_kg
 		
 
-		# send_data_to_receiver(product_data)
-		product_list.append(product_data)
+		send_data_to_receiver(product_data)
 		
 		if active == 1:
 			try:
@@ -110,7 +107,7 @@ def change_shop_location(driver, location):
 
 	if len(available_shops) == 0:
 		print('No shops found')
-		return
+		sys.exit(-1)
 
 	available_shops[0].click()
 	time.sleep(5)
@@ -119,77 +116,57 @@ def change_shop_location(driver, location):
 	time.sleep(4)
 
 if __name__ == "__main__":
-	all_shop = os.environ.get("ALL_SHOP_2")
-	count_shop = os.environ.get("COUNT_SHOP_2")
 
-	# result1 = get_store_by_grocery_and_city("Supermercato Tigre", "Roma")
-	# result2 = get_store_by_grocery_and_city("Supermercato Tigre", "Ciampino")
-	with open("oasi_tigre_shop.json", "r", encoding="utf-8") as infile:
-		data_info = json.load(infile)
+	for count_shop in range(0, 6):
 
-	if isinstance(data_info, list):
-		shop_list = data_info  # Assign directly if data is already a list
-	else:
-		shop_list = [data_info]  # Wrap data in a list if it's not a list
+		result1 = get_store_by_grocery_and_city("Supermercato Tigre", "Roma")
+		result2 = get_store_by_grocery_and_city("Supermercato Tigre", "Ciampino")
 
-	# shop_list = {'stores': result1['stores'] + result2['stores']}
+		shop_list = {'stores': result1['stores'] + result2['stores']}
 
-	if int(count_shop) == 6:
-		update_env_with_dotenv(".env", "COUNT_SHOP", 0)
-		count_shop = 0
+		shop = shop_list['stores'][count_shop]
 
-	count_shop = int(count_shop)
-	# shop = shop_list['stores'][count_shop]
-	shop = shop_list[count_shop]
+		options = uc.ChromeOptions()
 
+		options.binary_location = "/usr/bin/google-chrome"
 
-	options = uc.ChromeOptions()
+		options.add_argument("--headless")
+		options.add_argument("--no-sandbox")
+		options.add_argument("--disable-dev-shm-usage")
 
-	options.binary_location = "/usr/bin/google-chrome"
+		# Initialize the undetected Chrome driver
+		driver = uc.Chrome(options=options, use_subprocess=False)
+		total_items_processed = 0
 
-	# options.add_argument("--headless")
-	options.add_argument("--no-sandbox")
-	options.add_argument("--disable-dev-shm-usage")
+		change_shop_location(driver, shop['street'])
 
-	# Initialize the undetected Chrome driver
-	driver = uc.Chrome(options=options, use_subprocess=False)
-	total_items_processed = 0
-	product_list = []
-	change_shop_location(driver, shop['street'])
+		for category, items in categories_dict.items():
+			count = 0
+			for item in items:
+				product_url = f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html"
 
-	for category, items in categories_dict.items():
-		count = 0
-		for item in items:
-			product_url = f"https://oasitigre.it/it/spesa/reparti/{category}/{item}.html"
+				driver.get(product_url)
+				time.sleep(5)
 
-			driver.get(product_url)
-			time.sleep(5)
+				n_micro_cate = len(wait_fw(driver, '/html/body/main/div[1]/div[2]/div[2]/div'))
+				active = 1
 
-			n_micro_cate = len(wait_fw(driver, '/html/body/main/div[1]/div[2]/div[2]/div'))
-			active = 1
+				for micro_cate in range(2, n_micro_cate + 1):
+					if active == 1:
+						try:
+							element = wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]")
+							driver.execute_script('arguments[0].scrollIntoView(true)', element)
+						except:
+							active = 0
 
-			for micro_cate in range(2, n_micro_cate + 1):
-				if active == 1:
 					try:
-						element = wait_for_element(driver, f"/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]")
-						driver.execute_script('arguments[0].scrollIntoView(true)', element)
+						n_cards = len(wait_fw(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
 					except:
-						active = 0
+						continue
 
-				try:
-					n_cards = len(wait_fw(driver, f'/html/body/main/div[1]/div[2]/div[2]/div[{micro_cate}]/div/div[2]/div/div/div[1]/div'))
-				except:
-					continue
+					total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop)
 
-				total_items_processed += find_and_send_info(driver, n_cards, micro_cate, shop, product_list)
+		print(f"Total items processed: {total_items_processed}")
 
-	print(f"Total items processed: {total_items_processed}")
-	
-	update_env_with_dotenv(".env", "COUNT_SHOP_2", int(count_shop + 1))
-	json_object = json.dumps(product_list, indent=4, ensure_ascii=False)
-
-	# Writing to sample.json
-	with open(f"oasi_tigre_{count_shop}.json", "w", encoding='utf-8') as outfile:
-		outfile.write(json_object)
-
-	driver.close()
+		driver.close()
+		time.sleep(500)
