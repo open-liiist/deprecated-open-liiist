@@ -1,3 +1,5 @@
+
+//search-service/src/main.rs
 mod handlers;
 mod models;
 mod search;
@@ -28,8 +30,11 @@ async fn main() {
     let transport =
         elasticsearch::http::transport::Transport::single_node("http://elasticsearch:9200")
             .unwrap();
-    let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgresql://user:postgrespw@db:5432/appdb".to_string());
+    let database_url = std::env::var("REMOTE_DATABASE_URL")
+        .expect("REMOTE_DATABASE_URL must be set to connect to the remote database");
+        
+        println!("Connecting to database at URL: {}", database_url);
+
     let db_pool = sqlx::PgPool::connect(&database_url)
         .await
         .expect("Failed to connect to database");

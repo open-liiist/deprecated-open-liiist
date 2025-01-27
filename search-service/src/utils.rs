@@ -1,3 +1,4 @@
+//search-service/src/utils.rs
 pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
     let r = 6371.0; // Radius of the Earth in kilometers
     let dlat = (lat2 - lat1).to_radians();

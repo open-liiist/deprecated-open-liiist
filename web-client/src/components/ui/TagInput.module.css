@@ -1,0 +1,33 @@
+.productContainer {
+    max-height: 60vh; /* Component-specific max height */
+    max-width: 60vh;
+    display:flex;
+    overflow-y: auto; /* Enable vertical scrolling */
+    grid-template-columns: auto-fill, minmax(150px, 1fr); /* Adaptive grid */
+    padding-right: 10px; /* Prevent scrollbar overlap */
+    scrollbar-width: thin; /* Firefox scrollbar style */
+    scrollbar-color: #d6d6d6 transparent;
+  }
+  
+  .productContainer::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .productContainer::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 4px;
+  }
+
+  .productContainer.draggingOver {
+    background-color: #f0f8ff; /* Subtle blue to indicate drop area */
+    border: 2px dashed #2196f3; /* Highlight the container */
+  }
+  .dragging {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10; /* Bring it above other items */
+  }
+  
+  .tagItem {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }

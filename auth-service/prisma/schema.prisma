@@ -10,13 +10,36 @@ datasource db {
 model User {
     id           String         @id @default(cuid())
     email        String         @unique
-    name         String?
+    name         String
+    dateOfBirth  DateTime
+    supermarkets String[]
     passwordHash String
     createdAt    DateTime       @default(now())
     updatedAt    DateTime       @default(now())
     deletedAt    DateTime?
     refreshToken RefreshToken[]
     profile      Profile?
+    shoppingLists ShoppingList[]
+}
+
+model ShoppingList {
+  id        String    @id @default(uuid())
+  name      String
+  budget    String
+  mode      String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  products  Product[] // Relazione 1:N con i prodotti
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id            String    @id @default(uuid())
+  name          String
+  quantity      Int
+  shoppingListId String
+  shoppingList  ShoppingList @relation(fields: [shoppingListId], references: [id])
 }
 
 model Profile {

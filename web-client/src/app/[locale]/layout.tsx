@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UserProvider } from "@/services/auth";
 import { getUser } from "@/services/user";
+import {poppins} from "@/components/ui/fonts"
 
 const geistSans = localFont({
 	src: "../fonts/GeistVF.woff",
@@ -18,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-	title: "GrocyGo",
-	description: "GrocyGo is a grocery list app for the modern age.",
+	title: "liiist",
+	description: "liiist is a grocery list app for the modern age.",
 };
 
 export default async function RootLayout({
@@ -31,9 +32,9 @@ export default async function RootLayout({
 	const userPromise = getUser();
 
 	return (
-		<html lang="en">
+		<html lang="en" className={poppins.className}>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${poppins.className} antialiased bg-white text-black`}
 			>
 				<UserProvider userPromise={userPromise}>
 					<NextIntlClientProvider messages={messages}>

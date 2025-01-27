@@ -27,11 +27,34 @@ export async function getSession() {
 	return await verifyToken(session);
 }
 
-export async function register(email: string, password: string) {
+//vecchia versione di register 
+// export async function register(email: string, password: string) {
+// 	try {
+// 		const res = await fetchClient.post('/auth/register', { email, password });
+// 		if (res.status >= 400)
+// 			return null;
+// 		const user = (await res.json()).data as User;
+// 		return user;
+// 	} catch (error) {
+// 		logger.error(error);
+// 		return null;
+// 	}
+// }
+
+export async function register(email: string, password: string, name: string, dateOfBirth: string, supermarkets: string[]) {
+	
+	console.log("register user log", email, password, name, dateOfBirth, supermarkets);
 	try {
-		const res = await fetchClient.post('/auth/register', { email, password });
-		if (res.status >= 400)
+		const res = await fetchClient.post('/auth/register', {
+			email,
+			password,
+			name,
+			dateOfBirth,
+			supermarkets,
+		});
+		if (res.status >= 400) {
 			return null;
+		}
 		const user = (await res.json()).data as User;
 		return user;
 	} catch (error) {
@@ -39,6 +62,7 @@ export async function register(email: string, password: string) {
 		return null;
 	}
 }
+
 
 export async function login(email: string, password: string) {
 	try {
@@ -67,8 +91,11 @@ export async function setSession(_user: User, tokens: {
 	accessToken: string, refreshToken: string
 } | null) {
 	try {
-		if (!tokens)
-			return false;
+		if (!tokens){
+            console.error("No tokens provided to setSession.");
+            return false;
+        }
+        console.log("Tokens received for session:", tokens);
 		const { accessToken, refreshToken } = tokens;
 		const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
 		const expiresInOneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);

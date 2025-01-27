@@ -10,7 +10,7 @@ services:
     volumes:
       # Mount the web-client directory to the container (live reloading)
       - ./web-client:/app
-      # separate host node_modules from container node_modules
+      # host node_modules
       - /app/node_modules
       - /app/.next
     command: npm run dev
@@ -42,24 +42,36 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
+    # depends_on:
+      # db:
+      #   condition: service_healthy <- This is not needed with a remote database
     environment:
       - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Add: to point to the remote DB
+      - RUST_LOG=debug  #log: DEBUG
+
+
 
   product-receiver-service:
+    container_name: product-receiver-service
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
-    depends_on:
-      db: 
-          condition: service_healthy
+    #depends_on:
+    #  db: 
+    #      condition: service_healthy <- This is not needed with a remote database
     ports:
       - "3002:3002"
     environment:
       - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - DATABASE_URL=${DATABASE_URL}
+      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}
+      #- DATABASE_URL=${DATABASE_URL} <- This is not needed with a remote database
+      - LOGSTASH_HOST=logstash
+      - LOGSTASH_PORT=50000
     volumes:
       - ./product-receiver-service:/app
+      - product_receiver_data:/app/data
 
   db:
     image: postgres:13
@@ -73,9 +85,9 @@ services:
       POSTGRES_DB: appdb
     healthcheck:
       test: "pg_isready -h db"
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      interval: 10s
+      timeout: 10s
+      retries: 10
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -107,7 +119,8 @@ services:
       # enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro
+      #- /run/docker.sock:/run/docker.sock:ro #For Linux
+      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -135,7 +148,9 @@ services:
       "
     environment:
       node.name: elasticsearch
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      #ES_JAVA_OPTS: -Xms512m -Xmx512m 
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+
       discovery.type: single-node
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
     restart: unless-stopped
@@ -146,8 +161,10 @@ services:
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:rw,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:rw,Z
+      - logstash_data:/usr/share/logstash/data
+
     ports:
       - 5044:5044
       - 50000:50000/tcp
@@ -169,6 +186,8 @@ services:
       - "5601:5601"
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - kibana_data:/usr/share/kibana/data
+
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
     depends_on:
@@ -250,6 +269,9 @@ services:
 volumes:
   pgdata: 
   elasticsearch:
+  kibana_data:
+  logstash_data:
+  product_receiver_data:
 
 networks:
   shared-network:

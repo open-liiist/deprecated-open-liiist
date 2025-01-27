@@ -11,7 +11,7 @@ RUN npx prisma generate
 
 COPY . .
 
-RUN tsc
+RUN tsc --pretty
 
 EXPOSE 4000
 

@@ -1,3 +1,4 @@
+//search-service/src/models.rs
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
@@ -97,6 +98,7 @@ pub struct ProductInShopResponse {
 pub struct ProductsLowestPriceRequest {
     pub products: Vec<String>,
     pub position: Position,
+    pub mode: Option<String>,  // "risparmio" | "comodita" (o altro)
 }
 
 #[derive(Debug, Serialize, Clone)]

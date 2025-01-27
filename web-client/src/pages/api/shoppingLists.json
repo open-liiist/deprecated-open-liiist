@@ -1,0 +1,17 @@
+[
+  {
+    "id": "8e1e7786-66ca-4818-8bd4-1d863845e8cb",
+    "name": "d",
+    "products": [
+      {
+        "name": "d",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-04T17:04:58.249Z",
+    "updatedAt": "2025-01-04T17:04:58.249Z"
+  }
+]

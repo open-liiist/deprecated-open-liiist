@@ -12,6 +12,7 @@ export async function getUser(): Promise<User | null> {
 	const sessionCookie = cookies().get(environment.cookies.access);
 	if (sessionCookie === undefined)
 		return null
+	console.log(`il token ${sessionCookie.value}`)
 	const session = await getSession();
 	if (!session)
 		return null;
