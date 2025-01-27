@@ -180,21 +180,72 @@ services:
     ports:
       - "5000:5000"
 
-  scraping-service:
-    user: root
-    build: 
-      context: ./scraping-service
-      dockerfile: Dockerfile
-    container_name: scraping-service
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./scraping-service:/app
-    depends_on:
-      - db
-      - notification-alert
-      - product-receiver-service
-    stop_grace_period: 30s
-    restart: unless-stopped
+# this part is commented because it will not be needed during the presentation
+  # services:
+  #   scraping-conad:
+  #     user: root
+  #     build:
+  #       context: ./scraping-service/scraping/conad
+  #       dockerfile: ../../../Dockerfile.scraping_conad
+  #     container_name: scraping-conad
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock
+  #       - ./scraping-service/scraping/conad:/app
+  #     depends_on:
+  #       - db
+  #       - product-receiver-service
+  #       - notification-alert
+  #     stop_grace_period: 30s
+  #     restart: unless-stopped
+
+  #   scraping-gros-groups:
+  #     user: root
+  #     build:
+  #       context: ./scraping-service/scraping/gros_groups
+  #       dockerfile: ../../../Dockerfile.scraping_gros_groups
+  #     container_name: scraping-gros-groups
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock
+  #       - ./scraping-service/scraping/gros_groups:/app
+  #     depends_on:
+  #       - db
+  #       - product-receiver-service
+  #       - notification-alert
+  #     stop_grace_period: 30s
+  #     restart: unless-stopped
+
+  #   scraping-oasi-tigre:
+  #     user: root
+  #     build:
+  #       context: ./scraping-service/scraping/oasi_tigre
+  #       dockerfile: ../../../Dockerfile.scraping_oasi_tigre
+  #     container_name: scraping-oasi-tigre
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock
+  #       - ./scraping-service/scraping/oasi_tigre:/app
+  #     depends_on:
+  #       - db
+  #       - product-receiver-service
+  #       - notification-alert
+  #     stop_grace_period: 30s
+  #     restart: unless-stopped
+
+  #   scraping-shop:
+  #     user: root
+  #     build:
+  #       context: ./scraping-service/scraping_shop
+  #       dockerfile: ../../../Dockerfile.scraping_shop
+  #     container_name: scraping-shop
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock
+  #       - ./scraping-service/scraping_shop:/app
+  #       - ./.env:/app/.env
+  #     depends_on:
+  #       - db
+  #       - product-receiver-service
+  #       - notification-alert
+  #     stop_grace_period: 30s
+  #     restart: unless-stopped
 
 volumes:
   pgdata: 

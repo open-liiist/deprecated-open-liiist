@@ -2,7 +2,8 @@ import os
 import sys
 import requests
 import pandas as pd
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from libft import create_store
 
 def scraping_shops():
