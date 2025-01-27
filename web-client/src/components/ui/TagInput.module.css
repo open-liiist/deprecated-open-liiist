@@ -1,6 +1,6 @@
 .productContainer {
-    max-height: 60vh; /* Component-specific max height */
-    max-width: 60vh;
+    max-height: 90vh; /* Component-specific max height */
+    max-width: 90vh;
     display:flex;
     overflow-y: auto; /* Enable vertical scrolling */
     grid-template-columns: auto-fill, minmax(150px, 1fr); /* Adaptive grid */
@@ -8,6 +8,10 @@
     scrollbar-width: thin; /* Firefox scrollbar style */
     scrollbar-color: #d6d6d6 transparent;
   }
+  /* TagInput.module.css */
+.tagScale {
+  transform: scale(1.2); /* Aumenta di 20% */
+}
   
   .productContainer::-webkit-scrollbar {
     width: 8px;

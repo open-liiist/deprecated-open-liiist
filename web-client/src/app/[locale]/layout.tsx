@@ -7,6 +7,7 @@ import { UserProvider } from "@/services/auth";
 import { getUser } from "@/services/user";
 import {poppins} from "@/components/ui/fonts"
 
+
 const geistSans = localFont({
 	src: "../fonts/GeistVF.woff",
 	variable: "--font-geist-sans",

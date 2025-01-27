@@ -15,6 +15,7 @@ const config: Config = {
         liiist_white: '#F9FAFB',
         liiist_pink: '#FFABAD',
         liiist_black: '#333333',
+        list_light_blue: '#e2e8f0',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
