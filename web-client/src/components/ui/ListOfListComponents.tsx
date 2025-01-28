@@ -79,7 +79,7 @@ const ListOfListComponents = () => {
             ) : shoppingLists.length > 0 ? (
                 <div className="relative">
                     {/* Contenitore per le liste */}
-                    <div className="mt-3 relative mx-auto w-full max-w-2xl gap-1 max-h-[65vh] overflow-y-auto">
+                    <div className="mt-3 relative mx-auto w-full max-w-2xl gap-1 overflow-y-auto">
                         {shoppingLists.map((list) => (
                             <ListCard
                                 key={list.id}
@@ -104,7 +104,6 @@ const ListOfListComponents = () => {
                         ))}
                     </div>
                     {/* Effetto sfumato per lo scrolling */}
-                    <div className="w-full h-1 bg-gradient-to-t from-liiist_white to-transparent absolute bottom-0 pointer-events-none"></div>
                 </div>
             ) : (
                 <div className="mt-5 text-left">

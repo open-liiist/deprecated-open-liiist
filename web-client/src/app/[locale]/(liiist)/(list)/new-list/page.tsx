@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input2, Input } from "@/components/ui/input";
+import { Input2 } from "@/components/ui/input";
 import { ActionButton2 } from "@/components/ui/ActionButton";
 import { TagInput } from "@/components/ui/tag-input";
 import { AiOutlinePlus } from "react-icons/ai";
 import { handleCalculate } from "@/services/shoppingListService";
-import { GoArrowDownRight } from "react-icons/go";
+import { GoArrowDownRight, GoPlus } from "react-icons/go";
 
 const NewListPage = () => {
     const router = useRouter();
@@ -19,7 +19,7 @@ const NewListPage = () => {
     const [mode, setMode] = useState("convenience");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    
+
     const handleReorderProducts = (updatedTags: { name: string; quantity: number }[]) => {
         setProducts(updatedTags);
     };
@@ -81,7 +81,7 @@ const NewListPage = () => {
             console.log("Lista creata con successo:", result);
             router.push("/home");
         } catch (err) {
-            setError(err.message || "Failed to save the shopping list");
+            setError((err as Error).message || "Failed to save the shopping list");
             console.error("Errore durante il salvataggio della lista:", err);
         } finally {
             setIsLoading(false);
@@ -93,14 +93,15 @@ const NewListPage = () => {
     };
 
     return (
-        <div id="new-list-base" className=" flex p-5 absolute max-w-full w-full justify-center text-liiist_black">
-            <div id="new-list-card" className="max-w-2xl w-full">
-                <div id="new-list-form"  className="w-full flex-col">
+        <div className="relative min-h-screen bg-white text-liiist_black">
+            {/* Contenuto principale */}
+            <div className="max-w-2xl mx-auto"> {/* pb-24 per fare spazio a bottom_area */}
+                <div id="new-list-form" className="w-full flex flex-col">
                     <div id="title input" className="flex mb-10 items-center">
                         <Input2
-                        autoComplete="off"
+                            autoComplete="off"
                             id="listTitle"
-                            placeholder="enter list title"
+                            placeholder="Enter list title"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
                             className="w-full border-transparent text-5xl"
@@ -108,24 +109,33 @@ const NewListPage = () => {
                         <ActionButton2
                             onClick={handleSaveList}
                             disabled={isLoading || products.length === 0 || listTitle.trim() === ""}
-                            className="border-2 rounded-lg hover:scale-105 h-min"
+                            className="border-2 hover:scale-105 h-min ml-4"
                         >
-                            <AiOutlinePlus className="text-3xl"/>
+                            <GoPlus className="text-5xl" />
                         </ActionButton2>
                     </div>
-                    <div className="border-transparent min-h-[30vh]">
+                    <div className="border-transparent min-h-[30vh] mb-10">
                         <TagInput
-                            placeholder="add a product"
+                            placeholder="Add a product"
                             onAdd={handleProductAdd}
                             onRemove={handleProductRemove}
                             onIncreaseQuantity={handleIncreaseQuantity}
                             onDecreaseQuantity={handleDecreaseQuantity}
                             tags={products}
                             onReorder={handleReorderProducts}
-                            />
+                        />
                     </div>
                 </div>
-                <div id="bottom_area" className="w-full flex flex-row justify-between">
+                {error && (
+                    <div className="text-red-500 w-full flex justify-between mb-10">
+                        {error}
+                    </div>
+                )}
+            </div>
+
+            {/* Bottom Area Fisso */}
+            <div className="fixed bottom-0 left-0 w-full p-4">
+                <div id="bottom_area" className="max-w-2xl mx-auto flex justify-between">
                     <div className="flex flex-col items-start">
                         {mode === "convenience" ? (
                             <>
@@ -173,16 +183,11 @@ const NewListPage = () => {
                             )
                         }
                         disabled={isLoading || products.length === 0 || budget === ""}
-                        className="border-2 rounded-lg hover:scale-105 h-min"
-                        >
-                        <GoArrowDownRight className="text-5xl"/>
+                        className="border-2 hover:scale-105 h-min"
+                    >
+                        <GoArrowDownRight className="text-5xl" />
                     </ActionButton2>
                 </div>
-                {error && (
-                    <div className="text-red-500 w-full flex justify-between">
-                        {error}
-                    </div>
-                )}
             </div>
         </div>
     );

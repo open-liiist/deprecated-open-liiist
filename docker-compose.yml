@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
 
   web-client:
@@ -10,16 +12,16 @@ services:
     volumes:
       # Mount the web-client directory to the container (live reloading)
       - ./web-client:/app
-      # host node_modules
+      # Host node_modules
       - /app/node_modules
       - /app/.next
     command: npm run dev
     environment:
-      - NODE_ENV=${NODE_ENV}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - API_BASE_URL=${API_BASE_URL}
-      - NAME_COOKIE_ACCESS=${NAME_COOKIE_ACCESS}
-      - NAME_COOKIE_REFRESH=${NAME_COOKIE_REFRESH}
+      NODE_ENV: ${NODE_ENV}
+      LOG_LEVEL: ${LOG_LEVEL}
+      API_BASE_URL: ${API_BASE_URL}
+      NAME_COOKIE_ACCESS: ${NAME_COOKIE_ACCESS}
+      NAME_COOKIE_REFRESH: ${NAME_COOKIE_REFRESH}
 
   auth-service:
     build: 
@@ -31,10 +33,10 @@ services:
       db:
         condition: service_healthy
     environment:
-      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
-      - AUTH_DATABASE_URL=${AUTH_DATABASE_URL}
-      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
-      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+      AUTH_SERVICE_PORT: ${AUTH_SERVICE_PORT}
+      AUTH_DATABASE_URL: ${AUTH_DATABASE_URL}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
 
   search-service:
     build: 
@@ -43,15 +45,15 @@ services:
     ports:
       - "4001:4001"
     # depends_on:
-    #   db:
-    #     condition: service_healthy
+      # db:
+      #   condition: service_healthy # This is not needed with a remote database
     environment:
-      - SEARCH_SERVICE_PORT=${SEARCH_SERVICE_PORT}
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}  # Add: to point to the remote DB
-      - RUST_LOG=debug  #log: DEBUG
-
-
+      SEARCH_SERVICE_PORT: ${SEARCH_SERVICE_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}  # Point to the remote DB
+      RUST_LOG: ${RUST_LOG}
+    networks:
+      - shared-network
 
   product-receiver-service:
     container_name: product-receiver-service
@@ -59,19 +61,20 @@ services:
       context: ./product-receiver-service
       dockerfile: Dockerfile
     # depends_on:
-    #  db: 
-    #      condition: service_healthy
+    #   db: 
+    #       condition: service_healthy # This is not needed with a remote database
     ports:
       - "3002:3002"
     environment:
-      - PRODUCT_RECEIVER_SERVICE_PORT=${PRODUCT_RECEIVER_SERVICE_PORT}
-      - REMOTE_DATABASE_URL=${REMOTE_DATABASE_URL}
-    #  - DATABASE_URL=${DATABASE_URL} <- This is not needed with a remote database
-      - LOGSTASH_HOST=logstash
-      - LOGSTASH_PORT=50000
-    volumes:
+      PRODUCT_RECEIVER_SERVICE_PORT: ${PRODUCT_RECEIVER_SERVICE_PORT}
+      REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}
+      # DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 50000
       - ./product-receiver-service:/app
       - product_receiver_data:/app/data
+    networks:
+      - shared-network 
 
   db:
     image: postgres:13
@@ -84,7 +87,7 @@ services:
       POSTGRES_PASSWORD: postgrespw
       POSTGRES_DB: appdb
     healthcheck:
-      test: "pg_isready -h db"
+      test: ["CMD", "pg_isready", "-h", "db"]
       interval: 10s
       timeout: 10s
       retries: 10
@@ -96,18 +99,18 @@ services:
     restart: always
     command: php -S [::]:8090 -t /var/www/html
     ports:
-      - 8090:8090
+      - "8090:8090"
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: unless-stopped
     network_mode: host
     ports:
-      - 3003:3003
+      - "3003:3003"
     volumes:
       - ./data:/app/data
     environment:
-      - UPTIME_KUMA_PORT=${UPTIME_KUMA_PORT}
+      UPTIME_KUMA_PORT: ${UPTIME_KUMA_PORT}
 
   traefik:
     image: docker.io/library/traefik:v3.1.6
@@ -116,11 +119,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      # enable dashboard, don't do in production
+      # Enable dashboard, don't do in production
       - "8080:8080"
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro #For Linux
-    #  - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
+      # - /run/docker.sock:/run/docker.sock:ro #For Linux
+      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -138,26 +141,33 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
       - ./elasticsearch/setup-elasticsearch.sh:/usr/share/elasticsearch/setup-elasticsearch.sh
       - elasticsearch:/usr/share/elasticsearch/data:Z
-    entrypoint: |
-      sh -c "
-        elasticsearch &
-        chmod +x /usr/share/elasticsearch/setup-elasticsearch.sh &&
-        sleep 10 &&
-        /usr/share/elasticsearch/setup-elasticsearch.sh &&
-        wait
-      "
+    # entrypoint: |
+    #   sh -c "
+    #     elasticsearch &
+    #     chmod +x /usr/share/elasticsearch/setup-elasticsearch.sh &&
+    #     sleep 10 &&
+    #     /usr/share/elasticsearch/setup-elasticsearch.sh &&
+    #     wait
+    #   "
     environment:
       node.name: elasticsearch
-      #ES_JAVA_OPTS: -Xms512m -Xmx512m 
+      # ES_JAVA_OPTS: -Xms512m -Xmx512m 
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-
       discovery.type: single-node
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    networks:
+      - shared-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   logstash:
     build:
       context: logstash/
+      dockerfile: Dockerfile
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
@@ -166,20 +176,27 @@ services:
       - logstash_data:/usr/share/logstash/data
 
     ports:
-      - 5044:5044
-      - 50000:50000/tcp
-      - 50000:50000/udp
-      - 9600:9600
+      - "5044:5044"
+      - "50000:50000/tcp"
+      - "50000:50000/udp"
+      - "9600:9600"
     environment:
-      LS_JAVA_OPTS: -Xmx256m -Xms256m
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD}
+      JDBC_USER: ${JDBC_USER}
+      JDBC_PASSWORD: ${JDBC_PASSWORD}
+      ELASTICSEARCH_USER: ${ELASTICSEARCH_USER}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
     depends_on:
       - elasticsearch
+    networks:
+      - shared-network
     restart: unless-stopped
 
   kibana:
     build:
       context: kibana/
+      dockerfile: Dockerfile
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     ports:
@@ -187,11 +204,12 @@ services:
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
       - kibana_data:/usr/share/kibana/data
-
     environment:
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KIBANA_PASSWORD: ${KIBANA_PASSWORD}
     depends_on:
       - elasticsearch
+    networks:
+      - shared-network
     restart: unless-stopped
 
   notification-alert:
@@ -266,7 +284,20 @@ services:
   #       - notification-alert
   #     stop_grace_period: 30s
   #     restart: unless-stopped
+ 
+  setup-elasticsearch:
+    image: curlimages/curl:latest
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./elasticsearch/setup-elasticsearch.sh:/setup-elasticsearch.sh
+    entrypoint: ["sh", "/setup-elasticsearch.sh"]
+    networks:
+      - shared-network
+    restart: "no"
 
+    
 volumes:
   pgdata: 
   elasticsearch:
@@ -276,4 +307,4 @@ volumes:
 
 networks:
   shared-network:
-    external: true
+    driver: bridge

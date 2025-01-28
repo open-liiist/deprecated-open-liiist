@@ -28,7 +28,7 @@ const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate,
 
     return (
         <div id="list-card" 
-            className=" h-44 flex justify-between mb-6 bg-gray-50 rounded-2xl text-liiist_black  shadow-md transition-colors duration-300 hover:bg-gray-200"
+            className=" h-44 flex justify-between mb-6 bg-gray-50 rounded-3xl text-liiist_black transition-colors duration-300 hover:bg-gray-200"
             style={{ backgroundColor: isHovered ? "#e2e8f0" : backgroundColor }}
             >
             <div id="click zone" className="flex flex-col justify-between ml-5 w-full cursor-pointer"
@@ -37,16 +37,16 @@ const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate,
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <div className="font-bold text-3xl mt-6">{listName}</div>
-                <div className="text-white text-sm mb-3 bg-liiist_black w-fit rounded-lg flex gap-2 items-center px-4 py-1">
+                <div className=" text-4xl mt-6">{listName}</div>
+                <div className="text-white text-sm mb-6 rounded-full bg-liiist_black w-fit flex gap-2 items-center px-4 py-1">
                     <FaCheck/>
                     {listMode}
                 </div>
             </div>
             <div className="w-1/6 rounded-e-xl flex flex-col justify-between items-end pt-4 pb-3 px-4">
-                    <div className="border-liiist_black  hover:scale-105 cursor-pointer">
+                    <div className="border-liiist_black hover:scale-105 cursor-pointer">
                         <BsTrash3Fill 
-                            className="text-3xl m-0.5"
+                            className="text-3xl m-0.5 hover:text-red-500"
                             role = "button"
                             onClick={delateList}
                             onKeyPress={(e) => {
@@ -61,10 +61,10 @@ const ListCard = ({listId, listName, listMode, createdAt, delateList, calculate,
                             />
                     </div>
                     <div onClick={calculate} 
-                        className="rounded-lg border-2 border-liiist_black cursor-pointer hover:scale-105"
+                        className="rounded-lg cursor-pointer hover:scale-105"
                     >
                         <GoArrowDownRight
-                            className="text-4xl"
+                            className="text-6xl"
                         />
                     </div>
                 </div>

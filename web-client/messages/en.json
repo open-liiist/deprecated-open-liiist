@@ -1,6 +1,6 @@
 {
 	"manifest": {
-		"name": "GrocyGo App"
+		"name": "liiist App v1.0"
 	},
 	"auth": {
 		"login": "Login",
@@ -13,8 +13,8 @@
 		"forgotPassword": "Forgot Password?",
 		"resetPassword": "Reset Password",
 		"username": "Username",
-		"signIn": "Sign in to your account",
-		"create": "Create your account"
+		"signIn": "Accedi su liiist!",
+		"create": "Registrati su liiist"
 	},
 	"actions": {
 		"create": "Create",

@@ -1,4 +1,4 @@
-//search-service/src/models.rs
+// search-service/src/models.rs
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
@@ -15,21 +15,22 @@ pub struct StoreDB {
     pub picks_up_in_store: Option<bool>,
 }
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, FromRow, Debug, Clone)]
 pub struct ProductDB {
-    id: i32,
-    name: String,
-    description: String,
-    current_price: f64,
-    discount: f64,
-    price_for_kg: Option<f64>,
-    image_url: Option<String>,
+    pub id: i32,
+    pub name: String,
+    pub description: String,
+    pub current_price: f64,
+    pub discount: f64,
+    pub price_for_kg: Option<f64>,
+    pub image_url: Option<String>,
 }
 
 /// Search query parameters
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct SearchQuery {
     pub query: String,
+    pub position: Position, // Rende il campo pubblico
 }
 
 /// Struct for each product result
@@ -66,7 +67,7 @@ pub struct ProductExistRequest {
     pub position: Position,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Position {
     pub latitude: f64,
     pub longitude: f64,
@@ -94,7 +95,7 @@ pub struct ProductInShopResponse {
     pub details: Option<ProductResult>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct ProductsLowestPriceRequest {
     pub products: Vec<String>,
     pub position: Position,
