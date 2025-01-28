@@ -1,136 +1,254 @@
 #!/bin/bash
 
-# Attendi che Elasticsearch sia pronto
-echo "Attendere che Elasticsearch sia pronto..."
-until curl -s http://localhost:9200/_cluster/health | grep -q '"status":"green"\|"status":"yellow"'; do
-  echo "Elasticsearch non è ancora pronto. Riprovo tra 5 secondi..."
+# Funzione per controllare se un indice esiste
+index_exists() {
+  curl -s -o /dev/null -w "%{http_code}" "http://localhost:9200/$1"
+}
+
+# Funzione per controllare se un alias esiste e a quale indice punta
+alias_exists_and_points_to() {
+  local alias=$1
+  local index=$2
+  # Ottieni gli indici a cui l'alias punta
+  curl -s "http://localhost:9200/_alias/$alias" | grep -q "\"$index\""
+}
+
+# Attendere che Elasticsearch sia pronto
+echo "Waiting for Elasticsearch to become ready (status: green or yellow)..."
+until curl -s http://localhost:9200/_cluster/health | grep -q '"status":"yellow"'; do
+  if curl -s http://localhost:9200/_cluster/health | grep -q '"status":"green"'; then
+    break
+  fi
+  echo "Elasticsearch not ready yet. Retrying in 5 seconds..."
   sleep 5
 done
 
-echo "Elasticsearch è pronto. Creazione dell'indice 'products' con il mapping..."
-
-# Crea l'indice 'products' con il mapping
-curl -X PUT "http://localhost:9200/products" -H 'Content-Type: application/json' -d'
-{
-  "settings": {
-    "analysis": {
-      "normalizer": {
-        "lowercase_normalizer": {
-          "type": "custom",
-          "filter": ["lowercase"]
-        }
-      },
-      "analyzer": {
-        "whitespace_analyzer": {
-          "type": "custom",
-          "tokenizer": "whitespace",
-          "filter": ["lowercase"]
-        }
-      }
-    }
-  },
-  "mappings": {
-    "properties": {
-      "full_name": {
-        "type": "text",
-        "analyzer": "whitespace_analyzer"
-      },
-      "name": {
-        "type": "text",
-        "analyzer": "whitespace_analyzer",
-        "fields": {
-          "keyword": {
-            "type": "keyword",
-            "normalizer": "lowercase_normalizer",
-            "ignore_above": 256
+# Creare l'indice 'products_v2' con il mapping corretto solo se non esiste
+if [ $(index_exists "products_v2") != "200" ]; then
+  echo "Creating 'products_v2' index in Elasticsearch..."
+  curl -X PUT "http://localhost:9200/products_v2" -H 'Content-Type: application/json' -d '
+  {
+    "settings": {
+      "analysis": {
+        "analyzer": {
+          "ngram_analyzer": {
+            "type": "custom",
+            "tokenizer": "ngram_tokenizer",
+            "filter": ["lowercase"]
           }
-        }
-      },
-      "description": {
-        "type": "text",
-        "analyzer": "standard"
-      },
-      "location": {
-        "type": "geo_point"
-      },
-      "price": {
-        "type": "float"
-      },
-      "discount": {
-        "type": "float"
-      },
-      "quantity": {
-        "type": "keyword"
-      },
-      "image_url": {
-        "type": "keyword"
-      },
-      "price_for_kg": {
-        "type": "float"
-      },
-      "localization": {                   
-        "properties": {
-          "grocery": {
-            "type": "text",
-            "analyzer": "standard"
-          },
-          "lat": {
-            "type": "float"
-          },
-          "lon": {
-            "type": "float"
-          },
-          "street": {
-            "type": "text",
-            "analyzer": "standard"
-          },
-          "city": {
-            "type": "text",
-            "analyzer": "standard"
-          },
-          "zip_code": {
-            "type": "keyword"
-          },
-          "working_hours": {
-            "type": "text",
-            "analyzer": "standard"
-          },
-          "picks_up_in_store": {
-            "type": "boolean"
+        },
+        "tokenizer": {
+          "ngram_tokenizer": {
+            "type": "ngram",
+            "min_gram": 3,
+            "max_gram": 4,
+            "token_chars": ["letter", "digit"]
           }
         }
       }
+    },
+    "mappings": {
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { 
+          "type": "text",
+          "analyzer": "ngram_analyzer",
+          "fields": { 
+            "keyword": { 
+              "type": "keyword",
+              "ignore_above": 256 
+            } 
+          }
+        },
+        "full_name": { "type": "text" },
+        "description": { "type": "text" },
+        "current_price": { "type": "float" },
+        "discount": { "type": "float" },
+        "quantity": { "type": "keyword" },
+        "image_url": { "type": "keyword" },
+        "price_for_kg": { "type": "float" },
+        "grocery": { 
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "lat": { "type": "float" },
+        "lon": { "type": "float" },
+        "street": { "type": "text" },
+        "city": { 
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "zip_code": { "type": "keyword" },
+        "working_hours": { "type": "text" },
+        "picks_up_in_store": { "type": "boolean" },
+        "location": { "type": "geo_point" }
+      }
     }
-  }
-}'
+  }'
+  echo "'products_v2' index created with the correct mapping."
+else
+  echo "'products_v2' index already exists. Skipping creation."
+fi
 
-echo "Indice 'products' creato con successo!"
+# Creare l'alias 'products' che punta a 'products_v2' solo se non esiste o non punta correttamente
+if ! alias_exists_and_points_to "products" "products_v2"; then
+  echo "Creating alias 'products' pointing to 'products_v2'..."
+  curl -X POST "http://localhost:9200/_aliases" -H 'Content-Type: application/json' -d '
+  {
+    "actions": [
+      { "add": { "index": "products_v2", "alias": "products" } }
+    ]
+  }'
+  echo "Alias 'products' created, pointing to 'products_v2'."
+else
+  echo "Alias 'products' already points to 'products_v2'. Skipping alias creation."
+fi
 
-
+echo "Elasticsearch setup completed successfully!"
 
 # #!/bin/bash
-# #elasticsearch/setup-elasticsearch.sh
-# # Wait for Elasticsearch to start
+
+# # Funzione per controllare se un indice esiste
+# index_exists() {
+#   curl -s -o /dev/null -w "%{http_code}" "http://localhost:9200/$1"
+# }
+
+# # Attendere che Elasticsearch sia pronto
 # echo "Waiting for Elasticsearch to become ready (status: green or yellow)..."
-# until curl -s http://elasticsearch:9200/_cluster/health | grep -q '"status":"yellow"'; do
-#   if curl -s http://elasticsearch:9200/_cluster/health | grep -q '"status":"green"'; then
+# until curl -s http://localhost:9200/_cluster/health | grep -q '"status":"yellow"'; do
+#   if curl -s http://localhost:9200/_cluster/health | grep -q '"status":"green"'; then
 #     break
 #   fi
 #   echo "Elasticsearch not ready yet. Retrying in 5 seconds..."
 #   sleep 5
 # done
 
-# # curl -X PUT "localhost:9200/products" -H 'Content-Type: application/json' -d'
-# curl -X PUT "http://elasticsearch:9200/products" -H 'Content-Type: application/json' -d'
+# # Controllare se 'products_v2' esiste e eliminarlo se necessario
+# if [ $(index_exists "products_v2") == "200" ]; then
+#   echo "Deleting existing 'products_v2' index..."
+#   curl -X DELETE "http://localhost:9200/products_v2" -s -o /dev/null
+#   echo "'products_v2' index deleted."
+# else
+#   echo "'products_v2' index does not exist. Proceeding..."
+# fi
+
+# # Creare l'indice 'products_v2' con il mapping corretto
+# echo "Creating 'products_v2' index in Elasticsearch..."
+# curl -X PUT "http://localhost:9200/products_v2" -H 'Content-Type: application/json' -d '
 # {
-#   "mappings": {
-#     "properties": {
-#       "location": {
-#         "type": "geo_point"
+#   "settings": {
+#     "analysis": {
+#       "analyzer": {
+#         "ngram_analyzer": {
+#           "type": "custom",
+#           "tokenizer": "ngram_tokenizer",
+#           "filter": ["lowercase"]
+#         }
+#       },
+#       "tokenizer": {
+#         "ngram_tokenizer": {
+#           "type": "ngram",
+#           "min_gram": 3,
+#           "max_gram": 4,
+#           "token_chars": ["letter", "digit"]
+#         }
 #       }
 #     }
+#   },
+#   "mappings": {
+#     "properties": {
+#       "id": { "type": "integer" },
+#       "name": { 
+#         "type": "text",
+#         "analyzer": "ngram_analyzer",
+#         "fields": { 
+#           "keyword": { 
+#             "type": "keyword",
+#             "ignore_above": 256 
+#           } 
+#         }
+#       },
+#       "full_name": { "type": "text" },
+#       "description": { "type": "text" },
+#       "current_price": { "type": "float" },
+#       "discount": { "type": "float" },
+#       "quantity": { "type": "keyword" },
+#       "image_url": { "type": "keyword" },
+#       "price_for_kg": { "type": "float" },
+#       "grocery": { 
+#         "type": "text",
+#         "fields": {
+#           "keyword": {
+#             "type": "keyword",
+#             "ignore_above": 256
+#           }
+#         }
+#       },
+#       "lat": { "type": "float" },
+#       "lon": { "type": "float" },
+#       "street": { "type": "text" },
+#       "city": { 
+#         "type": "text",
+#         "fields": {
+#           "keyword": {
+#             "type": "keyword",
+#             "ignore_above": 256
+#           }
+#         }
+#       },
+#       "zip_code": { "type": "keyword" },
+#       "working_hours": { "type": "text" },
+#       "picks_up_in_store": { "type": "boolean" },
+#       "location": { "type": "geo_point" }
+#     }
 #   }
-# }
-# '
+# }'
+# echo "'products_v2' index created with the correct mapping."
 
-# echo "Index with geo_point created successfully!"
+# # Controllare se l'indice 'products' esiste prima di reindicizzare
+# if [ $(index_exists "products") == "200" ]; then
+#   echo "Reindexing data from 'products' to 'products_v2'..."
+#   curl -X POST "http://localhost:9200/_reindex" -H 'Content-Type: application/json' -d '
+#   {
+#     "source": {
+#       "index": "products"
+#     },
+#     "dest": {
+#       "index": "products_v2"
+#     }
+#   }'
+#   echo "Reindexing completed."
+# else
+#   echo "Source index 'products' does not exist. Skipping reindexing."
+# fi
+
+# # Controllare se l'indice 'products' esiste prima di eliminarlo
+# if [ $(index_exists "products") == "200" ]; then
+#   echo "Deleting old 'products' index..."
+#   curl -X DELETE "http://localhost:9200/products" -s -o /dev/null
+#   echo "'products' index deleted."
+# else
+#   echo "'products' index does not exist. Skipping deletion..."
+# fi
+
+# # Creare l'alias 'products' che punta a 'products_v2'
+# echo "Creating alias 'products' pointing to 'products_v2'..."
+# curl -X POST "http://localhost:9200/_aliases" -H 'Content-Type: application/json' -d '
+# {
+#   "actions": [
+#     { "add": { "index": "products_v2", "alias": "products" } }
+#   ]
+# }'
+# echo "Alias 'products' created, pointing to 'products_v2'."
+
+# echo "Elasticsearch setup completed successfully!"

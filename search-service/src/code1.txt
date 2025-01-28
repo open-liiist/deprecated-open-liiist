@@ -21,34 +21,64 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
+// search-service/src/handlers.rs
+
+use crate::models::{
+    LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
+    ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
+    SearchQuery, SearchResponse, ShopProduct, StoreDB,
+};
+use crate::search::{
+    fetch_lowest_price, fetch_lowest_price_shops, fetch_most_similar, fetch_product_in_shop,
+    fetch_product_nearby,
+};
+use crate::utils::haversine_distance;
+use crate::AppState;
+use axum::{
+    extract::{Path, Query, State},
+    http::StatusCode,
+    response::IntoResponse,
+    Json,
+};
+use serde_json::{Value, json};
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::sync::Arc;
+
+/// Handler per la ricerca dei prodotti
 pub async fn search_handler(
     State(app_state): State<Arc<AppState>>,
     Query(params): Query<SearchQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
+    // 1. Fetch most similar products
     let most_similar_result = fetch_most_similar(&app_state, &params.query).await;
     let mut most_similar = match most_similar_result {
         Ok(products) => products,
         Err(e) => {
-            return {
-                tracing::error!("Error fetching most similar products: {:?}", e);
-                Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(serde_json::json!({ "error": "Internal server error" })),
-                ))
-            }
+            tracing::error!("Error fetching most similar products: {:?}", e);
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "Internal server error" })),
+            ));
         }
     };
 
+    // 2. Exclude IDs from lowest price search
     let exclude_ids: HashSet<String> = most_similar
         .iter()
         .map(|product| product._id.clone())
         .collect();
 
+    // 3. Fetch lowest price products
     let mut lowest_price = match fetch_lowest_price(&app_state, &params.query, &exclude_ids).await {
         Ok(products) => products,
-        Err(_) => vec![],
+        Err(e) => {
+            tracing::error!("Error fetching lowest price products: {:?}", e);
+            vec![] // Continua anche in caso di errore
+        }
     };
 
+    // 4. If no lowest price, take the cheapest from most_similar
     if lowest_price.is_empty() {
         if most_similar.len() > 1 {
             if let Some((index, min_product)) =
@@ -64,6 +94,29 @@ pub async fn search_handler(
         }
     }
 
+    // 5. Calcola la distanza per i prodotti in most_similar
+    let most_similar_position = &params.position;
+    for product in &mut most_similar {
+        product.distance = Some(haversine_distance(
+            most_similar_position.latitude,
+            most_similar_position.longitude,
+            product.localization.lat,
+            product.localization.lon,
+        ));
+    }
+
+    // 6. Calcola la distanza per i prodotti in lowest_price
+    let lowest_price_position = &params.position;
+    for product in &mut lowest_price {
+        product.distance = Some(haversine_distance(
+            lowest_price_position.latitude,
+            lowest_price_position.longitude,
+            product.localization.lat,
+            product.localization.lon,
+        ));
+    }
+
+    // 7. Costruisci la risposta
     Ok((
         StatusCode::OK,
         Json(SearchResponse {
@@ -72,6 +125,7 @@ pub async fn search_handler(
         }),
     ))
 }
+
 
 pub async fn check_product_exist(
     State(app_state): State<Arc<AppState>>,
@@ -901,6 +955,8 @@ pub struct ProductDB {
 #[derive(Deserialize)]
 pub struct SearchQuery {
     pub query: String,
+    position: Position, // Assicurati che questa riga esista
+
 }
 
 /// Struct for each product result
@@ -1104,7 +1160,7 @@ pub async fn fetch_product_in_shop(
                 "bool": {
                     "must": [
                         { "match": { "name.keyword": product } },
-                        { "match": { "localization.grocery": shop } }
+                        { "match": { "grocery": shop } }
                     ],
                     "filter": {
                         "geo_distance": {
@@ -1223,34 +1279,47 @@ pub async fn parse_response(
             ProductResult {
                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
-                // Fallback a `name_id` se `name` non è presente
                 name: source["name"].as_str().unwrap_or("").to_string(),
                 description: source["description"].as_str().unwrap_or("").to_string(),
-                price: source["price"].as_f64().unwrap_or(0.0),
+                price: source["current_price"].as_f64().unwrap_or(0.0),  // Cambiato
                 discount: source["discount"].as_f64(),
-                distance: source["distance"].as_f64(),
+                distance: None,  // Lascia vuoto, calcola nel handler
                 localization: Localization {
-                    grocery: source["localization"]["grocery"]
-                        .as_str()
-                        .unwrap_or("")
-                        .to_string(),
-                    lat: source["localization"]["lat"].as_f64().unwrap_or(0.0),
-                    lon: source["localization"]["lon"].as_f64().unwrap_or(0.0),
+                    grocery: source["grocery"].as_str().unwrap_or("").to_string(),  // Mappato da "grocery" a localization.grocery
+                    lat: source["lat"].as_f64().unwrap_or(0.0),  // Mappato da "lat" a localization.lat
+                    lon: source["lon"].as_f64().unwrap_or(0.0),  // Mappato da "lon" a localization.lon
                 },
             }
         })
         .collect();
     Ok(products)
 }//search-service/src/utils.rs
-pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
-    let r = 6371.0; // Radius of the Earth in kilometers
+// pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
+//     let r = 6371.0; // Radius of the Earth in kilometers
+//     let dlat = (lat2 - lat1).to_radians();
+//     let dlon = (lon2 - lon1).to_radians();
+//     let a = (dlat / 2.0).sin() * (dlat / 2.0).sin()
+//         + lat1.to_radians().cos()
+//             * lat2.to_radians().cos()
+//             * (dlon / 2.0).sin()
+//             * (dlon / 2.0).sin();
+//     let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
+//     r * c // Distance in kilometers
+// }
+pub fn haversine_distance(
+    lat1: f64,
+    lon1: f64,
+    lat2: f64,
+    lon2: f64,
+) -> f64 {
+    let earth_radius = 6371.0; // Raggio medio della Terra in km
+
     let dlat = (lat2 - lat1).to_radians();
     let dlon = (lon2 - lon1).to_radians();
-    let a = (dlat / 2.0).sin() * (dlat / 2.0).sin()
-        + lat1.to_radians().cos()
-            * lat2.to_radians().cos()
-            * (dlon / 2.0).sin()
-            * (dlon / 2.0).sin();
-    let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
-    r * c // Distance in kilometers
+
+    let a = (dlat / 2.0).sin().powi(2)
+        + lat1.to_radians().cos() * lat2.to_radians().cos() * (dlon / 2.0).sin().powi(2);
+    let c = 2.0 * a.sqrt().asin();
+
+    earth_radius * c
 }

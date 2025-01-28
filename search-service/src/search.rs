@@ -1,6 +1,5 @@
+// search-service/src/search.rs
 
-
-//search-service/src/search.rs
 use crate::models::{Localization, ProductResult};
 use crate::AppState;
 use elasticsearch::SearchParts;
@@ -9,6 +8,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
+/// Fetch the most similar products based on the query.
 pub async fn fetch_most_similar(
     app_state: &Arc<AppState>,
     query: &str,
@@ -17,6 +17,7 @@ pub async fn fetch_most_similar(
     let response = client
         .search(SearchParts::Index(&["products"]))
         .body(json!({
+            "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
             "query": {
                 "multi_match": {
                     "fields": ["full_name", "name", "name.keyword", "description"],
@@ -32,6 +33,7 @@ pub async fn fetch_most_similar(
     parse_response(response).await
 }
 
+/// Fetch the lowest priced products excluding certain IDs.
 pub async fn fetch_lowest_price(
     app_state: &Arc<AppState>,
     query: &str,
@@ -41,16 +43,21 @@ pub async fn fetch_lowest_price(
     let response = client
         .search(SearchParts::Index(&["products"]))
         .body(json!({
+            "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
             "query": {
-                "multi_match": {
-                    "fields": ["full_name", "name", "name.keyword", "description"],
-                    "query": query,
-                    "type": "best_fields", // "phrase_prefix" changed in "phrase" & than -> "best_fields"
-                    "fuzziness": "AUTO"
+                "bool": {
+                    "must": {
+                        "multi_match": {
+                            "fields": ["full_name", "name", "name.keyword", "description"],
+                            "query": query,
+                            "type": "best_fields",
+                            "fuzziness": "AUTO"
+                        }
+                    }
                 }
             },
             "size": 10,
-            "sort": [{ "price": "asc" }]
+            "sort": [{ "current_price": "asc" }] // Assicurati che "current_price" sia il campo corretto
         }))
         .send()
         .await?;
@@ -62,6 +69,7 @@ pub async fn fetch_lowest_price(
     Ok(unique_products)
 }
 
+/// Fetch a single product nearby based on location.
 pub async fn fetch_product_nearby(
     app_state: &Arc<AppState>,
     product: &str,
@@ -72,6 +80,7 @@ pub async fn fetch_product_nearby(
     let response = client
         .search(SearchParts::Index(&["products"]))
         .body(json!({
+            "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
             "query": {
                 "bool": {
                     "must": {
@@ -100,6 +109,7 @@ pub async fn fetch_product_nearby(
     parse_response(response).await
 }
 
+/// Fetch a single product in a specific shop based on location.
 pub async fn fetch_product_in_shop(
     app_state: &Arc<AppState>,
     product: &str,
@@ -111,11 +121,24 @@ pub async fn fetch_product_in_shop(
     let response = client
         .search(SearchParts::Index(&["products"]))
         .body(json!({
+            "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
             "query": {
                 "bool": {
                     "must": [
-                        { "match": { "name.keyword": product } },
-                        { "match": { "localization.grocery": shop } }
+                        { 
+                            "term": { 
+                                "name.keyword": { 
+                                    "value": product 
+                                } 
+                            } 
+                        },
+                        { 
+                            "term": { 
+                                "grocery.keyword": { 
+                                    "value": shop 
+                                } 
+                            } 
+                        }
                     ],
                     "filter": {
                         "geo_distance": {
@@ -135,7 +158,7 @@ pub async fn fetch_product_in_shop(
     parse_response(response).await
 }
 
-/// Fetch prices for each product at nearby shops
+/// Fetch prices for each product at nearby shops.
 pub async fn fetch_lowest_price_shops(
     app_state: &Arc<AppState>,
     products: &[String],
@@ -149,6 +172,7 @@ pub async fn fetch_lowest_price_shops(
         let response = client
             .search(SearchParts::Index(&["products"]))
             .body(json!({
+                "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
                 "query": {
                     "bool": {
                         "must": {
@@ -171,7 +195,7 @@ pub async fn fetch_lowest_price_shops(
                     }
                 },
                 "size": 10,
-                "sort": [{ "price": "asc" }]
+                "sort": [{ "current_price": "asc" }] // Assicurati che "current_price" sia il campo corretto
             }))
             .send()
             .await?;
@@ -182,49 +206,12 @@ pub async fn fetch_lowest_price_shops(
     Ok(product_prices)
 }
 
-// Helper function to parse Elasticsearch response into Vec<ProductResult>
-// async fn parse_response(
-//     response: elasticsearch::http::response::Response,
-// ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
-//     let json_resp = response.json::<serde_json::Value>().await?;
-//     tracing::debug!("elasticsearch response: {:#?}", json_resp);
-//     let empty_vec = vec![];
-//     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
-//     let products = hits
-//         .iter()
-//         .map(|hit| {
-//             let source = &hit["_source"];
-//             ProductResult {
-//                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
-//                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
-//                 // Fallback a `name_id` se `name` non è presente
-//                 name: source
-//                 .get("name")
-//                 .and_then(|v| v.as_str())
-//                 .unwrap_or_else(|| source.get("name_id").and_then(|v| v.as_str()).unwrap_or(""))
-//                 .to_string(),
-//                 description: source["description"].as_str().unwrap_or("").to_string(),
-//                 price: source["price"].as_f64().unwrap_or(0.0),
-//                 discount: source["discount"].as_f64(),
-//                 distance: source["distance"].as_f64(),
-//                 localization: Localization {
-//                     grocery: source["localization"]["grocery"]
-//                         .as_str()
-//                         .unwrap_or("")
-//                         .to_string(),
-//                     lat: source["localization"]["lat"].as_f64().unwrap_or(0.0),
-//                     lon: source["localization"]["lon"].as_f64().unwrap_or(0.0),
-//                 },
-//             }
-//         })
-//         .collect();
-//     Ok(products)
-// }
+/// Parse the Elasticsearch response into a vector of `ProductResult`.
 pub async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let json_resp = response.json::<serde_json::Value>().await?;
-    tracing::debug!("elasticsearch response: {:#?}", json_resp);
+    tracing::debug!("Elasticsearch response: {:#?}", json_resp);
     let empty_vec = vec![];
     let hits = json_resp["hits"]["hits"].as_array().unwrap_or(&empty_vec);
     let products = hits
@@ -234,19 +221,15 @@ pub async fn parse_response(
             ProductResult {
                 _id: hit["_id"].as_str().unwrap_or("").to_string(),
                 full_name: source["full_name"].as_str().unwrap_or("").to_string(),
-                // Fallback a `name_id` se `name` non è presente
                 name: source["name"].as_str().unwrap_or("").to_string(),
                 description: source["description"].as_str().unwrap_or("").to_string(),
-                price: source["price"].as_f64().unwrap_or(0.0),
-                discount: source["discount"].as_f64(),
-                distance: source["distance"].as_f64(),
+                price: source["current_price"].as_f64().unwrap_or(0.0),
+                discount: source.get("discount").and_then(|d| d.as_f64()),
+                distance: None,  // Lascia vuoto, calcola nel handler
                 localization: Localization {
-                    grocery: source["localization"]["grocery"]
-                        .as_str()
-                        .unwrap_or("")
-                        .to_string(),
-                    lat: source["localization"]["lat"].as_f64().unwrap_or(0.0),
-                    lon: source["localization"]["lon"].as_f64().unwrap_or(0.0),
+                    grocery: source["grocery"].as_str().unwrap_or("").to_string(),
+                    lat: source["lat"].as_f64().unwrap_or(0.0),
+                    lon: source["lon"].as_f64().unwrap_or(0.0),
                 },
             }
         })
