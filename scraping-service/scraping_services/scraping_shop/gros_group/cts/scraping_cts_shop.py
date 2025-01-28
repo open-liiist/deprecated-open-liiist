@@ -1,11 +1,12 @@
 import os
 import sys
 from bs4 import BeautifulSoup
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import pandas as pd
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from libft import to_float, create_store, get_html_from_url, has_phone_number, has_superficie, geocode
 
 def scraping_shop():
-	generic_url = "https://www.cedigros.com/insegne/itemlist/filter.html?category=36&moduleId=219&Itemid=701&f63b37307b7737ac4a3515d3d0455523=1&format=raw"
+	generic_url = "https://www.ctssupermercati.it/punti_vendita/"
 	headers = {"Accept": "*/*"}
 
 	response = get_html_from_url(generic_url, headers = headers)
@@ -13,8 +14,21 @@ def scraping_shop():
 
 	soup = BeautifulSoup(response.text, 'html.parser')
 
+	shop_div = soup.find('div', class_="jet-listing-grid__items grid-col-desk-2 grid-col-tablet-2 grid-col-mobile-1 jet-listing-grid--1789")
+	shop_class = shop_div.find_all('div')
+	for all_shop in shop_class:
+		try:
+			shop_info = (all_shop.find('div', class_="jet-listing-dynamic-field__content")).get_text()
+			if ("Indirizzo:" in shop_info):
+				print(shop_info)
+			exit()
+		except:
+			pass
+	exit()
+
 	shop = soup.find_all('a', href=True)
 	url_shop_list = []
+	list_shop = []
 
 	for shop_info in shop:
 		url_shop = f"https://www.cedigros.com{shop_info['href']}"
@@ -69,7 +83,10 @@ def scraping_shop():
 			"picks_up_in_shop": "True",
 			"zip_code": postal_code
 			}
-		create_store(shop_info)
+		# create_store(shop_info)
+		list_shop.append(shop_info)
+	df = pd.DataFrame(list_shop)
+	df.to_csv('cts_shop.csv', index=False)
 
 if __name__ == "__main__":
 	scraping_shop()

@@ -1,0 +1,16 @@
+# Base Python image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy the scraping_shop folder
+COPY scraping_shop /app/scraping_shop
+COPY libft /app/libft
+
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Run the scheduler
+CMD ["python", "scraping_shop/scheduler.py"]

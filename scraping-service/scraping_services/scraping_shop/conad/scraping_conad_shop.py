@@ -1,8 +1,10 @@
 import os
 import sys
 import requests
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from libft import to_float, create_store
+import pandas as pd
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from libft import create_store
 
 def scraping_shops():
 	# Declaration of all information that request.post needs to function correctly
@@ -15,6 +17,7 @@ def scraping_shops():
 		"partial": True
 	}
 	headers = {"Accept": "*/*"}
+	list_shop = []
 	
 	response = requests.post(url, json=body_data, headers=headers)
 
@@ -31,7 +34,7 @@ def scraping_shops():
 			"name": info_need['storeType'],
 			"street": info_need['address']['formattedAddress'],
 			"lat": info_need['geoPoint']['latitude'],
-			"long": info_need['geoPoint']['longitude'],
+			"lng": info_need['geoPoint']['longitude'],
 			"city": info_need['address']['town'],
 			"zip_code": info_need['address']['postalCode'],
 			"picks_up_in_shop": True,
@@ -43,7 +46,10 @@ def scraping_shops():
 			else:
 				service_hours = " ".join(info_need['serviceHours'])
 				shop_info['working_hours'] = service_hours
-		create_store(shop_info)
+		# create_store(shop_info)
+		list_shop.append(shop_info)
+	df = pd.DataFrame(list_shop)
+	df.to_csv('conad_shop.csv', index=False)
 
 
 if __name__ == "__main__":

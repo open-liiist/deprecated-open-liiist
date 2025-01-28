@@ -60,3 +60,4 @@ async fn main() {
     println!("Search service started at port {}", port);
     axum::serve(listener, app).await.unwrap();
 }
+
