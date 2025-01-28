@@ -18,7 +18,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 # This function is use for the conad site, because in some case it search for a thing that doesn't exist
 
-def wait_for_element_conad(driver, xpath, max_retries=2, retry_delay=2):
+def wait_for_element_conad(driver, xpath, max_retries=1, retry_delay=3):
 
 	for i in range(max_retries):
 		try:
