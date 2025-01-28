@@ -71,6 +71,7 @@ services:
       # DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 50000
+    volumes:
       - ./product-receiver-service:/app
       - product_receiver_data:/app/data
     networks:

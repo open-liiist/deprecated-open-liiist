@@ -50,7 +50,7 @@ export const getUserLocation =() => {
                 }
             );
         }else {
-            reject("bro your browser doesn't support geolocation")
+            reject(" your browser doesn't support geolocation")
         }
     })
 }
