@@ -3,7 +3,7 @@
 use crate::models::{
     LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
     ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
-    SearchQuery, SearchResponse, ShopProduct, StoreDB,
+    SearchQuery, SearchResponse, ShopProduct, StoreDB, Position,
 };
 use crate::search::{
     fetch_lowest_price, fetch_lowest_price_shops, fetch_most_similar, fetch_product_in_shop,
@@ -27,6 +27,13 @@ pub async fn search_handler(
     State(app_state): State<Arc<AppState>>,
     Query(params): Query<SearchQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
+    tracing::info!("Received search query: {:?}", params);
+    let position = Position {
+        latitude: params.position_latitude,
+        longitude: params.position_longitude,
+    };
+    tracing::info!("Constructed position: {:?}", position);
+    
     // 1. Fetch most similar products
     let most_similar_result = fetch_most_similar(&app_state, &params.query).await;
     let mut most_similar = match most_similar_result {
@@ -47,7 +54,7 @@ pub async fn search_handler(
         .collect();
 
     // 3. Fetch lowest price products
-    let mut lowest_price = match fetch_lowest_price(&app_state, &params.query, &exclude_ids).await {
+    let mut lowest_price = match fetch_lowest_price(&app_state, &params.query, &exclude_ids, &position).await {
         Ok(products) => products,
         Err(e) => {
             tracing::error!("Error fetching lowest price products: {:?}", e);
@@ -72,22 +79,22 @@ pub async fn search_handler(
     }
 
     // 5. Calcola la distanza per i prodotti in most_similar
-    let most_similar_position = &params.position;
+    //let most_similar_position = &params.position;
     for product in &mut most_similar {
         product.distance = Some(haversine_distance(
-            most_similar_position.latitude,
-            most_similar_position.longitude,
+            position.latitude,
+            position.longitude,
             product.localization.lat,
             product.localization.lon,
         ));
     }
 
     // 6. Calcola la distanza per i prodotti in lowest_price
-    let lowest_price_position = &params.position;
+    //let lowest_price_position = &params.position;
     for product in &mut lowest_price {
         product.distance = Some(haversine_distance(
-            lowest_price_position.latitude,
-            lowest_price_position.longitude,
+            position.latitude,
+            position.longitude,
             product.localization.lat,
             product.localization.lon,
         ));

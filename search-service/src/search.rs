@@ -1,6 +1,6 @@
 // search-service/src/search.rs
 
-use crate::models::{Localization, ProductResult};
+use crate::models::{Localization, ProductResult, Position};
 use crate::AppState;
 use elasticsearch::SearchParts;
 use serde_json::json;
@@ -38,6 +38,7 @@ pub async fn fetch_lowest_price(
     app_state: &Arc<AppState>,
     query: &str,
     exclude_ids: &HashSet<String>,
+    position: &Position,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {
     let client = app_state.client.lock().await;
     let response = client
@@ -52,6 +53,15 @@ pub async fn fetch_lowest_price(
                             "query": query,
                             "type": "best_fields",
                             "fuzziness": "AUTO"
+                        }
+                    },
+                    "filter": {
+                        "geo_distance": { // Aggiungi un filtro di distanza se necessario
+                            "distance": "200km",
+                            "location": {
+                                "lat": position.latitude,
+                                "lon": position.longitude
+                            }
                         }
                     }
                 }

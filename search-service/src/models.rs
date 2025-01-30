@@ -30,7 +30,9 @@ pub struct ProductDB {
 #[derive(Deserialize, Debug)]
 pub struct SearchQuery {
     pub query: String,
-    pub position: Position, // Rende il campo pubblico
+    //pub position: Position, // Rende il campo pubblico
+    pub position_latitude: f64,
+    pub position_longitude: f64,
 }
 
 /// Struct for each product result
