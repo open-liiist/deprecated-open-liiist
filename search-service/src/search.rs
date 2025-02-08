@@ -172,8 +172,9 @@ pub async fn fetch_product_in_shop(
 pub async fn fetch_lowest_price_shops(
     app_state: &Arc<AppState>,
     products: &[String],
-    latitude: f64,
-    longitude: f64,
+    // latitude: f64,
+    // longitude: f64,
+    position: &Position, // Usa la posizione invece di latitudine e longitudine
 ) -> Result<HashMap<String, Vec<ProductResult>>, Box<dyn std::error::Error + Send + Sync>> {
     let mut product_prices: HashMap<String, Vec<ProductResult>> = HashMap::new();
     let client = app_state.client.lock().await;
@@ -186,19 +187,14 @@ pub async fn fetch_lowest_price_shops(
                 "query": {
                     "bool": {
                         "must": {
-                            "multi_match": {
-                                "query": product,
-                                "fields": ["full_name", "name", "description"],
-                                "type": "best_fields",
-                                "fuzziness": "AUTO"
-                            }
+                            "term": { "name.keyword": product }
                         },
                         "filter": {
                             "geo_distance": {
                                 "distance": "100km",
                                 "location": {
-                                    "lat": latitude,
-                                    "lon": longitude
+                                    "lat": position.latitude,
+                                    "lon": position.longitude
                                 }
                             }
                         }

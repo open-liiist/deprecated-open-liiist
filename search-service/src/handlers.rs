@@ -22,7 +22,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
-/// Handler per la ricerca dei prodotti
+/// Handler per la ricerca dei prodotti: Modalità Standard
 pub async fn search_handler(
     State(app_state): State<Arc<AppState>>,
     Query(params): Query<SearchQuery>,
@@ -207,6 +207,7 @@ pub async fn search_product_in_shop(
     }
 }
 
+/// Handler per trovare il negozio con i prezzi più bassi (Modalità Comodità e Risparmio)
 pub async fn find_lowest_price(
     State(app_state): State<Arc<AppState>>,
     Json(payload): Json<ProductsLowestPriceRequest>,
@@ -217,8 +218,9 @@ pub async fn find_lowest_price(
     let product_prices = match fetch_lowest_price_shops(
         &app_state,
         &payload.products,
-        payload.position.latitude,
-        payload.position.longitude
+        // payload.position.latitude,
+        // payload.position.longitude
+        &payload.position, // Passa il riferimento a Position
     )
     .await
     {
