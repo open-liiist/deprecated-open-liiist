@@ -167,5 +167,39 @@
     "userId": "12345",
     "createdAt": "2025-01-30T16:20:59.063Z",
     "updatedAt": "2025-01-30T16:20:59.063Z"
+  },
+  {
+    "id": "30dc8e0e-02be-4faa-baf0-7dfd82e1b0fa",
+    "name": "lista1",
+    "products": [
+      {
+        "name": "dentifircio",
+        "quantity": 1
+      },
+      {
+        "name": "pane fresco",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-30T22:51:41.765Z",
+    "updatedAt": "2025-01-30T22:51:41.765Z"
+  },
+  {
+    "id": "e1bb5e80-7708-4bd7-965d-1f7a2c5e1b91",
+    "name": "lists",
+    "products": [
+      {
+        "name": "tonno",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-30T23:17:54.521Z",
+    "updatedAt": "2025-01-30T23:17:54.521Z"
   }
 ]
