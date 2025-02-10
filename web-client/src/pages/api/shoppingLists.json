@@ -1,0 +1,205 @@
+[
+  {
+    "id": "294a13e2-8969-4ffc-8d36-e75f85f383bd",
+    "name": "Miao",
+    "products": [
+      {
+        "name": "latte🥛",
+        "quantity": 1
+      },
+      {
+        "name": "miele",
+        "quantity": 1
+      },
+      {
+        "name": "zucca🎃",
+        "quantity": 1
+      },
+      {
+        "name": "avocado🥑",
+        "quantity": 1
+      },
+      {
+        "name": "pomodorini",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-28T10:14:47.224Z",
+    "updatedAt": "2025-01-28T10:14:47.224Z"
+  },
+  {
+    "id": "d58eb6cc-37fd-4f83-8eba-f3aa58d68fcd",
+    "name": "comic sans bold pro x fides srl",
+    "products": [
+      {
+        "name": "JavaScript",
+        "quantity": 1
+      },
+      {
+        "name": "Typescript",
+        "quantity": 1
+      },
+      {
+        "name": "linguaggi usati",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-28T10:33:38.139Z",
+    "updatedAt": "2025-01-28T10:33:38.139Z"
+  },
+  {
+    "id": "a5beb19b-e8db-4a7c-9858-2e4b18be5684",
+    "name": "lista di alessio",
+    "products": [
+      {
+        "name": "mieke",
+        "quantity": 1
+      },
+      {
+        "name": "frutta",
+        "quantity": 1
+      },
+      {
+        "name": "avocado🥑",
+        "quantity": 1
+      },
+      {
+        "name": "broccoli🥦",
+        "quantity": 1
+      },
+      {
+        "name": "banane🍌",
+        "quantity": 1
+      },
+      {
+        "name": "cazzi",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-28T10:34:46.121Z",
+    "updatedAt": "2025-01-28T10:34:46.121Z"
+  },
+  {
+    "id": "0582e27e-3a61-4297-820e-35f5f9ef8951",
+    "name": "title",
+    "products": [
+      {
+        "name": "pomodoro🍅",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-28T12:52:12.234Z",
+    "updatedAt": "2025-01-28T12:52:12.237Z"
+  },
+  {
+    "id": "257aae5e-6a57-4d45-9a01-d7325f0d34fb",
+    "name": "lista",
+    "products": [
+      {
+        "name": "latte🥛",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-29T16:03:24.572Z",
+    "updatedAt": "2025-01-29T16:03:24.572Z"
+  },
+  {
+    "id": "ab31011c-15c7-4490-9a14-2034c8b87c7c",
+    "name": "comiclist",
+    "products": [
+      {
+        "name": "sangue",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-29T22:02:15.592Z",
+    "updatedAt": "2025-01-29T22:02:15.592Z"
+  },
+  {
+    "id": "b1ff7744-f743-441b-91dc-5549361c242a",
+    "name": "lista x lista",
+    "products": [
+      {
+        "name": "pasta🍝",
+        "quantity": 1
+      },
+      {
+        "name": "noci",
+        "quantity": 1
+      },
+      {
+        "name": "sedano",
+        "quantity": 1
+      },
+      {
+        "name": "broccolo romano",
+        "quantity": 1
+      },
+      {
+        "name": "pomodorini",
+        "quantity": 1
+      },
+      {
+        "name": "dentifricio",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-30T16:20:59.063Z",
+    "updatedAt": "2025-01-30T16:20:59.063Z"
+  },
+  {
+    "id": "30dc8e0e-02be-4faa-baf0-7dfd82e1b0fa",
+    "name": "lista1",
+    "products": [
+      {
+        "name": "dentifircio",
+        "quantity": 1
+      },
+      {
+        "name": "pane fresco",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-30T22:51:41.765Z",
+    "updatedAt": "2025-01-30T22:51:41.765Z"
+  },
+  {
+    "id": "e1bb5e80-7708-4bd7-965d-1f7a2c5e1b91",
+    "name": "lists",
+    "products": [
+      {
+        "name": "tonno",
+        "quantity": 1
+      }
+    ],
+    "budget": "0",
+    "mode": "convenience",
+    "userId": "12345",
+    "createdAt": "2025-01-30T23:17:54.521Z",
+    "updatedAt": "2025-01-30T23:17:54.521Z"
+  }
+]

@@ -22,6 +22,11 @@ services:
       API_BASE_URL: ${API_BASE_URL}
       NAME_COOKIE_ACCESS: ${NAME_COOKIE_ACCESS}
       NAME_COOKIE_REFRESH: ${NAME_COOKIE_REFRESH}
+      NEXT_PUBLIC_SEARCH_SERVICE_URL: ${NEXT_PUBLIC_SEARCH_SERVICE_URL}
+    networks:
+      - default
+      - shared-network  # Aggiungi questa riga
+
 
   auth-service:
     build: 
@@ -71,6 +76,7 @@ services:
       # DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 50000
+    volumes:
       - ./product-receiver-service:/app
       - product_receiver_data:/app/data
     networks:
@@ -181,7 +187,7 @@ services:
       - "50000:50000/udp"
       - "9600:9600"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xms1g -Xmx1g"
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD}
       JDBC_USER: ${JDBC_USER}
       JDBC_PASSWORD: ${JDBC_PASSWORD}

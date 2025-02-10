@@ -1,3 +1,4 @@
+//web-client/src/lib/api.ts
 import environment from '@/config/environment';
 import logger from '@/config/logger';
 
