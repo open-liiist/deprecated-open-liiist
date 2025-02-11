@@ -2,6 +2,7 @@
 
 use crate::models::{Localization, ProductResult, Position};
 use crate::AppState;
+use crate::utils::sanitize;
 use elasticsearch::SearchParts;
 use serde_json::json;
 use std::collections::HashMap;
@@ -169,48 +170,74 @@ pub async fn fetch_product_in_shop(
 }
 
 /// Fetch prices for each product at nearby shops.
+// pub async fn fetch_lowest_price_shops(
+//     app_state: &Arc<AppState>,
+//     products: &[String],
+//     // latitude: f64,
+//     // longitude: f64,
+//     position: &Position, // Usa la posizione invece di latitudine e longitudine
+// ) -> Result<HashMap<String, Vec<ProductResult>>, Box<dyn std::error::Error + Send + Sync>> {
+//     let mut product_prices: HashMap<String, Vec<ProductResult>> = HashMap::new();
+//     let client = app_state.client.lock().await;
+
+//     for product in products.iter() {
+//         let response = client
+//             .search(SearchParts::Index(&["products"]))
+//             .body(json!({
+//                 "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
+//                 "query": {
+//                     "bool": {
+//                         "must": {
+//                             "term": { "name.keyword": product }
+//                         },
+//                         "filter": {
+//                             "geo_distance": {
+//                                 "distance": "100km",
+//                                 "location": {
+//                                     "lat": position.latitude,
+//                                     "lon": position.longitude
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 },
+//                 "size": 10,
+//                 "sort": [{ "current_price": "asc" }] // Assicurati che "current_price" sia il campo corretto
+//             }))
+//             .send()
+//             .await?;
+
+//         let shop_products = parse_response(response).await?;
+//         product_prices.insert(product.clone(), shop_products);
+//     }
+//     Ok(product_prices)
+// }
+
 pub async fn fetch_lowest_price_shops(
     app_state: &Arc<AppState>,
     products: &[String],
-    // latitude: f64,
-    // longitude: f64,
-    position: &Position, // Usa la posizione invece di latitudine e longitudine
+    position: &Position,
 ) -> Result<HashMap<String, Vec<ProductResult>>, Box<dyn std::error::Error + Send + Sync>> {
     let mut product_prices: HashMap<String, Vec<ProductResult>> = HashMap::new();
     let client = app_state.client.lock().await;
 
     for product in products.iter() {
+        // Costruiamo la query ibrida per il prodotto corrente
+        let es_query = build_product_query(product, position);
+
         let response = client
             .search(SearchParts::Index(&["products"]))
-            .body(json!({
-                "_source": ["full_name", "name", "description", "current_price", "discount", "grocery", "lat", "lon"],
-                "query": {
-                    "bool": {
-                        "must": {
-                            "term": { "name.keyword": product }
-                        },
-                        "filter": {
-                            "geo_distance": {
-                                "distance": "100km",
-                                "location": {
-                                    "lat": position.latitude,
-                                    "lon": position.longitude
-                                }
-                            }
-                        }
-                    }
-                },
-                "size": 10,
-                "sort": [{ "current_price": "asc" }] // Assicurati che "current_price" sia il campo corretto
-            }))
+            .body(es_query)
             .send()
             .await?;
-
+        
         let shop_products = parse_response(response).await?;
         product_prices.insert(product.clone(), shop_products);
     }
     Ok(product_prices)
 }
+
+
 
 /// Parse the Elasticsearch response into a vector of `ProductResult`.
 pub async fn parse_response(
@@ -241,4 +268,39 @@ pub async fn parse_response(
         })
         .collect();
     Ok(products)
+}
+
+/// Costruisce una query ibrida per cercare un prodotto.
+/// Combina una term query esatta (sul campo non analizzato) con una multi_match fuzzy sui campi testuali.
+/// Integra inoltre un filtro geo per limitare i risultati alla posizione dell'utente.
+pub fn build_product_query(product_input: &str, position: &Position) -> serde_json::Value {
+    // Sanitizziamo l'input per ottenere la forma canonicizzata (per il match esatto)
+    let sanitized = crate::utils::sanitize(product_input);
+    
+    json!({
+        "query": {
+            "bool": {
+                "should": [
+                    { "term": { "name.keyword": sanitized } },
+                    {
+                        "multi_match": {
+                            "query": product_input,
+                            "fields": ["full_name^3", "name", "description"],
+                            "fuzziness": "AUTO"
+                        }
+                    }
+                ],
+                "minimum_should_match": 1,
+                "filter": {
+                    "geo_distance": {
+                        "distance": "100km",
+                        "location": {
+                            "lat": position.latitude,
+                            "lon": position.longitude
+                        }
+                    }
+                }
+            }
+        }
+    })
 }
