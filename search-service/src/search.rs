@@ -2,7 +2,7 @@
 
 use crate::models::{Localization, ProductResult, Position};
 use crate::AppState;
-use crate::utils::sanitize;
+//use crate::utils::sanitize;
 use elasticsearch::SearchParts;
 use serde_json::json;
 use std::collections::HashMap;
@@ -227,19 +227,54 @@ pub async fn parse_response(
 /// Costruisce una query ibrida per cercare un prodotto.
 /// Combina una term query esatta (usando la forma sanitizzata) con una multi_match fuzzy
 /// sui campi testuali e integra un filtro geo.
-pub fn build_product_query(product_input: &str, position: &Position) -> serde_json::Value {
-    let sanitized = sanitize(product_input);
-    let wildcard_value = format!("{}*", sanitized);
+// pub fn build_product_query(product_input: &str, position: &Position) -> serde_json::Value {
+//     let sanitized = sanitize(product_input);
+//     let wildcard_value = format!("{}*", sanitized);
 
+//     json!({
+//         "query": {
+//             "bool": {
+//                 "should": [
+//                     {
+//                         "wildcard": {
+//                             "name.keyword": {
+//                                 "value": wildcard_value
+//                             }
+//                         }
+//                     },
+//                     {
+//                         "multi_match": {
+//                             "query": product_input,
+//                             "fields": ["full_name^3", "name", "description"],
+//                             "fuzziness": "AUTO"
+//                         }
+//                     }
+//                 ],
+//                 "minimum_should_match": 1,
+//                 "filter": {
+//                     "geo_distance": {
+//                         "distance": "100km",
+//                         "location": {
+//                             "lat": position.latitude,
+//                             "lon": position.longitude
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     })
+// }
+
+pub fn build_product_query(product_input: &str, position: &Position) -> serde_json::Value {
     json!({
         "query": {
             "bool": {
                 "should": [
                     {
-                        "wildcard": {
-                            "name.keyword": {
-                                "value": wildcard_value
-                            }
+                        "multi_match": {
+                            "query": product_input,
+                            "type": "phrase_prefix",  // Usa il phrase_prefix per abbinamenti "naturali"
+                            "fields": ["full_name^3", "name", "description"]
                         }
                     },
                     {
@@ -264,4 +299,3 @@ pub fn build_product_query(product_input: &str, position: &Position) -> serde_js
         }
     })
 }
-

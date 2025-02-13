@@ -2,3 +2,5 @@ SELECT p.id, p.name, p.full_name, p.description, p.current_price, p.discount, p.
 FROM "Product" p 
 JOIN "Localization" l ON p."localizationId" = l.id 
 WHERE p."updated_at" > :sql_last_value
+-- Temporaneamente rimuoviamo il filtro per reindicizzare tutto
+-- WHERE p."updated_at" > :sql_last_value

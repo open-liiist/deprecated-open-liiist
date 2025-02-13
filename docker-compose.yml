@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
 
   web-client:
@@ -42,6 +41,8 @@ services:
       AUTH_DATABASE_URL: ${AUTH_DATABASE_URL}
       ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+    networks:
+      - shared-network
 
   search-service:
     build: 
@@ -49,9 +50,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
-    # depends_on:
-      # db:
-      #   condition: service_healthy # This is not needed with a remote database
+    depends_on:
+      db:
+        condition: service_healthy # This is not needed with a remote database
     environment:
       SEARCH_SERVICE_PORT: ${SEARCH_SERVICE_PORT}
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
@@ -65,17 +66,19 @@ services:
     build: 
       context: ./product-receiver-service
       dockerfile: Dockerfile
-    # depends_on:
-    #   db: 
-    #       condition: service_healthy # This is not needed with a remote database
+    depends_on:
+      db: 
+          condition: service_healthy # This is not needed with a remote database
     ports:
       - "3002:3002"
     environment:
       PRODUCT_RECEIVER_SERVICE_PORT: ${PRODUCT_RECEIVER_SERVICE_PORT}
       REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}
-      # DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
+      DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 50000
+      JDBC_USER: user
+      JDBC_PASSWORD: postgrespw
     volumes:
       - ./product-receiver-service:/app
       - product_receiver_data:/app/data
@@ -99,6 +102,8 @@ services:
       retries: 10
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - shared-network 
 
   adminer:
     image: adminer
@@ -106,6 +111,8 @@ services:
     command: php -S [::]:8090 -t /var/www/html
     ports:
       - "8090:8090"
+    networks:
+      - shared-network
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -164,10 +171,10 @@ services:
     networks:
       - shared-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:9200/_cluster/health | grep -E '\"status\":\"(green|yellow)\"'"]
+      interval: 15s
+      timeout: 20s
+      retries: 10
     restart: unless-stopped
 
   logstash:
@@ -194,7 +201,10 @@ services:
       ELASTICSEARCH_USER: ${ELASTICSEARCH_USER}
       ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
     depends_on:
-      - elasticsearch
+      elasticsearch:
+          condition: service_healthy
+      db:
+          condition: service_healthy
     networks:
       - shared-network
     restart: unless-stopped
