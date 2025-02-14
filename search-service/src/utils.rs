@@ -16,3 +16,14 @@ pub fn haversine_distance(
 
     earth_radius * c
 }
+
+/// Trasforma l’input in minuscolo, rimuove i caratteri speciali e sostituisce gli spazi con underscore.
+/// Esempio: "brodo di verdure" -> "brodo_di_verdure"
+pub fn sanitize(input: &str) -> String {
+    input
+        .to_lowercase()
+        .replace(|c: char| !c.is_alphanumeric() && !c.is_whitespace(), "")
+        .split_whitespace()
+        .collect::<Vec<&str>>()
+        .join("_")
+}
