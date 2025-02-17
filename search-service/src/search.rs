@@ -1,6 +1,6 @@
 // search-service/src/search.rs
 
-use crate::models::{Localization, ProductResult, Position};
+use crate::models::{ProductResult, Position}; //removed: Localization
 use crate::AppState;
 //use crate::utils::sanitize;
 use elasticsearch::SearchParts;
@@ -8,6 +8,8 @@ use serde_json::json;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
+use crate::utils::sanitize;
+
 
 /// Esegue una ricerca fuzzy (ibrida) per “most similar”
 /// usando una multi_match query sui campi testuali.
@@ -188,7 +190,15 @@ pub async fn fetch_lowest_price_shops(
             .body(es_query)
             .send()
             .await?;
-        let shop_products = parse_response(response).await?;
+        // let shop_products = parse_response(response).await?;
+        // product_prices.insert(product.clone(), shop_products);
+
+        // Filtra i risultati per includere solo quelli che, dopo sanitizzazione, corrispondono esattamente all'input
+        let shop_products: Vec<ProductResult> = parse_response(response).await?
+            .into_iter()
+            //.filter(|pr| sanitize(&pr.name) == sanitize(product))
+            .filter(|pr| sanitize(&pr.name).contains(&sanitize(product))) //Accettiamo come match se il nome del prodotto (sanitizzato) contiene il termine dell'input sanitizzato
+            .collect();
         product_prices.insert(product.clone(), shop_products);
     }
     Ok(product_prices)
@@ -271,9 +281,17 @@ pub fn build_product_query(product_input: &str, position: &Position) -> serde_js
             "bool": {
                 "should": [
                     {
+                        "term": {
+                            "name.keyword": {
+                                "value": sanitize(product_input),
+                                "boost": 5.0
+                            }
+                        }
+                    },
+                    {
                         "multi_match": {
                             "query": product_input,
-                            "type": "phrase_prefix",  // Usa il phrase_prefix per abbinamenti "naturali"
+                            "type": "phrase_prefix",
                             "fields": ["full_name^3", "name", "description"]
                         }
                     },

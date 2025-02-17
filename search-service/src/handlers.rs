@@ -17,9 +17,11 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use serde_json::{json, Value};
+use serde_json::{json}; // removed: Value
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+//use crate::utils::sanitize;
+
 
 /// Handler per la ricerca dei prodotti: Modalità Standard
 pub async fn search_handler(
@@ -444,7 +446,8 @@ pub async fn find_lowest_price(
                 // Se il negozio copre tutti i termini richiesti
                 if best_for_input.len() == required_count {
                     let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
-                    tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
+                    //tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
+                    tracing::debug!("Shop '{}' - best_for_input: {:?}", shop_name, best_for_input);
                     let selected_products: Vec<ShopProduct> = best_for_input.into_values().collect();
                     if let Some(ref mut current_best) = best_option {
                         if total_price < current_best.total_price {
