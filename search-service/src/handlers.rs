@@ -3,7 +3,7 @@
 use crate::models::{
     LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
     ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
-    SearchQuery, SearchResponse, ShopProduct, StoreDB, Position,
+    SearchQuery, SearchResponse, ShopProduct, StoreDB, Position, LowestPriceExtended,
 };
 use crate::search::{
     fetch_lowest_price, fetch_lowest_price_shops, fetch_most_similar, fetch_product_in_shop,
@@ -140,8 +140,6 @@ pub async fn search_product_in_shop(
         Ok(Json(ProductInShopResponse { product: payload.product.clone(), shop: payload.shop.clone(), exists: false, details: None }))
     }
 }
-
-/// Handler per trovare il negozio con i prezzi più bassi (Modalità Comodità e Risparmio)
 // pub async fn find_lowest_price(
 //     State(app_state): State<Arc<AppState>>,
 //     Json(payload): Json<ProductsLowestPriceRequest>,
@@ -161,28 +159,7 @@ pub async fn search_product_in_shop(
 
 //     tracing::debug!("Product prices fetched: {:?}", product_prices);
 
-//     // let mut shop_combinations: HashMap<String, Vec<ShopProduct>> = HashMap::new();
-//     // for (_product_name, product_list) in &product_prices {
-//     //     for product_result in product_list {
-//     //         let distance = haversine_distance(
-//     //             payload.position.latitude,
-//     //             payload.position.longitude,
-//     //             product_result.localization.lat,
-//     //             product_result.localization.lon,
-//     //         );
-//     //         shop_combinations
-//     //             .entry(product_result.localization.grocery.clone())
-//     //             .or_insert_with(Vec::new)
-//     //             .push(ShopProduct {
-//     //                 shop: product_result.localization.grocery.clone(),
-//     //                 name: product_result.name.clone(),
-//     //                 description: product_result.description.clone(),
-//     //                 discount: product_result.discount,
-//     //                 price: product_result.price,
-//     //                 distance,
-//     //             });
-//     //     }
-//     // }
+//     // Costruisci la mappa: per ogni negozio, conserva tuple (ShopProduct, input_product)
 //     let mut shop_combinations: HashMap<String, Vec<(ShopProduct, String)>> = HashMap::new();
 //     for (input_product, product_list) in &product_prices {
 //         for product_result in product_list {
@@ -208,8 +185,8 @@ pub async fn search_product_in_shop(
 //     }
 //     tracing::info!("Shop combinations built: {:?}", shop_combinations);
 
-//     // Normalizza i nomi dei prodotti richiesti
-//     let required_names: HashSet<String> = payload.products.iter().map(|p| crate::utils::sanitize(p)).collect();
+//     // Normalizza i termini richiesti
+//     let required_names: HashSet<String> = payload.products.iter().map(|p| sanitize(p)).collect();
 //     let required_count = required_names.len();
 //     tracing::debug!("Required products (sanitized): {:?} (count: {})", required_names, required_count);
 
@@ -219,84 +196,13 @@ pub async fn search_product_in_shop(
 
 //     match mode {
 //         "risparmio" => {
-//             tracing::info!("Processing in 'risparmio' mode.");
-//             let mut best_single: Option<LowestPriceResponse> = None;
-//             for (shop_name, products_in_shop) in &shop_combinations {
-//                 let found_names: HashSet<String> = products_in_shop.iter().map(|sp| crate::utils::sanitize(&sp.name)).collect();
-//                 let match_count = required_names.iter().filter(|needed| found_names.contains(*needed)).count();
-//                 tracing::debug!("Shop '{}': match_count = {} (required: {})", shop_name, match_count, required_count);
-//                 if match_count == required_count {
-//                     let total_price: f64 = products_in_shop.iter().map(|p| p.price).sum();
-//                     tracing::info!("Shop '{}' has all required products with total price: {}", shop_name, total_price);
-//                     if let Some(ref mut current_best) = best_single {
-//                         if total_price < current_best.total_price {
-//                             current_best.total_price = total_price;
-//                             current_best.products = products_in_shop.clone();
-//                             current_best.shop = shop_name.clone();
-//                         }
-//                     } else {
-//                         best_single = Some(LowestPriceResponse {
-//                             shop: shop_name.clone(),
-//                             total_price,
-//                             products: products_in_shop.clone(),
-//                         });
-//                     }
-//                 }
-//             }
-
-//             let shop_names: Vec<String> = shop_combinations.keys().cloned().collect();
-//             let mut best_pair: Option<LowestPriceResponse> = None;
-//             for i in 0..shop_names.len() {
-//                 for j in (i+1)..shop_names.len() {
-//                     let shop1 = &shop_names[i];
-//                     let shop2 = &shop_names[j];
-//                     tracing::debug!("Checking shop pair: '{}' + '{}'", shop1, shop2);
-//                     let mut combined_products = shop_combinations[shop1].clone();
-//                     combined_products.extend(shop_combinations[shop2].clone());
-//                     let found_names: HashSet<String> = combined_products.iter().map(|sp| crate::utils::sanitize(&sp.name)).collect();
-//                     let match_count = required_names.iter().filter(|needed| found_names.contains(*needed)).count();
-//                     tracing::debug!("Shop pair '{} + {}': match_count = {} (required: {})", shop1, shop2, match_count, required_count);
-//                     if match_count == required_count {
-//                         let total_price: f64 = combined_products.iter().map(|p| p.price).sum();
-//                         tracing::info!("Shop pair '{} + {}' covers all products with total price: {}", shop1, shop2, total_price);
-//                         if let Some(ref mut current_best) = best_pair {
-//                             if total_price < current_best.total_price {
-//                                 current_best.total_price = total_price;
-//                                 current_best.products = combined_products.clone();
-//                                 current_best.shop = format!("{} + {}", shop1, shop2);
-//                             }
-//                         } else {
-//                             best_pair = Some(LowestPriceResponse {
-//                                 shop: format!("{} + {}", shop1, shop2),
-//                                 total_price,
-//                                 products: combined_products,
-//                             });
-//                         }
-//                     }
-//                 }
-//             }
-
-//             match (best_single, best_pair) {
-//                 (Some(s), Some(p)) => {
-//                     if s.total_price <= p.total_price {
-//                         results.push(s);
-//                     } else {
-//                         results.push(p);
-//                     }
-//                 }
-//                 (Some(s), None) => results.push(s),
-//                 (None, Some(p)) => results.push(p),
-//                 (None, None) => {
-//                     tracing::warn!("No single shop or shop pair covers all required products.");
-//                 }
-//             }
+//             tracing::warn!("La modalità 'risparmio' non è ancora implementata completamente.");
 //         },
 //         "comodita" => {
 //             tracing::info!("Processing in 'comodita' mode.");
 //             let mut best_option: Option<LowestPriceResponse> = None;
-//             //itara su ogni negozio
 //             for (shop_name, items) in &shop_combinations {
-//                 // Mappa temporanea: per ogni termine (sanitized) memorizza il ShopProduct con prezzo minimo
+//                 // Per ogni negozio, seleziona il miglior prodotto per ciascun termine di input
 //                 let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
 //                 for (sp, input_product) in items {
 //                     let key = sanitize(input_product);
@@ -308,11 +214,12 @@ pub async fn search_product_in_shop(
 //                         best_for_input.insert(key, sp.clone());
 //                     }
 //                 }
+//                 // Se il negozio copre tutti i termini richiesti
 //                 if best_for_input.len() == required_count {
 //                     let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
-//                     tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
+//                     //tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
+//                     tracing::debug!("Shop '{}' - best_for_input: {:?}", shop_name, best_for_input);
 //                     let selected_products: Vec<ShopProduct> = best_for_input.into_values().collect();
-//                     // Aggiorna best_option: scegli il negozio con il prezzo totale minore
 //                     if let Some(ref mut current_best) = best_option {
 //                         if total_price < current_best.total_price {
 //                             *current_best = LowestPriceResponse {
@@ -329,26 +236,6 @@ pub async fn search_product_in_shop(
 //                         });
 //                     }
 //                 }
-//                 // let found_names: HashSet<String> = products_in_shop.iter().map(|sp| crate::utils::sanitize(&sp.name)).collect();
-//                 // let match_count = required_names.iter().filter(|needed| found_names.contains(*needed)).count();
-//                 // tracing::debug!("Shop '{}': match_count = {} (required: {})", shop_name, match_count, required_count);
-//                 // if match_count == required_count {
-//                 //     let total_price: f64 = products_in_shop.iter().map(|p| p.price).sum();
-//                 //     tracing::info!("Shop '{}' has all required products with total price: {}", shop_name, total_price);
-//                 //     if let Some(ref mut current_best) = best_option {
-//                 //         if total_price < current_best.total_price {
-//                 //             current_best.total_price = total_price;
-//                 //             current_best.products = products_in_shop.clone();
-//                 //             current_best.shop = shop_name.clone();
-//                 //         }
-//                 //     } else {
-//                 //         best_option = Some(LowestPriceResponse {
-//                 //             shop: shop_name.clone(),
-//                 //             total_price,
-//                 //             products: products_in_shop.clone(),
-//                 //         });
-//                 //     }
-//                 // }
 //             }
 //             if let Some(best) = best_option {
 //                 results.push(best);
@@ -369,10 +256,11 @@ pub async fn search_product_in_shop(
     
 //     Ok(Json(results))
 // }
+
 pub async fn find_lowest_price(
     State(app_state): State<Arc<AppState>>,
     Json(payload): Json<ProductsLowestPriceRequest>,
-) -> Result<Json<Vec<LowestPriceResponse>>, (StatusCode, Json<serde_json::Value>)> {
+) -> Result<Json<Vec<LowestPriceExtended>>, (StatusCode, Json<serde_json::Value>)> {
     tracing::info!("find_lowest_price called with payload: {:?}", payload);
 
     let product_prices = match fetch_lowest_price_shops(&app_state, &payload.products, &payload.position).await {
@@ -388,7 +276,7 @@ pub async fn find_lowest_price(
 
     tracing::debug!("Product prices fetched: {:?}", product_prices);
 
-    // Costruisci la mappa: per ogni negozio, conserva tuple (ShopProduct, input_product)
+    // Costruisci una mappa per ogni negozio: chiave = nome negozio, valore = Vec<(ShopProduct, input_product)>
     let mut shop_combinations: HashMap<String, Vec<(ShopProduct, String)>> = HashMap::new();
     for (input_product, product_list) in &product_prices {
         for product_result in product_list {
@@ -414,76 +302,88 @@ pub async fn find_lowest_price(
     }
     tracing::info!("Shop combinations built: {:?}", shop_combinations);
 
-    // Normalizza i termini richiesti
+    // Insieme dei termini richiesti (sanitizzati)
     let required_names: HashSet<String> = payload.products.iter().map(|p| sanitize(p)).collect();
     let required_count = required_names.len();
     tracing::debug!("Required products (sanitized): {:?} (count: {})", required_names, required_count);
 
-    let mut results: Vec<LowestPriceResponse> = Vec::new();
-    let mode = payload.mode.as_deref().unwrap_or("comodita");
-    tracing::info!("Mode selected: {}", mode);
+    // Due vettori per raccogliere i negozi che coprono tutti gli item e quelli parziali.
+    let mut full_coverage: Vec<LowestPriceExtended> = vec![];
+    let mut partial_coverage: Vec<LowestPriceExtended> = vec![];
 
-    match mode {
-        "risparmio" => {
-            tracing::warn!("La modalità 'risparmio' non è ancora implementata completamente.");
-        },
-        "comodita" => {
-            tracing::info!("Processing in 'comodita' mode.");
-            let mut best_option: Option<LowestPriceResponse> = None;
-            for (shop_name, items) in &shop_combinations {
-                // Per ogni negozio, seleziona il miglior prodotto per ciascun termine di input
-                let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
-                for (sp, input_product) in items {
-                    let key = sanitize(input_product);
-                    if let Some(existing) = best_for_input.get(&key) {
-                        if sp.price < existing.price {
-                            best_for_input.insert(key, sp.clone());
-                        }
-                    } else {
-                        best_for_input.insert(key, sp.clone());
+    // Per ogni negozio in shop_combinations:
+    for (shop_name, items) in shop_combinations {
+        let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
+        // Per ogni tuple (ShopProduct, input_product) del negozio, scegli il match migliore (più economico)
+        for (sp, input_product) in items {
+            let key = sanitize(&input_product);
+            best_for_input
+                .entry(key)
+                .and_modify(|existing| {
+                    if sp.price < existing.price {
+                        *existing = sp.clone();
                     }
-                }
-                // Se il negozio copre tutti i termini richiesti
-                if best_for_input.len() == required_count {
-                    let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
-                    //tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
-                    tracing::debug!("Shop '{}' - best_for_input: {:?}", shop_name, best_for_input);
-                    let selected_products: Vec<ShopProduct> = best_for_input.into_values().collect();
-                    if let Some(ref mut current_best) = best_option {
-                        if total_price < current_best.total_price {
-                            *current_best = LowestPriceResponse {
-                                shop: shop_name.clone(),
-                                total_price,
-                                products: selected_products,
-                            };
-                        }
-                    } else {
-                        best_option = Some(LowestPriceResponse {
-                            shop: shop_name.clone(),
-                            total_price,
-                            products: selected_products,
-                        });
-                    }
-                }
-            }
-            if let Some(best) = best_option {
-                results.push(best);
-            } else {
-                tracing::warn!("No single shop covers all required products in 'comodita' mode.");
-            }
-        },
-        _ => {
-            tracing::warn!("Unknown mode '{}' received. Defaulting to 'comodita'.", mode);
+                })
+                .or_insert(sp);
+        }
+        let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
+
+        if best_for_input.len() == required_count {
+            // Questo negozio copre TUTTI gli item richiesti
+            full_coverage.push(LowestPriceExtended {
+                shop: shop_name.clone(),
+                total_price,
+                products: best_for_input.values().cloned().collect(),
+                missing: vec![],
+            });
+        } else {
+            // Negozio parziale: calcola quali item mancano
+            let found: HashSet<String> = best_for_input.keys().cloned().collect();
+            let missing: Vec<String> = required_names.difference(&found).cloned().collect();
+            partial_coverage.push(LowestPriceExtended {
+                shop: shop_name.clone(),
+                total_price,
+                products: best_for_input.values().cloned().collect(),
+                missing,
+            });
         }
     }
-    
-    if results.is_empty() {
-        tracing::info!("No valid shop combinations found to cover all products.");
+
+    // Determina il negozio "migliore" da restituire
+    let mut final_result: Vec<LowestPriceExtended> = vec![];
+
+    if !full_coverage.is_empty() {
+        // Caso 1: esistono negozi che coprono tutti gli item: scegli quello con il prezzo totale minore
+        let best = full_coverage.into_iter().min_by(|a, b| {
+            a.total_price
+                .partial_cmp(&b.total_price)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
+        if let Some(best_shop) = best {
+            final_result.push(best_shop);
+        }
+    } else if !partial_coverage.is_empty() {
+        // Caso 2: nessun negozio copre tutti gli item; scegli il negozio parziale migliore
+        // Criterio: numero di item trovati (maggiore è meglio), in caso di parità, prezzo totale minore.
+        let best = partial_coverage.into_iter().max_by(|a, b| {
+            let cmp_count = a.products.len().cmp(&b.products.len());
+            if cmp_count == std::cmp::Ordering::Equal {
+                // Invertiamo l'ordine per il prezzo, perché minore è meglio
+                b.total_price.partial_cmp(&a.total_price).unwrap_or(std::cmp::Ordering::Equal)
+            } else {
+                cmp_count
+            }
+        });
+        if let Some(best_shop) = best {
+            tracing::info!("Partial shop '{}' missing items: {:?}", best_shop.shop, best_shop.missing);
+            final_result.push(best_shop);
+        }
     } else {
-        tracing::info!("Returning results: {:?}", results);
+        tracing::info!("No valid shop combinations found to cover any products.");
     }
-    
-    Ok(Json(results))
+
+    tracing::info!("Returning results: {:?}", final_result);
+    Ok(Json(final_result))
 }
 
 pub async fn get_all_stores(
