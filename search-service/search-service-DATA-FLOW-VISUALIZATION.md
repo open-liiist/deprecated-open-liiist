@@ -1,6 +1,8 @@
+# (Alert! Documentation Expired) 
 Below are the **Mermaid** diagrams illustrating the data flows for the **search-service**, **Elasticsearch**, and **Logstash**. 
 ---
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## 1. Database Schema Relationships
 
 ### Diagram

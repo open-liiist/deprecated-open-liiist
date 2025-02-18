@@ -24,7 +24,7 @@ services:
       NEXT_PUBLIC_SEARCH_SERVICE_URL: ${NEXT_PUBLIC_SEARCH_SERVICE_URL}
     networks:
       - default
-      - shared-network  # Aggiungi questa riga
+      - shared-network
 
 
   auth-service:
@@ -52,11 +52,11 @@ services:
       - "4001:4001"
     depends_on:
       db:
-        condition: service_healthy # This is not needed with a remote database
+        condition: service_healthy
     environment:
       SEARCH_SERVICE_PORT: ${SEARCH_SERVICE_PORT}
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
-      REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}  # Point to the remote DB
+      REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}
       RUST_LOG: ${RUST_LOG}
     networks:
       - shared-network
@@ -68,13 +68,13 @@ services:
       dockerfile: Dockerfile
     depends_on:
       db: 
-          condition: service_healthy # This is not needed with a remote database
+          condition: service_healthy
     ports:
       - "3002:3002"
     environment:
       PRODUCT_RECEIVER_SERVICE_PORT: ${PRODUCT_RECEIVER_SERVICE_PORT}
       REMOTE_DATABASE_URL: ${REMOTE_DATABASE_URL}
-      DATABASE_URL: ${DATABASE_URL} # This is not needed with a remote database
+      DATABASE_URL: ${DATABASE_URL}
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 50000
       JDBC_USER: user
@@ -132,11 +132,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      # Enable dashboard, don't do in production
+      # Enable dashboard, don't do in production!
       - "8080:8080"
     volumes:
-      # - /run/docker.sock:/run/docker.sock:ro #For Linux
-      - /var/run/docker.sock:/var/run/docker.sock:ro #For MacOs
+      # - /run/docker.sock:/run/docker.sock:ro #Linux
+      - /var/run/docker.sock:/var/run/docker.sock:ro #MacOs
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/conf.d/:/etc/traefik/conf.d/:ro
       - ./certs/:/var/traefik/certs/:rw
@@ -234,7 +234,7 @@ services:
       - "5000:5000"
 
 
-# this part is commented because it will not be needed during the presentation
+# Scraping services are being moved to a separate repository
   # services:
   #   scraping-conad:
   #     user: root

@@ -5,19 +5,6 @@ import { logger } from '../utils/logger';
 import { UserRepository } from '../repositories/userRepository';
 import { User } from '../config/types/api';
 
-// export async function registerUser(
-// 	email: string,
-// 	password: string,
-// ) {
-// 	try {
-// 		const passwordHash = await bcrypt.hash(password, 10);
-// 		const user = await UserRepository.createUser(email, passwordHash);
-// 		return user;
-// 	} catch (err) {
-// 		logger.error(err);
-// 		throw ApiError.internal('Error registering user into database');
-// 	}
-// }
 
 export async function registerUser(
 	email: string,

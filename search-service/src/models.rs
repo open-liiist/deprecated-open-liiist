@@ -120,3 +120,11 @@ pub struct ShopProduct {
     pub discount: Option<f64>, // Discount on the product, if applicable
     pub distance: f64,         // Distance from user to shop
 }
+
+#[derive(Debug, Serialize, Clone)]
+pub struct LowestPriceExtended {
+    pub shop: String,               // Nome del negozio
+    pub total_price: f64,           // Totale dei prezzi dei prodotti trovati
+    pub products: Vec<ShopProduct>, // Lista dei prodotti trovati
+    pub missing: Vec<String>,       // Lista degli item mancanti (con messaggio, se vuoi)
+}

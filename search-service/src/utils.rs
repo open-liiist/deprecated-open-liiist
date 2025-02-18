@@ -1,4 +1,5 @@
 //search-service/src/utils.rs
+
 pub fn haversine_distance(
     lat1: f64,
     lon1: f64,
@@ -26,4 +27,15 @@ pub fn sanitize(input: &str) -> String {
         .split_whitespace()
         .collect::<Vec<&str>>()
         .join("_")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sanitize() {
+        assert_eq!(sanitize("Brodo di Verdure"), "brodo_di_verdure");
+        assert_eq!(sanitize("burro_consorzio_produttori_latte_maremma_250_g"), "burro_consorzio_produttori_latte_maremma_250_g");
+    }
 }

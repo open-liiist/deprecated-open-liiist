@@ -1,5 +1,6 @@
-# Integration Guide: Scraping Service to Product Receiver and Database
-
+# # (Alert! Documentation Expired) Integration Guide: Scraping Service to Product Receiver and Database
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## Table of Contents
 
 1. [Introduction](#introduction)
