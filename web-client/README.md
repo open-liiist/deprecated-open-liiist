@@ -1,5 +1,6 @@
-# Liiist Web Client
-
+# liiist Web Client
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## Development
 
 First, run the development server and the necessary services:

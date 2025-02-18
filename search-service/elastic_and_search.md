@@ -14,7 +14,8 @@
 12. [Conclusione](#12-conclusione)
 
 ---
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## **Prerequisiti**
 
 Prima di iniziare, assicurati di avere:

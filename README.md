@@ -116,7 +116,8 @@ flowchart LR
 8. [Additional Notes](#additional-notes)
 
 ---
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## Features
 
 - **Create and manage grocery lists** 🛒

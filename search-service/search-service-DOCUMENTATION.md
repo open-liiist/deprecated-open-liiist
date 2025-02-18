@@ -2,7 +2,8 @@
 # (Alert! Documentation Expired) Technical Documentation: `search-service`
 
 ---
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ## **Table of Contents**
 
 1. [Elasticsearch Configuration](#1-elasticsearch-configuration)

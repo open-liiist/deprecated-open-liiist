@@ -1,7 +1,8 @@
 # # (Alert! Documentation Expired)  Data Flow Visualization
 
 This document contains **Mermaid** diagrams illustrating the data flows within the system, focusing on **Products**, **Stores**, and their relationships with the database and API endpoints.
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 ---
 
 ## 1. Database Schema Relationships

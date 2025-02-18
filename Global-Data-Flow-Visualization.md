@@ -1,6 +1,7 @@
 # # (Alert! Documentation Expired) Global Data Flow Visualization
 This document contains **Mermaid** diagrams illustrating the data flows within the system, focusing on **Products**, **Stores**, **Search-Service**, **Elasticsearch**, and their interactions with the database and API endpoints.
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 
 ```mermaid
 flowchart LR

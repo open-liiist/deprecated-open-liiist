@@ -1,5 +1,6 @@
 # (Alert! Documentation Expired) 
-
+**(Alert! Documentation Expired)**  
+The documentation is currently under revision and updates. Some sections may be incomplete or undergoing modifications.
 Below is the **updated** and **expanded** documentation (@ 25 Jan 2025) for the **Product Receiver Service**.
 
 - Use of **Zod** for validation.
