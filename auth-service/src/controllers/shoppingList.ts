@@ -16,9 +16,9 @@ interface CreateShoppingListRequest {
 }
 
 export class ShoppingListController {
-  // Ottieni tutte le liste della spesa per un utente
+  
   static async getShoppingLists(req: Request, res: Response, next: NextFunction) {
-    logger.info(`getting list for this user`);
+    logger.info(`Getting list for this user`);
     try {
         if (!req.user || !req.user.userId) {
           next(ApiResponse.error("User ID is missing"));

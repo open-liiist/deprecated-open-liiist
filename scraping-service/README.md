@@ -1,5 +1,6 @@
 **IN PROGRESS: The scraping-service is currently a work in progress to automate the scraping process, optimizing it for each specific case. It will autonomously send products and stores to the product-receiver, which will then forward them to the database.**
 ---
+# (Alert! Documentation Expired) 
 Below is an **updated** documentation for the **Scraping Service**, including some **temporary scripts** (`send_*_products_*.py` and `send_*_shop_*.py`) that send scraped data to the **product-receiver** service. It also preserves the original Docker-based (**Status: to change**) instructions and clarifies how the various supermarket/groups scrapers are laid out.
 
 

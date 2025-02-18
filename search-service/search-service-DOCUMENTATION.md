@@ -1,6 +1,5 @@
----
 
-# Technical Documentation: `search-service`
+# (Alert! Documentation Expired) Technical Documentation: `search-service`
 
 ---
 

@@ -1,6 +1,4 @@
-Ciao! Capisco che tu stia cercando una guida dettagliata per configurare e utilizzare correttamente il tuo **search-service** insieme a Elasticsearch. Ti guiderò passo dopo passo, includendo esempi pratici per ogni operazione, dall'impostazione iniziale fino alle query avanzate. Inoltre, chiarirò se è necessario mappare anche il campo `localization`.
-
-## **Indice**
+## **Indice**  (Alert! Documentation Expired) 
 
 1. [Prerequisiti](#1-prerequisiti)
 2. [1. Installazione e Configurazione di Elasticsearch](#1-installazione-e-configurazione-di-elasticsearch)
@@ -968,7 +966,7 @@ curl -X POST "http://localhost:4001/product/lowest-price" -H 'Content-Type: appl
 
 ## **Conclusione**
 
-Seguendo questa guida step-by-step, dovresti essere in grado di configurare correttamente il tuo **search-service** con Elasticsearch, creare indici con mapping appropriati, inserire e interrogare documenti, e gestire eventuali errori comuni. Ecco un riepilogo delle chiavi di successo:
+Questa guida step-by-step, ha lo scopo di guidare nel configurare correttamente il  **search-service** con Elasticsearch, creare indici con mapping appropriati, inserire e interrogare documenti, e gestire eventuali errori comuni. Riepilogo:
 
 1. **Mapping Corretto:** Assicurati che tutti i campi siano mappati correttamente, inclusi i campi nested come `localization`.
 2. **Headers HTTP Adeguati:** Sempre specificare `Content-Type: application/json` quando si inviano dati JSON nelle richieste.
@@ -976,11 +974,3 @@ Seguendo questa guida step-by-step, dovresti essere in grado di configurare corr
 4. **Verifica dei Documenti:** Usa le API di Elasticsearch per confermare che i documenti siano presenti e correttamente indicizzati.
 5. **Log Dettagliati nel `search-service`:** Implementa log dettagliati per monitorare le richieste e le risposte tra il servizio e Elasticsearch.
 6. **Test Completi:** Esegui test completi delle API del tuo servizio per assicurarti che tutto funzioni come previsto.
-
-Se dopo aver seguito tutti i passaggi riscontri ancora problemi, considera di:
-
-- **Controllare i Log di Elasticsearch:** Verifica se ci sono errori o avvisi nei log di Elasticsearch.
-- **Controllare i Log del `search-service`:** Assicurati che il servizio comunichi correttamente con Elasticsearch.
-- **Testare Manualmente le Query:** Esegui query manuali per verificare i risultati e assicurarti che corrispondano alle aspettative.
-
-Spero che questa guida ti sia stata utile! Se hai ulteriori domande o incontri altri problemi, non esitare a chiedere. Buon lavoro con il tuo **search-service**!
