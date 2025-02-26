@@ -8,7 +8,7 @@ import useRoutes from './routes';
 import { errorHandler } from '../../middlewares/errorHandler';
 
 function init (app?: express.Application): Server {
-	logger.info('Initializing server');
+	logger.info('Initializing server...');
 	dotenv.config();
 
 	if (!app) throw new Error('No express server app provided, could not start');

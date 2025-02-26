@@ -46,9 +46,9 @@ export async function verifyRefreshToken(token: string) {
 			}
 		});
 		if (!storedToken)
-			throw ApiError.unauthorized('Invalid refresh token - not found');
+			throw ApiError.unauthorized('Refresh token not found');
 		if (new Date(storedToken.expiryDate) < new Date())
-			throw ApiError.unauthorized('Refresh token expired');
+			throw ApiError.unauthorized('Refresh token has expired');
 
 		return payload;
 	} catch (err) {

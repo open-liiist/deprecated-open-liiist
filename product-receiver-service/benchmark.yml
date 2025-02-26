@@ -1,43 +1,58 @@
+# Main configuration section
 config:
-  target: "http://localhost:3002" # Target URL
+  # URL of the target server to test
+  target: "http://localhost:3002" 
+
+  # Define different test phases to simulate traffic over time
   phases:
-    - duration: 60      # Run test for 60 seconds
-      arrivalRate: 5   # Start with 10 requests per second and increase as needed
-      rampTo: 10
+    # Phase 1: Warm up period
+    - duration: 60      # Test duration: 60 seconds
+      arrivalRate: 5    # Start with 5 requests per second
+      rampTo: 10        # Gradually increase to 10 requests per second
       name: Warm up the API
+
+    # Phase 2: Ramp up period
     - duration: 60
-      arrivalRate: 10
-      rampTo: 500
+      arrivalRate: 10   # Start with 10 requests per second
+      rampTo: 500       # Ramp up to 500 requests per second
       name: Ramp up to peak load
+
+    # Phase 3: Sustained high load
     - duration: 60
-      arrivalRate: 50
+      arrivalRate: 50   # Constantly send 50 requests per second
       name: Sustained peak load
 
-  # Load & configure a couple of useful plugins
+  # Load & configure useful plugins for monitoring and ensuring performance
   # https://docs.art/reference/extensions
   plugins:
-    ensure: {}
-    apdex: {}
-    metrics-by-endpoint: {}
+    ensure: {}              # Plugin to check defined performance thresholds
+    apdex: {}               # Plugin to calculate Apdex scores for response times
+    metrics-by-endpoint: {} # Plugin to gather metrics for each API endpoint
+
+  # Configuration for the apdex plugin
   apdex:
-    threshold: 100
+    threshold: 100  # Response time threshold (ms) to consider a transaction satisfactory
+
+  # Configuration for the ensure plugin with custom performance thresholds
   ensure:
     thresholds:
-      - http.response_time.p99: 100
-      - http.response_time.p95: 75
+      - http.response_time.p99: 100  # 99th percentile response time must be < 100ms
+      - http.response_time.p95: 75   # 95th percentile response time must be < 75ms
 
+# Define the scenarios for API testing
 scenarios:
   - flow:
+      # Define a POST request to create a product
       - post:
-          url: "/api/product"
-          json:
-            full_name: "Test Product"
-            name: "Test"
-            description: "This is a test product"
-            price: 19.99
-            discount: 0.15
+          url: "/api/product"  # API endpoint to hit
+          json:                # JSON payload sent in the request body
+            full_name: "Test Product"  # Full product name
+            name: "Test"               # Short name/identifier
+            description: "This is a test product"  # Product description
+            price: 19.99               # Product price
+            discount: 0.0              # Discount applied to the product
             localization:
-              grocery: "Test Grocery Store"
-              lat: 41.9028
-              long: 12.4964
-
+              grocery: "Test Grocery Store"  # Name of the associated grocery store
+              lat: 41.9028                   # Latitude coordinate (example for location)
+              long: 12.4964                  # Longitude coordinate
+              street: "Main St"              # Street address

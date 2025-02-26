@@ -5,15 +5,15 @@ import { logger } from './utils/logger';
 import environment from './config/environment';
 
 function onListening(server: Server) {
-	const addr = server.address();
-	const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`;
-	logger.info(`Listening on ${bind}`);
+    const addr = server.address();
+    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`;
+    logger.info(`Server is listening on ${bind}`);
 }
 
-function exitHandler (server?: Server) {
+function exitHandler(server?: Server) {
     if (server) {
         server.close(() => {
-            console.info("Server closed");
+            console.info("Server has been closed");
             process.exit(1);
         });
     } else {
@@ -21,18 +21,18 @@ function exitHandler (server?: Server) {
     }
 };
 
-function unexpectedErrorHandler (error: unknown) {
+function unexpectedErrorHandler(error: unknown) {
     console.error(error);
     exitHandler();
 };
 
 function main() {
-	const port = environment.appPort;
-	const server = init(express());
-	server.listen(port);
-	server.on('listening', () => onListening(server));
-	process.on('uncaughtException', unexpectedErrorHandler);
-	process.on('unhandledRejection', unexpectedErrorHandler);
+    const port = environment.appPort;
+    const server = init(express());
+    server.listen(port);
+    server.on('listening', () => onListening(server));
+    process.on('uncaughtException', unexpectedErrorHandler);
+    process.on('unhandledRejection', unexpectedErrorHandler);
 }
 
 main();

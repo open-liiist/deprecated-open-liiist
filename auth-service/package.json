@@ -1,7 +1,7 @@
 {
 	"name": "auth-service",
 	"version": "1.0.0",
-	"description": "Authentication microservice for GrocyGo",
+	"description": "authentication microservice for liiist",
 	"main": "main.js",
 	"scripts": {
 		"start": "npm run db:sync && node dist/main.js",
@@ -11,18 +11,18 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gabref/grocygo.git#main"
+		"url": "git+https://github.com/open-liiist/open-liiist-base.git#main"
 	},
 	"keywords": [
 		"grocery",
 		"economy"
 	],
-	"author": "gabref",
+	"author": "amema42",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/gabref/grocygo/issues"
+		"url": "https://github.com/open-liiist/open-liiist-base/issues"
 	},
-	"homepage": "https://github.com/gabref/grocygo/tree/main#readme",
+	"homepage": "https://github.com/open-liiist/open-liiist-base#readme",
 	"devDependencies": {
 		"@prisma/client": "^5.22.0",
 		"prisma": "^5.22.0",

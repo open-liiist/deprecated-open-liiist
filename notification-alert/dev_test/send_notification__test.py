@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://localhost:5000/ricevi_code'
+url = 'http://localhost:5000/send_notification'
 
 try:
 	response = requests.post(url, data={'code': 1, 'shop': "conad"})
@@ -8,10 +8,10 @@ try:
 	response = requests.post(url, data={'code': 3, 'shop': "conad"})
 	response = requests.post(url, data={'code': 6, 'shop': "conad"})
 except:
-	print("Server down o non up")
+	print("Server status: down or not running")
 	exit()
 
 if response.status_code == 200:
-    print("code inviato con successo!")
+	print("Code sent successfully!")
 else:
-    print("Si è verificato un errore:", response.text)
+	print("An error occurred:", response.text)

@@ -18,7 +18,7 @@ interface CreateShoppingListRequest {
 export class ShoppingListController {
   
   static async getShoppingLists(req: Request, res: Response, next: NextFunction) {
-    logger.info(`Getting list for this user`);
+    logger.info(`Getting shopping lists for this user`);
     try {
         if (!req.user || !req.user.userId) {
           next(ApiResponse.error("User ID is missing"));
@@ -37,56 +37,55 @@ export class ShoppingListController {
         }
         res.status(200).json(ApiResponse.success("Shopping lists retrieved successfully", shoppingLists));
     } catch (error) {
-        console.error("Errore nel recupero delle liste della spesa:", error);
-        next(ApiResponse.error("Errore nel recupero delle liste."));
+        console.error("Error retrieving shopping lists:", error);
+        next(ApiResponse.error("Error retrieving shopping lists."));
     }
-}
+  }
 
-
-static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>, res: Response, next: NextFunction) {
-  try {
-    if (!req.user || !req.user.userId) {
+  static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>, res: Response, next: NextFunction) {
+    try {
+      if (!req.user || !req.user.userId) {
         next(ApiResponse.error("User ID is missing"));
         return; 
-    }
-    
-    const userId = req.user.userId;
-    const { name, budget, mode, products } = req.body;
+      }
+      
+      const userId = req.user.userId;
+      const { name, budget, mode, products } = req.body;
 
-    // Validazione dei campi obbligatori
-    if (!name || !budget || !mode) {
-      next(ApiResponse.error("All fields (name, budget, mode) are required."));
-      return;
-    }
-    if (!Array.isArray(products) || !products.every(product => product.name && product.quantity)) {
-      next(ApiResponse.error("Invalid products format. Each product must have name, quantity"));
-      return;
-    }
+      // Validate required fields
+      if (!name || !budget || !mode) {
+        next(ApiResponse.error("All fields (name, budget, mode) are required."));
+        return;
+      }
+      if (!Array.isArray(products) || !products.every(product => product.name && product.quantity)) {
+        next(ApiResponse.error("Invalid products format. Each product must have name, quantity"));
+        return;
+      }
 
-    const newList = await prisma.shoppingList.create({
-      data: {
-        name,
-        budget,
-        mode,
-        userId,
-        products: {
-          create: products.map(product => ({
-            name: product.name,
-            quantity: product.quantity,
-          })),
+      const newList = await prisma.shoppingList.create({
+        data: {
+          name,
+          budget,
+          mode,
+          userId,
+          products: {
+            create: products.map(product => ({
+              name: product.name,
+              quantity: product.quantity,
+            })),
+          },
         },
-      },
-    });
+      });
 
-    res.status(201).json(ApiResponse.success("list created successfully", newList));
-  } catch (error) {
-    console.error("Errore nella creazione della lista:", error);
-    next(ApiResponse.error("Errore nella creazione della lista."));
-    return;
+      res.status(201).json(ApiResponse.success("Shopping list created successfully", newList));
+    } catch (error) {
+      console.error("Error creating shopping list:", error);
+      next(ApiResponse.error("Error creating shopping list."));
+      return;
+    }
   }
-}
 
-  // Ottieni una lista della spesa specifica
+  // Get a specific shopping list
   static async getShoppingList(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
@@ -96,31 +95,31 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
       });
 
       if (!shoppingList) {
-        next(ApiResponse.error("list not found"));
+        next(ApiResponse.error("Shopping list not found"));
         return;
       }
-      res.status(200).json(ApiResponse.success("list found", shoppingList));
+      res.status(200).json(ApiResponse.success("Shopping list found", shoppingList));
     } catch (error) {
-      console.error("Errore nel recupero della lista della spesa:", error);
-      next(ApiResponse.error("error getting list"));
+      console.error("Error retrieving shopping list:", error);
+      next(ApiResponse.error("Error retrieving shopping list"));
       return;
     }
   }
 
-  // Aggiorna una lista della spesa
+  // Update a shopping list
   static async updateShoppingList(req: Request<{ id: string }, {}, CreateShoppingListRequest>, res: Response, next: NextFunction) {
     try {
-      // 1. Verifica se l'utente è autenticato
+      // Check if the user is authenticated
       if (!req.user || !req.user.userId) {
         next(ApiResponse.error("User ID is missing"));
         return; 
       }
   
       const userId = req.user.userId;
-      const { id } = req.params; // ID della lista da modificare
+      const { id } = req.params; // ID of the shopping list to update
       const { name, budget, mode, products } = req.body;
   
-      // 2. Validazione dei campi obbligatori
+      // Validate required fields
       if (!name || !budget || !mode) {
         next(ApiResponse.error("All fields (name, budget, mode) are required."));
         return;
@@ -131,7 +130,7 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
         return;
       }
   
-      // 3. Controlla se la lista esiste
+      // Check if the shopping list exists
       const existingList = await prisma.shoppingList.findUnique({
         where: { id }
       });
@@ -141,7 +140,7 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
         return;
       }
   
-      // 4. Aggiorna la lista e i prodotti
+      // Update the shopping list and products
       const updatedList = await prisma.shoppingList.update({
         where: { id },
         data: {
@@ -149,26 +148,25 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
           budget,
           mode,
           products: {
-            deleteMany: {}, // Elimina i prodotti esistenti (se vuoi sovrascriverli completamente)
+            deleteMany: {}, // Delete existing products to completely overwrite them
             create: products.map(product => ({
               name: product.name,
               quantity: product.quantity,
             })),
           },
         },
-        include: { products: true }, // Include i prodotti aggiornati
+        include: { products: true }, // Include updated products
       });
   
-      res.status(200).json(ApiResponse.success("List updated successfully", updatedList));
+      res.status(200).json(ApiResponse.success("Shopping list updated successfully", updatedList));
     } catch (error) {
-      console.error("Errore nell'aggiornamento della lista:", error);
-      next(ApiResponse.error("Errore nell'aggiornamento della lista."));
+      console.error("Error updating shopping list:", error);
+      next(ApiResponse.error("Error updating shopping list."));
       return;
     }
   }
   
-
-  // Elimina una lista della spesa
+  // Delete a shopping list
   static async deleteShoppingList(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -181,8 +179,8 @@ static async createShoppingList(req: Request<{}, {}, CreateShoppingListRequest>,
 
       res.json(deletedList);
     } catch (error) {
-      console.error("Errore nell'eliminazione della lista della spesa:", error);
-      res.status(500).json({ error: "Errore nell'eliminazione della lista." });
+      console.error("Error deleting shopping list:", error);
+      res.status(500).json({ error: "Error deleting shopping list." });
     }
   }
 }

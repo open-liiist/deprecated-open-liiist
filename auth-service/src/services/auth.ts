@@ -5,7 +5,6 @@ import { logger } from '../utils/logger';
 import { UserRepository } from '../repositories/userRepository';
 import { User } from '../config/types/api';
 
-
 export async function registerUser(
 	email: string,
 	password: string,
@@ -42,16 +41,16 @@ export async function loginUser(email: string, password: string):
 	const accessToken = generateAccessToken(user.id);
 	const refreshToken = generateRefreshToken(user.id);
 
-	logger.info(`User ${user.id} logged in`)
+	logger.info(`User ${user.id} successfully logged in.`);
 
 	await saveRefreshToken(user.id, refreshToken);
-	logger.debug(`Refresh token saved for user ${user.id}`)
+	logger.debug(`Refresh token successfully saved for user ${user.id}.`);
 	return { accessToken, refreshToken, user };
 }
 
 export async function logoutUser(refreshToken: string) {
 	const userId = await clearRefreshTokens(refreshToken);
-	logger.info(`User ${userId} logged out`);
+	logger.info(`User ${userId} successfully logged out.`);
 }
 
 export async function refreshTokens(refreshToken: string) {
