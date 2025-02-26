@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Map, getUserLocation } from "@/components/map/Map";
 import { Marker, Autocomplete } from "@react-google-maps/api";
 
-const LocationSelectionPage = () => {
+const LocationPage = () => {
     const router = useRouter();
     const [userLocation, setUserLocation] = useState(null);
     const [nearbySupers, setNearbySupers] = useState([]);
@@ -17,14 +17,17 @@ const LocationSelectionPage = () => {
     const [inputAddress, setInputAddress] = useState("");
     const [autocomplete, setAutocomplete] = useState(null);
 
+    // Fetch user location when the component mounts
     useEffect(() => {
         const fetchLocation = async () => {
             try {
                 const location = await getUserLocation();
+                console.log("User location obtained:", location);
                 setUserLocation(location);
                 fetchNearbySupers(location.latitude, location.longitude);
             } catch (err) {
-                setError(err);
+                console.error("Error obtaining user location:", err);
+                setError("Error getting user location.");
             } finally {
                 setIsLoading(false);
             }
@@ -33,6 +36,7 @@ const LocationSelectionPage = () => {
         fetchLocation();
     }, []);
 
+    // Fetch nearby supermarkets based on the provided latitude and longitude
     const fetchNearbySupers = async (latitude, longitude) => {
         setIsLoading(true);
         setError(null);
@@ -41,43 +45,59 @@ const LocationSelectionPage = () => {
                 `/api/nearby-supermarkets?lat=${latitude}&lng=${longitude}`
             );
             if (!response.ok) {
+                console.error("Bad response from API for nearby supermarkets:", response.statusText);
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
+            console.log("Nearby supermarkets fetched successfully:", data.supermarkets);
             setNearbySupers(data.supermarkets);
         } catch (err) {
+            console.error("Error fetching nearby supermarkets:", err);
             setError("Failed to fetch nearby supermarkets");
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Navigate to the supermarket's detail page
     const handleSupermartClick = (superId) => {
+        console.log("Redirecting to supermarket with ID:", superId);
         router.push(`/supermarket/${superId}`);
     };
 
+    // Enable manual location entry view
     const handleManualLocationEntry = () => {
+        console.log("Switching to manual location entry");
         setManualEntry(true);
     };
 
+    // Update input field value for address
     const handleAddressChange = (event) => {
         setInputAddress(event.target.value);
     };
 
+    // When a place is selected from the autocomplete, update user location and fetch supermarkets
     const handlePlaceSelect = () => {
         if (autocomplete !== null) {
             const place = autocomplete.getPlace();
             if (place.geometry) {
                 const latitude = place.geometry.location.lat();
                 const longitude = place.geometry.location.lng();
+                console.log("Selected place:", { latitude, longitude });
                 setUserLocation({ latitude, longitude });
                 fetchNearbySupers(latitude, longitude);
                 setManualEntry(false);
+            } else {
+                console.error("Selected place has no geometry");
             }
+        } else {
+            console.error("Autocomplete instance is not initialized");
         }
     };
 
+    // Save the autocomplete instance to state
     const onLoad = (autocompleteInstance) => {
+        console.log("Autocomplete loaded");
         setAutocomplete(autocompleteInstance);
     };
 
@@ -88,12 +108,9 @@ const LocationSelectionPage = () => {
                     <CardTitle>Select Your Location</CardTitle>
                 </CardHeader>
                 <CardContent>
+                    {/* Display loading, error, or map and list of supermarkets */}
                     {isLoading ? (
-                        <div
-                            className="text-center"
-                            role="status"
-                            aria-live="polite"
-                        >
+                        <div className="text-center" role="status" aria-live="polite">
                             Loading...
                         </div>
                     ) : error ? (
@@ -115,10 +132,11 @@ const LocationSelectionPage = () => {
                                     zoom={13}
                                     onDragEnd={(map) => {
                                         const center = map.getCenter();
-                                        fetchNearbySupers(
-                                            center.lat(),
-                                            center.lng()
-                                        );
+                                        console.log("Map dragged. New center:", {
+                                            lat: center.lat(),
+                                            lng: center.lng(),
+                                        });
+                                        fetchNearbySupers(center.lat(), center.lng());
                                     }}
                                 >
                                     {nearbySupers.map((supermarket) => (
@@ -128,11 +146,7 @@ const LocationSelectionPage = () => {
                                                 lat: supermarket.latitude,
                                                 lng: supermarket.longitude,
                                             }}
-                                            onClick={() =>
-                                                handleSupermartClick(
-                                                    supermarket.id
-                                                )
-                                            }
+                                            onClick={() => handleSupermartClick(supermarket.id)}
                                             aria-label={`Location of ${supermarket.name}`}
                                         />
                                     ))}
@@ -143,9 +157,7 @@ const LocationSelectionPage = () => {
                                     <div
                                         key={supermarket.id}
                                         className="p-3 mb-2 border border-gray-300 rounded-md cursor-pointer transition-colors hover:bg-gray-100"
-                                        onClick={() =>
-                                            handleSupermartClick(supermarket.id)
-                                        }
+                                        onClick={() => handleSupermartClick(supermarket.id)}
                                         role="button"
                                         tabIndex={0}
                                         aria-label={`Select supermarket ${supermarket.name}`}
@@ -165,10 +177,7 @@ const LocationSelectionPage = () => {
                                         onLoad={onLoad}
                                         onPlaceChanged={handlePlaceSelect}
                                         options={{
-                                            fields: [
-                                                "geometry",
-                                                "formatted_address",
-                                            ],
+                                            fields: ["geometry", "formatted_address"],
                                         }}
                                     >
                                         <div className="flex items-center gap-2">
@@ -204,247 +213,4 @@ const LocationSelectionPage = () => {
     );
 };
 
-export default LocationSelectionPage;
-
-
-// "use client";
-// import React, { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
-// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import locationStyles from "./styles/LocationSelection.module.css";
-// import { Map, getUserLocation } from "@/components/map/Map";
-// import { Marker, Autocomplete } from "@react-google-maps/api";
-
-
-// const LocationSelectionPage = () => {
-//     const router = useRouter();
-//     const [userLocation, setUserLocation] = useState(null);
-//     const [nearbySupers, setNearbySupers] = useState([]);
-//     const [isLoading, setIsLoading] = useState(true);
-//     const [error, setError] = useState(null);
-//     const [manualEntry, setManualEntry] = useState(false);
-//     const [inputAddress, setInputAddress] = useState("");
-//     const [autocomplete, setAutocomplete] = useState(null);
-
-//     useEffect(() => {
-//         const fetchLocation = async () => {
-//             try {
-//                 const location = await getUserLocation();
-//                 setUserLocation(location);
-//                 fetchNearbySupers(location.latitude, location.longitude);
-//             } catch (err) {
-//                 setError(err);
-//             } finally {
-//                 setIsLoading(false);
-//             }
-//         };
-
-//         fetchLocation();
-//     }, []);
-
-//     const fetchNearbySupers = async (latitude, longitude) => {
-//         setIsLoading(true);
-//         setError(null);
-//         try {
-//             const response = await fetch(
-//                 `/api/nearby-supermarkets?lat=${latitude}&lng=${longitude}`
-//             );
-//             if (!response.ok) {
-//                 throw new Error("Network response was not ok");
-//             }
-//             const data = await response.json();
-//             setNearbySupers(data.supermarkets);
-//         } catch (err) {
-//             setError("Failed to fetch nearby supermarkets");
-//         } finally {
-//             setIsLoading(false);
-//         }
-//     };
-
-//     const handleSupermartClick = (superId) => {
-//         router.push(`/supermarket/${superId}`);
-//     };
-
-//     const handleManualLocationEntry = () => {
-//         setManualEntry(true);
-//     };
-
-//     const handleAddressChange = (event) => {
-//         setInputAddress(event.target.value);
-//     };
-
-//     const handlePlaceSelect = () => {
-//         if (autocomplete !== null) {
-//             const place = autocomplete.getPlace();
-//             if (place.geometry) {
-//                 const latitude = place.geometry.location.lat();
-//                 const longitude = place.geometry.location.lng();
-//                 setUserLocation({ latitude, longitude });
-//                 fetchNearbySupers(latitude, longitude);
-//                 setManualEntry(false);
-//             }
-//         }
-//     };
-
-//     const onLoad = (autocompleteInstance) => {
-//         setAutocomplete(autocompleteInstance);
-//     };
-
-//     return (
-//         <div className={locationStyles.container}>
-//             <Card className={locationStyles.card}>
-//                 <CardHeader>
-//                     <CardTitle>Select Your Location</CardTitle>
-//                 </CardHeader>
-//                 <CardContent>
-//                     {isLoading ? (
-//                         <div
-//                             className={locationStyles.loading}
-//                             role="status"
-//                             aria-live="polite"
-//                         >
-//                             Loading...
-//                         </div>
-//                     ) : error ? (
-//                         <div className={locationStyles.error} role="alert">
-//                             {error}
-//                         </div>
-//                     ) : (
-//                         <>
-//                             <div className={locationStyles.mapContainer}>
-//                                 <Map
-//                                     center={
-//                                         userLocation
-//                                             ? {
-//                                                   lat: userLocation.latitude,
-//                                                   lng: userLocation.longitude,
-//                                               }
-//                                             : { lat: 41.9028, lng: 12.4964 } // Default to Rome, Italy
-//                                     }
-//                                     zoom={13}
-//                                     onDragEnd={(map) => {
-//                                         const center = map.getCenter();
-//                                         fetchNearbySupers(
-//                                             center.lat(),
-//                                             center.lng()
-//                                         );
-//                                     }}
-//                                 >
-//                                     {nearbySupers.map((supermarket) => (
-//                                         <Marker
-//                                             key={supermarket.id}
-//                                             position={{
-//                                                 lat: supermarket.latitude,
-//                                                 lng: supermarket.longitude,
-//                                             }}
-//                                             onClick={() =>
-//                                                 handleSupermartClick(
-//                                                     supermarket.id
-//                                                 )
-//                                             }
-//                                             aria-label={`Location of ${supermarket.name}`}
-//                                         />
-//                                     ))}
-//                                 </Map>
-//                             </div>
-//                             <div className={locationStyles.supermarketList}>
-//                                  {nearbySupers.map((supermarket) => (
-//                                     <div
-//                                         key={supermarket.id}
-//                                         className={
-//                                             locationStyles.supermarketItem
-//                                         }
-//                                         onClick={() =>
-//                                             handleSupermartClick(supermarket.id)
-//                                         }
-//                                         role="button"
-//                                         tabIndex={0}
-//                                         // onKeyPress={(e) => {
-//                                         //     if (
-//                                         //         e.key === "Enter" ||
-//                                         //         e.key === " "
-//                                         //     ) {
-//                                         //         handleSupermartClick(
-//                                         //             supermarket.id,
-//                                         //         );
-//                                         //     }
-//                                         // }}
-//                                         aria-label={`Select supermarket ${supermarket.name}`}
-//                                     >
-//                                         <div
-//                                             className={
-//                                                 locationStyles.supermarketName
-//                                             }
-//                                         >
-//                                             {supermarket.name}
-//                                         </div>
-//                                         <div
-//                                             className={
-//                                                 locationStyles.supermarketAddress
-//                                             }
-//                                         >
-//                                             {supermarket.address}
-//                                         </div>
-//                                     </div>
-//                                 ))}
-//                             </div>
-//                             {manualEntry ? (
-//                                 <div
-//                                     className={
-//                                         locationStyles.manualEntryContainer
-//                                     }
-//                                 >
-//                                     <Autocomplete
-//                                         onLoad={onLoad}
-//                                         onPlaceChanged={handlePlaceSelect}
-//                                         options={{
-//                                             fields: [
-//                                                 "geometry",
-//                                                 "formatted_address",
-//                                             ],
-//                                         }}
-//                                     >
-//                                         <div
-//                                             className={
-//                                                 locationStyles.inputContainer
-//                                             }
-//                                         >
-//                                             <input
-//                                                 type="text"
-//                                                 value={inputAddress}
-//                                                 onChange={handleAddressChange}
-//                                                 placeholder="Enter Location here"
-//                                                 className={
-//                                                     locationStyles.addressInput
-//                                                 }
-//                                             />
-//                                             <Button
-//                                                 onClick={handlePlaceSelect}
-//                                                 className={
-//                                                     locationStyles.confirmButton
-//                                                 }
-//                                                 aria-label="Confirm location"
-//                                             >
-//                                                 ➡️
-//                                             </Button>
-//                                         </div>
-//                                     </Autocomplete>
-//                                 </div>
-//                             ) : (
-//                                 <Button
-//                                     onClick={handleManualLocationEntry}
-//                                     className={locationStyles.manualEntry}
-//                                 >
-//                                     Enter Location Manually
-//                                 </Button>
-//                             )}
-//                         </>
-//                     )}
-//                 </CardContent>
-//             </Card>
-//         </div>
-//     );
-// };
-
-// export default LocationSelectionPage;
+export default LocationPage;

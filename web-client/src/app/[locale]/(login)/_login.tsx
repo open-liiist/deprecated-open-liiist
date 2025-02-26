@@ -11,9 +11,6 @@ import { signIn, signUp } from './actions';
 import { ActionState } from '@/services/auth/middleware';
 import { useFormState } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { GoArrowDownRight } from 'react-icons/go'; // Assicurati di importare l'icona
-
-//import { oswald, noto_Sans } from '@/components/ui/fonts';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     const t = useTranslations('');
@@ -26,6 +23,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         { error: '' }
     );
 
+    // Toggle selection for a supermarket
     const handleToggle = (supermarket) => {
         if (selectedSupermarkets.includes(supermarket)) {
             setSelectedSupermarkets((prev) =>
@@ -36,6 +34,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         }
     };
 
+    // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -66,7 +65,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                         required
                                         maxLength={50}
                                         className="appearance-none rounded-lg relative block w-full px-3 py-6 border border-gray-400 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-liiist_green focus:border-liiist_green focus:z-10 sm:text-sm"
-                                        placeholder="Inserisca il suo nome completo"
+                                        placeholder="Enter your full name"
                                     />
                                 </div>
                             </div>
@@ -79,12 +78,10 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                         type="date"
                                         required
                                         className="appearance-none rounded-lg relative block w-full px-3 py-6 border border-gray-400 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-liiist_green focus:border-liiist_green focus:z-10 sm:text-sm"
-                                        placeholder="birthday"
+                                        placeholder="Enter your date of birth"
                                     />
                                 </div>
                             </div>
-
-                            
                         </>
                     )}
 
@@ -98,7 +95,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                 required
                                 maxLength={50}
                                 className="appearance-none rounded-lg relative block w-full px-3 py-6 border border-gray-400 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-liiist_green focus:border-liiist_green focus:z-10 sm:text-sm"
-                                placeholder="Inserisca la sua email"
+                                placeholder="Enter your email address"
                             />
                         </div>
                     </div>
@@ -114,16 +111,20 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                 minLength={8}
                                 maxLength={100}
                                 className="appearance-none rounded-lg relative block w-full px-3 py-6 border border-gray-400 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-liiist_green focus:border-liiist_green focus:z-10 sm:text-sm"
-                                placeholder="Inserisca la sua password"
+                                placeholder="Enter your password"
                             />
                         </div>
                     </div>
 
                     {state?.error && <div className="text-red-500 text-sm">{state.error}</div>}
-                    {mode === 'signup' && (<>
-                        <div>
-                                <Label htmlFor="supermarkets" className="block text-sm font-medium text-liiist_green px-2 mb-4">
-                                Prego, selezioni le catene di cui è membro
+                    {mode === 'signup' && (
+                        <>
+                            <div>
+                                <Label
+                                    htmlFor="supermarkets"
+                                    className="block text-sm font-medium text-liiist_green px-2 mb-4"
+                                >
+                                    Please select the supermarket chains you belong to
                                 </Label>
                                 <div className="mt-1 grid grid-cols-2 gap-4 px-2">
                                     {['Oasi Tigre', 'Gros', 'Conad', 'Carrefour', 'Decò'].map((supermarket) => (
@@ -144,14 +145,13 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                     ))}
                                 </div>
                             </div>
-                    </>
+                        </>
                     )}
                     <div>
                         <Button
                             type="submit"
                             className="flex justify-start items-center py-8 px-6 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-liiist_green hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-liiist_green"
                             disabled={pending}
-                            
                         >
                             {pending ? (
                                 <>
@@ -159,9 +159,9 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                                     Loading...
                                 </>
                             ) : mode === 'signin' ? (
-                                'Accedi al tuo account'
+                                'Log In to Your Account'
                             ) : (
-                                'Crea il tuo account'
+                                'Create Your Account'
                             )}
                         </Button>
                     </div>
@@ -174,12 +174,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                         </div>
                         <div className="relative flex justify-start text-sm">
                             <span className="px-1 bg-liiist_white text-gray-500">
-                                {mode === 'signin' ? 'Nuovo da queste parti?' : ''}
+                                {mode === 'signin' ? 'New here?' : ''}
                             </span>
                         </div>
                     </div>
 
-                    <div className="mt-6">
+                    <div className="mt-6"></div>
                         <Link
                             href={
                                 `${mode === 'signin' ? '/sign-up' : '/sign-in'}
@@ -187,7 +187,9 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                             }
                             className="w-full flex justify-start py-2 px-2 text-base font-medium text-liiist_green"
                         >
-                            {mode === 'signin' ? 'Crea un nuovo account' : 'Accedi a un account esistente'}
+                            {mode === 'signin'
+                                ? 'Create a New Account'
+                                : 'Log In to an Existing Account'}
                         </Link>
                     </div>
                 </div>

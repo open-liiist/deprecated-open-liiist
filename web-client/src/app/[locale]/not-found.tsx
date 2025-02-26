@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { CircleIcon } from 'lucide-react';
 
 export default function NotFound() {
 	return (

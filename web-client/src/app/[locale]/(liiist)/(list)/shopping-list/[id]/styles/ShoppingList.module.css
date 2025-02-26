@@ -72,7 +72,7 @@
     color: red;
     cursor: pointer;
     transition: transform 0.2s;
-    margin-left: 10px; /* Margine per separare l'icona dal titolo */
+    margin-left: 10px;
 }
 
 .deleteIcon:hover {
