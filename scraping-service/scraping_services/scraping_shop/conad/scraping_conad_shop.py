@@ -1,10 +1,13 @@
 import os
 import sys
 import requests
-import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from libft import create_store
+try:
+	from libft import create_store, write_list_of_dicts_to_csv
+except ImportError:
+	print("Error: libft module not found. Please ensure it's in your PYTHONPATH or in the same directory.")
+	sys.exit(1)
 
 def scraping_shops():
 	# Declaration of all information that request.post needs to function correctly
@@ -17,7 +20,8 @@ def scraping_shops():
 		"partial": True
 	}
 	headers = {"Accept": "*/*"}
-	list_shop = []
+
+	shop_list = []
 	
 	response = requests.post(url, json=body_data, headers=headers)
 
@@ -46,11 +50,11 @@ def scraping_shops():
 			else:
 				service_hours = " ".join(info_need['serviceHours'])
 				shop_info['working_hours'] = service_hours
-		# create_store(shop_info)
-		list_shop.append(shop_info)
-	df = pd.DataFrame(list_shop)
-	df.to_csv('conad_shop.csv', index=False)
-
+		if create_store(shop_info) is None:
+			shop_list.append(shop_info)
+			
+	if (shop_list):
+		write_list_of_dicts_to_csv(shop_list, "conad_shop.csv")
 
 if __name__ == "__main__":
 	scraping_shops()
