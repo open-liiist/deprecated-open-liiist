@@ -1,6 +1,6 @@
 {
 	"manifest": {
-		"name": "liiist App v1.0"
+		"name": "liiist web-client v1.0"
 	},
 	"auth": {
 		"login": "Login",
