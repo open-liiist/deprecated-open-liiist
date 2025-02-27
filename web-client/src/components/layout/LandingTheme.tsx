@@ -1,5 +1,5 @@
 // theme.js o dove hai definito il tuo tema
-import { MantineProvider, createTheme } from '@mantine/core';
+import { createTheme } from '@mantine/core';
 
 const theme = createTheme({
   colors: {

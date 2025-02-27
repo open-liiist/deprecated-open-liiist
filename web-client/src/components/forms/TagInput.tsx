@@ -1,9 +1,9 @@
 // TagInput.tsx
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import { foodEmojisItalian } from "./foodEmojis";
+import { foodEmojisItalian } from "../utils/foodEmojis";
 import styles from "./TagInput.module.css";
-import Tag from "./single-tag"; // Importa il nuovo componente Tag
+import Tag from "../common/SingleTag"; // Importa il nuovo componente Tag
 
 interface TagInputProps {
   placeholder?: string;

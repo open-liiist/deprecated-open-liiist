@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "./button";
+import { Button } from "./common/Button";
 import {FaTrashAlt} from "react-icons/fa"
 import { FaArrowRight } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
