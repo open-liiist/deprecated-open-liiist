@@ -1,12 +1,11 @@
 //search-service/src/utils.rs
-
 pub fn haversine_distance(
     lat1: f64,
     lon1: f64,
     lat2: f64,
     lon2: f64,
 ) -> f64 {
-    let earth_radius = 6371.0; // Raggio medio della Terra in km
+    let earth_radius = 6371.0;
 
     let dlat = (lat2 - lat1).to_radians();
     let dlon = (lon2 - lon1).to_radians();
@@ -18,8 +17,6 @@ pub fn haversine_distance(
     earth_radius * c
 }
 
-/// Trasforma l’input in minuscolo, rimuove i caratteri speciali e sostituisce gli spazi con underscore.
-/// Esempio: "brodo di verdure" -> "brodo_di_verdure"
 pub fn sanitize(input: &str) -> String {
     input
         .to_lowercase()
@@ -29,6 +26,7 @@ pub fn sanitize(input: &str) -> String {
         .join("_")
 }
 
+// Tests: the name is sanitized to remove special characters and spaces, and the result is returned in lowercase.
 #[cfg(test)]
 mod tests {
     use super::*;

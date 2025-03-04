@@ -1,8 +1,6 @@
 // search-service/src/search.rs
-
-use crate::models::{ProductResult, Position}; //removed: Localization
+use crate::models::{ProductResult, Position};
 use crate::AppState;
-//use crate::utils::sanitize;
 use elasticsearch::SearchParts;
 use serde_json::json;
 use std::collections::HashMap;
@@ -11,8 +9,7 @@ use std::sync::Arc;
 use crate::utils::sanitize;
 
 
-/// Esegue una ricerca fuzzy (ibrida) per “most similar”
-/// usando una multi_match query sui campi testuali.
+// Fuzzy search (hybrid): "most similar"
 pub async fn fetch_most_similar(
     app_state: &Arc<AppState>,
     query: &str,
@@ -37,8 +34,8 @@ pub async fn fetch_most_similar(
     parse_response(response).await
 }
 
-/// Esegue una ricerca fuzzy combinata per ottenere i prodotti con prezzo più basso,
-/// escludendo eventuali ID già trovati, e applicando un filtro geo.
+/// Executes a combined fuzzy search to obtain products with the lowest price,
+/// excluding any already found IDs and applying a geo filter.
 pub async fn fetch_lowest_price(
     app_state: &Arc<AppState>,
     query: &str,
@@ -173,8 +170,7 @@ pub async fn fetch_product_in_shop(
     parse_response(response).await
 }
 
-
-/// Esegue una query per ottenere prodotti usando la query ibrida costruita da `build_product_query`
+/// Executes a query to obtain products using the hybrid query built by `build_product_query`
 pub async fn fetch_lowest_price_shops(
     app_state: &Arc<AppState>,
     products: &[String],
@@ -193,11 +189,11 @@ pub async fn fetch_lowest_price_shops(
         // let shop_products = parse_response(response).await?;
         // product_prices.insert(product.clone(), shop_products);
 
-        // Filtra i risultati per includere solo quelli che, dopo sanitizzazione, corrispondono esattamente all'input
+        // Filters results to include only those that, after sanitization, exactly match the input
         let shop_products: Vec<ProductResult> = parse_response(response).await?
             .into_iter()
             //.filter(|pr| sanitize(&pr.name) == sanitize(product))
-            .filter(|pr| sanitize(&pr.name).contains(&sanitize(product))) //Accettiamo come match se il nome del prodotto (sanitizzato) contiene il termine dell'input sanitizzato
+            .filter(|pr| sanitize(&pr.name).contains(&sanitize(product))) // Accept as match if the sanitized product name contains the sanitized input term
             .collect();
         product_prices.insert(product.clone(), shop_products);
     }
@@ -205,8 +201,7 @@ pub async fn fetch_lowest_price_shops(
 }
 
 
-
-/// Converte la risposta di Elasticsearch in un vettore di `ProductResult`
+/// Converts the Elasticsearch response into a vector of `ProductResult`
 pub async fn parse_response(
     response: elasticsearch::http::response::Response,
 ) -> Result<Vec<ProductResult>, Box<dyn std::error::Error + Send + Sync>> {

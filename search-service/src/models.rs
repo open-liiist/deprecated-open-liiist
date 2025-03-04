@@ -30,7 +30,7 @@ pub struct ProductDB {
 #[derive(Deserialize, Debug)]
 pub struct SearchQuery {
     pub query: String,
-    //pub position: Position, // Rende il campo pubblico
+    //pub position: Position,
     pub position_latitude: f64,
     pub position_longitude: f64,
 }
@@ -101,7 +101,7 @@ pub struct ProductInShopResponse {
 pub struct ProductsLowestPriceRequest {
     pub products: Vec<String>,
     pub position: Position,
-    pub mode: Option<String>,  // "risparmio" | "comodita" (o altro)
+    pub mode: Option<String>,  // Optional mode parameter ("Risparmio" or "default: Comodità")
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -123,8 +123,8 @@ pub struct ShopProduct {
 
 #[derive(Debug, Serialize, Clone)]
 pub struct LowestPriceExtended {
-    pub shop: String,               // Nome del negozio
-    pub total_price: f64,           // Totale dei prezzi dei prodotti trovati
-    pub products: Vec<ShopProduct>, // Lista dei prodotti trovati
-    pub missing: Vec<String>,       // Lista degli item mancanti (con messaggio, se vuoi)
+    pub shop: String,               // Shop/Grocery name
+    pub total_price: f64,           // Total price for all products
+    pub products: Vec<ShopProduct>, // List of products purchased from this shop
+    pub missing: Vec<String>,       // List of products not found in the shop
 }
