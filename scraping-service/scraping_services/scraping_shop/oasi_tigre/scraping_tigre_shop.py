@@ -63,7 +63,7 @@ def scraping_shop():
 				"city": info_need['city'],
 				"zip_code": postal_code,
 				"working_hours": (info_need['hours']),
-				"picks_up_in_shop": True,
+				"picks_up_in_shop": "True",
 				}
 			data = ast.literal_eval(f"{info_need['hours']}")
 

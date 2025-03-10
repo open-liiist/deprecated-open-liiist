@@ -18,7 +18,6 @@ from .libft_utility import (
 from .send_data import (
 	send_data_to_receiver,
 	create_store,
-	get_all_stores,
 	get_store_by_grocery_and_city,
 )
 
