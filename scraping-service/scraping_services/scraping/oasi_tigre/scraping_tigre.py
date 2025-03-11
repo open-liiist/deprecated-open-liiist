@@ -134,7 +134,7 @@ def get_stores(result_dict):
 	if result_dict is None:
 		return []
 	try:
-		stores = result_dict['stores']
+		stores = result_dict[0]
 		if stores is None:
 			return []
 		return stores
@@ -155,14 +155,12 @@ if __name__ == "__main__":
 	else: 
 		count_shop = int(count_shop)
 	try:
-		shop_list = {
-			'stores': get_stores(result1) + get_stores(result2)
-		}
+		shop_list =  result1 + result2
 	except KeyError as e:
 		print(f"Error: Missing 'stores' key in one of the result dictionaries. Error: {e}")
 		shop_list = {'stores': []}
-
-	if not shop_list['stores']:
+	
+	if not shop_list:
 		shop_list_csv = read_csv_to_list_of_dicts("oasi_tigre_shop.csv")
 		if shop_list_csv:
 			try:
@@ -173,8 +171,7 @@ if __name__ == "__main__":
 			print("Warning: oasi_tigre_shop.csv is empty or could not be read.")
 	else:
 		try:
-			shop = shop_list['stores'][count_shop]
-			print(shop)
+			shop = shop_list[count_shop]
 		except IndexError:
 			print(f"Error: count_shop ({count_shop}) is out of range for the 'stores' list.")
 
