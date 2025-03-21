@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SupermarketCard from "@/components/ui/SupermarketCard";
 import ProductTags from "@/components/ui/ProductTags";
-import { Supermarket, Product } from "@/types";
+import { Localization } from "@/types";
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 
@@ -20,11 +20,11 @@ const SavingsModePage: React.FC = () => {
   const [listTitle, setListTitle] = useState<string>("");
   const [budget, setBudget] = useState<string>("");
   const [userProducts, setUserProducts] = useState<UserProduct[]>([]);
-  const [supermarkets, setSupermarkets] = useState<Supermarket[]>([]);
+  const [supermarkets, setSupermarkets] = useState<Localization[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  // In savings mode partiamo con "risparmio"
+  // In savings mode we start with "risparmio"
   const [mode, setMode] = useState<"comodità" | "risparmio">("risparmio"); 
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
@@ -53,7 +53,7 @@ const SavingsModePage: React.FC = () => {
         setBudget(listData.budget);
         setUserProducts(userProductsFromList);
         
-        // Leggiamo mode dal db, se mode=savings allora risparmio, altrimenti comodità
+        // Retrieve mode from the database; if mode equals "savings" then set to "risparmio", otherwise "comodità"
         const currentMode = listData.mode === "savings" ? "risparmio" : "comodità";
         setMode(currentMode);
 
@@ -69,7 +69,7 @@ const SavingsModePage: React.FC = () => {
         const userCount = userProductsFromList.length;
         const half = Math.ceil(userCount / 2);
 
-        // Divisione prodotti per il primo supermercato
+        // Distribute products for the first supermarket
         market1.products = market1.products.slice(0, half);
         for (let i = 0; i < half; i++) {
           if (market1.products[i]) {
@@ -77,7 +77,7 @@ const SavingsModePage: React.FC = () => {
           }
         }
 
-        // Divisione prodotti per il secondo supermercato
+        // Distribute products for the second supermarket
         const secondCount = userCount - half;
         market2.products = market2.products.slice(0, secondCount);
         for (let j = 0; j < secondCount; j++) {
@@ -102,7 +102,7 @@ const SavingsModePage: React.FC = () => {
     fetchData();
   }, [searchParams]);
 
-  const calcTotalPrice = (sms: Supermarket[]) => {
+  const calcTotalPrice = (sms: Localization[]) => {
     return sms.reduce((acc, sm) => {
       return acc + sm.products.reduce((pAcc, prod) => {
         const productPrice = prod.discounted_price ?? prod.price;
@@ -128,10 +128,10 @@ const SavingsModePage: React.FC = () => {
       return;
     }
 
-    // Siamo in risparmio. Cliccando passiamo subito a comodità (UI immediata)
+    // We are in savings mode. Clicking changes mode immediately to convenience for UI update.
     setMode("comodità");
 
-    // Dopo 2 secondi redirect a convenience-mode
+    // Redirect to convenience mode after 2 seconds
     setTimeout(() => {
       router.push(`/convenience-mode?id=${listId}&listTitle=${listTitle}&budget=${budget}`);
     }, 2000);
@@ -169,7 +169,7 @@ const SavingsModePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <span className="text-gray-600 animate-pulse">Caricamento...</span>
+        <span className="text-gray-600 animate-pulse">Loading...</span>
       </div>
     );
   }
@@ -191,7 +191,7 @@ const SavingsModePage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
 
-        {/* Titolo, mode e toggle */}
+        {/* Title, mode, and toggle */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <h1 className="text-3xl font-bold text-gray-800">
@@ -212,7 +212,7 @@ const SavingsModePage: React.FC = () => {
           />
         </div>
 
-        {/* Budget e Costo Totale */}
+        {/* Budget and Total Cost */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 mb-6">
           <span className="text-lg font-semibold text-gray-700">Budget: €{budget}</span>
           <span
@@ -220,22 +220,22 @@ const SavingsModePage: React.FC = () => {
               isOverBudget ? "text-red-600" : "text-green-600"
             }`}
           >
-            Costo totale: €{totalPrice.toFixed(2)}
+            Total Cost: €{totalPrice.toFixed(2)}
           </span>
         </div>
 
-        {/* Tag dei prodotti */}
+        {/* Product tags */}
         <div className="mb-6 space-y-1">
           <ProductTags products={userProducts} onRemove={handleRemoveProduct} />
         </div>
 
-        {/* Due supermercati */}
+        {/* Two supermarkets */}
         {supermarkets.map((sm, sIndex) => (
           <SupermarketCard
             key={sIndex}
             supermarket={sm}
             onRemoveProduct={(productIndex) => {
-              // Calcolo indice globale
+              // Calculate global index
               const userCount = userProducts.length;
               const half = Math.ceil(userCount / 2);
 

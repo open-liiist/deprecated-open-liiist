@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Temi globali */
+/* Global themes */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --navbar-height: 64px; /* Altezza della navbar */
-
+  --navbar-height: 64px; /* Navbar height */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,14 +16,14 @@
   }
 }
 
-/* Stili globali */
+/* Global styles */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Personalizzazione globale della scrollbar */
+/* Global customization of scrollbar */
 ::-webkit-scrollbar {
   width: 0px;
 }
@@ -68,7 +67,7 @@ body {
 }
 
 .pt-navbar {
-  padding-top: var(--navbar-height); /* Compensa l'altezza della navbar */
+  padding-top: var(--navbar-height); /* Compensate for navbar height */
 }
 
 .header {
@@ -78,5 +77,4 @@ body {
   width: 100%;
   z-index: 50;
   /*border: 2px solid red;*/
-
 }

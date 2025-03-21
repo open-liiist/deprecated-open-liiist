@@ -1,5 +1,3 @@
-
-//search-service/src/main.rs
 mod handlers;
 mod models;
 mod search;

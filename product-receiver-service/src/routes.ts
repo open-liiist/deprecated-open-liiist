@@ -1,15 +1,15 @@
 /**
- * PRODUCT-RECIEVER-SERVICE/src/routes.ts
+ * product-receiver-service/src/routes.ts
  */
 import express, { Request, Response, NextFunction } from 'express';
 import net from 'node:net';
-import prisma from './prisma'; // la tua istanza di PrismaClient
-import { z } from 'zod';      // libreria di validazione
+import prisma from './prisma'; // your PrismaClient instance
+import { z } from 'zod';      // validation library
 
 const router = express.Router();
 
 /* ------------------------------------------------------------------
- *                     MIDDLEWARE DI VALIDAZIONE
+ *                     VALIDATION MIDDLEWARE
  * ------------------------------------------------------------------ */
 
 // Product schema
@@ -26,8 +26,8 @@ const productSchema = z.object({
     grocery: z.string().min(1, 'grocery is required'),
     lat: z.number().min(-90).max(90),
     lng: z.number().min(-180).max(180),
-    // x gestire street anche nei product
-    street: z.string().min(1, 'street is required'), // o .optional()
+    // also handle street in products
+    street: z.string().min(1, 'street is required'),
   }),
 });
 
@@ -36,14 +36,14 @@ const storeSchema = z.object({
   name: z.string().min(1, 'name is required'),
   lat: z.number().min(-90).max(90),
   lng: z.number().min(-180).max(180),
-  street: z.string().nullable().optional(),  // accetta string o null
+  street: z.string().nullable().optional(),  // accepts string or null
   city: z.string().optional(),
   working_hours: z.string().optional(),
   picks_up_in_shop: z.boolean().optional(),
   zip_code: z.string().optional(),
 });
 
-// Validazione product
+// Validate product request
 function validateProduct(req: Request, res: Response, next: NextFunction) {
   const result = productSchema.safeParse(req.body);
   if (!result.success) {
@@ -56,7 +56,7 @@ function validateProduct(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-// Validazione store
+// Validate store request
 function validateStore(req: Request, res: Response, next: NextFunction) {
   const result = storeSchema.safeParse(req.body);
   if (!result.success) {
@@ -112,23 +112,21 @@ function renameLongToLng(data: any): any {
 }
 
 /* ------------------------------------------------------------------
- *                         UP-SERT PRODOTTI
+ *                     UP-SERT PRODUCTS
  * ------------------------------------------------------------------ */
 
 /**
- * Esegue un upsert di Product basato su (name_id, localizationId).
- * Prima crea/upserta la Localization con la chiave (grocery_lat_lng_street).
- * Nel product payload, se non arriva la street, usiamo '' come fallback.
+ * Performs an upsert for Product based on (name_id, localizationId).
+ * First it creates/updates the Localization with the key (grocery_lat_lng_street).
+ * In the product payload, if street is not provided, it must be supplied.
  */
 async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 1000) {
   let attempt = 0;
 
-  // Ricaviamo name_id
+  // Extract name_id from the provided full_name or name
   const name_id = sanitizeString(data.full_name || data.name);
 
-  // Se la street non è presente, usiamo stringa vuota
-  // (solo se vuoi differenziare i negozi in base alla street
-  //  se non la usi, puoi passare sempre '')
+  // Ensure street is provided; otherwise throw an error
   const streetForConstraint = data.localization?.street;
   if (!streetForConstraint) {
     throw new Error("Missing 'street' for product localization");
@@ -137,7 +135,7 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
   while (attempt < maxRetries) {
     try {
       const result = await prisma.$transaction(async (tx) => {
-        // 1) Upsert della localization via (grocery_lat_lng_street)
+        // 1) Upsert the localization by (grocery, lat, lng, street)
         const loc = await tx.localization.upsert({
           where: {
             grocery_lat_lng_street: {
@@ -148,7 +146,7 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
             },
           },
           update: {
-            // Se vuoi aggiornare campi quando c'è già
+            // Update fields if necessary when record exists
           },
           create: {
             grocery: data.localization.grocery,
@@ -158,7 +156,7 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
           },
         });
 
-        // 2) Product upsert (chiave: name_id + localizationId)
+        // 2) Upsert product (key: name_id + localizationId)
         const existingProduct = await tx.product.findUnique({
           where: {
             name_id_localizationId: {
@@ -199,7 +197,7 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
           },
         });
 
-        // 3) Insert in ProductHistory
+        // 3) Insert a record in the ProductHistory
         await tx.productHistory.create({
           data: {
             productId: product.id,
@@ -215,13 +213,13 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
       return result;
     } catch (err: any) {
       attempt++;
-      console.error(`Tentativo ${attempt} fallito:`, err);
+      console.error(`Attempt ${attempt} failed:`, err);
 
       if (err.code === 'P2028') {
-        console.warn('Timeout, ritento...');
+        console.warn('Timeout encountered, retrying...');
         await new Promise((r) => setTimeout(r, retryDelay));
       } else if (err.code === 'P2002') {
-        console.warn('Violazione chiave unica, ritento...');
+        console.warn('Unique key violation detected, retrying...');
         await new Promise((r) => setTimeout(r, retryDelay));
       } else {
         throw err;
@@ -233,12 +231,12 @@ async function upsertProductWithRetry(data: any, maxRetries = 3, retryDelay = 10
 }
 
 /* ------------------------------------------------------------------
- *                    HANDLER PRODOTTO E STORE
+ *                    PRODUCT & STORE HANDLERS
  * ------------------------------------------------------------------ */
 
 async function createOrUpdateProductHandler(req: Request, res: Response) {
   try {
-    console.log('Dati ricevuti per il prodotto:', req.body);
+    console.log('Received product data:', req.body);
     const data = renameLongToLng(res.locals.productData);
 
     const result = await upsertProductWithRetry(data);
@@ -246,32 +244,32 @@ async function createOrUpdateProductHandler(req: Request, res: Response) {
       return res.status(500).json({ error: 'Failed to save product' });
     }
     const { product, action } = result;
-    console.info(`Prodotto ${action}: ${product.full_name}`);
+    console.info(`Product ${action}: ${product.full_name}`);
     await sendToLogstash({
       id: product.id,  
       ...data,
       name_id: product.name_id,
-      name: product.name,  // Assicurati che 'name' sia incluso
+      name: product.name,  // Ensure 'name' is included
       action,
     });
 
     return res.status(201).json({ message: 'Product saved', product, action });
   } catch (error: any) {
-    console.error('Errore salvataggio prodotto:', error);
+    console.error('Error saving product:', error);
     return res.status(500).json({ error: error.message });
   }
 }
 
 async function createOrUpdateStoreHandler(req: Request, res: Response) {
   try {
-    console.log('Dati ricevuti per il negozio:', req.body);
+    console.log('Received store data:', req.body);
     const data = renameLongToLng(res.locals.storeData);
 
-    // Se street è null/undefined, fallback a ''
+    // If street is null/undefined, fallback to empty string
     const streetForConstraint = data.street || '';
 
     const result = await prisma.$transaction(async (tx) => {
-      // 1) Cerchiamo un record con (grocery, lat, lng, street)
+      // 1) Search for a record with (grocery, lat, lng, street)
       const existingStore = await tx.localization.findUnique({
         where: {
           grocery_lat_lng_street: {
@@ -321,7 +319,7 @@ async function createOrUpdateStoreHandler(req: Request, res: Response) {
     }
 
     const { store, action } = result;
-    console.info(`Negozio ${action}: ${store.grocery}`);
+    console.info(`Store ${action}: ${store.grocery}`);
 
     return res.status(201).json({
       message: 'Store saved',
@@ -329,7 +327,7 @@ async function createOrUpdateStoreHandler(req: Request, res: Response) {
       action,
     });
   } catch (error: any) {
-    console.error('Errore salvataggio negozio:', error);
+    console.error('Error saving store:', error);
     return res.status(500).json({ error: error.message });
   }
 }

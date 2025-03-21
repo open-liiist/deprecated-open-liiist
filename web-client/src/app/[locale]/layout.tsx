@@ -1,27 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { UserProvider } from "@/services/auth";
 import { getUser } from "@/services/user";
-import {poppins} from "@/components/ui/fonts"
-
-
-const geistSans = localFont({
-	src: "../fonts/GeistVF.woff",
-	variable: "--font-geist-sans",
-	weight: "100 900",
-});
-const geistMono = localFont({
-	src: "../fonts/GeistMonoVF.woff",
-	variable: "--font-geist-mono",
-	weight: "100 900",
-});
+import { poppins } from "@/components/ui/fonts";
 
 export const metadata: Metadata = {
 	title: "liiist",
-	description: "liiist is a grocery list app for the modern age.",
+	description: "a smart grocery list app",
 };
 
 export default async function RootLayout({
@@ -34,9 +21,7 @@ export default async function RootLayout({
 
 	return (
 		<html lang="en" className={poppins.className}>
-			<body
-				className={`${poppins.className} antialiased bg-white text-black`}
-			>
+			<body className={`${poppins.className} antialiased bg-white text-black`}>
 				<UserProvider userPromise={userPromise}>
 					<NextIntlClientProvider messages={messages}>
 						{children}

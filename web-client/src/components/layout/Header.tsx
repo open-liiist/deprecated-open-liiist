@@ -1,6 +1,4 @@
-
 'use client';
-
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -16,7 +14,7 @@ import { useUser } from '@/services/auth';
 import { signOut } from '../../app/[locale]/(login)/actions';
 import { useRouter } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
-import SetLocationLink from '@/components/ui/SetLocationLink';
+import SetLocation from '@/components/pages/SetLocation';
 import { noto_Sans } from '@/components/ui/fonts';
 
 function Header() {

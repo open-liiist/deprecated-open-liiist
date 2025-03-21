@@ -17,7 +17,7 @@ export const Map = ({ center, zoom, children }) => {
     }
 
     const mapOptions = {
-        disableDefaultUI: true,  // Disabilita l'interfaccia utente predefinita
+        disableDefaultUI: true,  // Disable default user interface
     };
 
     return (
@@ -35,7 +35,7 @@ export const Map = ({ center, zoom, children }) => {
     );
 };
 
-export const getUserLocation =() => {
+export const getUserLocation = () => {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -49,44 +49,43 @@ export const getUserLocation =() => {
                     reject(err.message);
                 }
             );
-        }else {
-            reject("bro your browser doesn't support geolocation")
+        } else {
+            reject("Your browser does not support geolocation");
         }
-    })
-}
+    });
+};
 
 export const reverseGeocode = async (lat, lng) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
-      );
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch address");
-      }
-
-      const data = await response.json();
-
-      if (data.status === "OK" && data.results.length > 0) {
-        const addressComponents = data.results[0].address_components;
-        const street = addressComponents.find(component => component.types.includes("route"));
-        const streetNumber = addressComponents.find(component => component.types.includes("street_number"));
-
-        if (street && streetNumber) {
-          return `${street.long_name} ${streetNumber.long_name}`;
-        } else {
-          return "Unknown Street";
+        if (!response.ok) {
+            throw new Error("Failed to fetch address");
         }
-      } else {
-        throw new Error("No address found for the given coordinates");
-      }
-    } catch (error) {
-      console.error("Reverse geocoding error:", error);
-      return "Unknown Location";
-    }
-  };
 
+        const data = await response.json();
+
+        if (data.status === "OK" && data.results.length > 0) {
+            const addressComponents = data.results[0].address_components;
+            const street = addressComponents.find(component => component.types.includes("route"));
+            const streetNumber = addressComponents.find(component => component.types.includes("street_number"));
+
+            if (street && streetNumber) {
+                return `${street.long_name} ${streetNumber.long_name}`;
+            } else {
+                return "Unknown Street";
+            }
+        } else {
+            throw new Error("No address found for the given coordinates");
+        }
+    } catch (error) {
+        console.error("Reverse geocoding error:", error);
+        return "Unknown Location";
+    }
+};
 
 async function reverseGeocodeWithOSM(lat, lng) {
     const response = await fetch(

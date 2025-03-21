@@ -4,19 +4,19 @@ import { ShoppingListController } from "../controllers/shoppingList";
 
 const router = Router();
 
-// Ottieni tutte le liste della spesa per un utente
+// Get all shopping lists for a user
 router.get("/", authenticateToken, ShoppingListController.getShoppingLists);
 
-// Crea una nuova lista della spesa
+// Create a new shopping list
 router.post("/", authenticateToken, ShoppingListController.createShoppingList);
 
-// Ottieni una lista della spesa specifica
+// Get a specific shopping list
 router.get("/:id", authenticateToken, ShoppingListController.getShoppingList);
 
-// Aggiorna una lista della spesa
+// Update a shopping list
 router.put("/:id", authenticateToken, ShoppingListController.updateShoppingList);
 
-// Elimina una lista della spesa
+// Delete a shopping list
 router.delete("/:id", authenticateToken, ShoppingListController.deleteShoppingList);
 
 export { router };

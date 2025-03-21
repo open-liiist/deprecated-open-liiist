@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Input2 } from "@/components/ui/input";
 import { ActionButton2 } from "@/components/ui/ActionButton";
 import { TagInput } from "@/components/ui/tag-input";
-import { AiOutlinePlus } from "react-icons/ai";
 import { handleCalculate } from "@/services/shoppingListService";
 import { GoArrowDownRight, GoPlus } from "react-icons/go";
 
@@ -20,26 +19,31 @@ const NewListPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Callback to update product ordering
     const handleReorderProducts = (updatedTags: { name: string; quantity: number }[]) => {
         setProducts(updatedTags);
     };
 
+    // Add a new product to the list
     const handleProductAdd = (product: { name: string; quantity: number }) => {
         setProducts([product, ...products]);
     };
 
+    // Remove a product from the list based on its index
     const handleProductRemove = (index: number) => {
         const updatedProducts = [...products];
         updatedProducts.splice(index, 1);
         setProducts(updatedProducts);
     };
 
+    // Increase the quantity of a product
     const handleIncreaseQuantity = (index: number) => {
         const updatedProducts = [...products];
         updatedProducts[index].quantity += 1;
         setProducts(updatedProducts);
     };
 
+    // Decrease the quantity of a product (minimum of 1)
     const handleDecreaseQuantity = (index: number) => {
         const updatedProducts = [...products];
         if (updatedProducts[index].quantity > 1) {
@@ -48,6 +52,7 @@ const NewListPage = () => {
         }
     };
 
+    // Save the shopping list via an API call
     const handleSaveList = async () => {
         if (listTitle.trim() === "" || products.length === 0) {
             setError("Please enter a list title and add at least one product.");
@@ -78,26 +83,28 @@ const NewListPage = () => {
             }
 
             const result = await response.json();
-            console.log("Lista creata con successo:", result);
+            console.log("List created successfully:", result);
             router.push("/home");
         } catch (err) {
             setError((err as Error).message || "Failed to save the shopping list");
-            console.error("Errore durante il salvataggio della lista:", err);
+            console.error("Error while saving the list:", err);
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Handle switching between modes
     const handleModeChange = (selectedMode: string) => {
         setMode(selectedMode);
     };
 
     return (
         <div className="relative min-h-screen bg-white text-liiist_black">
-            {/* Contenuto principale */}
-            <div className="max-w-2xl mx-auto"> {/* pb-24 per fare spazio a bottom_area */}
+            {/* Main content */}
+            <div className="max-w-2xl mx-auto"> {/* pb-24 to create space for the bottom area */}
                 <div id="new-list-form" className="w-full flex flex-col">
-                    <div id="title input" className="flex mb-10 items-center">
+                    {/* Title input */}
+                    <div id="title-input" className="flex mb-10 items-center">
                         <Input2
                             autoComplete="off"
                             id="listTitle"
@@ -133,7 +140,7 @@ const NewListPage = () => {
                 )}
             </div>
 
-            {/* Bottom Area Fisso */}
+            {/* Fixed Bottom Area */}
             <div className="fixed bottom-0 left-0 w-full p-4">
                 <div id="bottom_area" className="max-w-2xl mx-auto flex justify-between">
                     <div className="flex flex-col items-start">

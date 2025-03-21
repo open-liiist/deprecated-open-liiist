@@ -5,20 +5,20 @@ import SupermarketProducts from './SupermarketProducts';
 async function getLocalizationData(localizationId: string): Promise<Localization | null> {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!apiUrl) {
-        throw new Error('NEXT_PUBLIC_API_URL non è definito.');
+        throw new Error('NEXT_PUBLIC_API_URL is not defined.');
     }
 
     try {
         const res = await fetch(`${apiUrl}/api/supermarket/${localizationId}`, { cache: 'no-store' });
         if (!res.ok) {
-            console.error(`Errore API: ${res.status} ${res.statusText}`);
+            console.error(`API Error: ${res.status} ${res.statusText}`);
             return null;
         }
 
         const data: Localization = await res.json();
         return data;
     } catch (error) {
-        console.error('Errore durante la chiamata API:', error);
+        console.error('Error during API call:', error);
         return null;
     }
 }
@@ -28,7 +28,7 @@ export default async function SupermarketPage({ params }: { params: { supermarke
     if (isNaN(localizationId)) {
         return (
             <div className="p-8">
-                <p className="text-center text-gray-500 text-xl">ID Supermercato non valido</p>
+                <p className="text-center text-gray-500 text-xl">Invalid Supermarket ID</p>
             </div>
         );
     }
@@ -38,7 +38,7 @@ export default async function SupermarketPage({ params }: { params: { supermarke
     if (!localization) {
         return (
             <div className="p-8">
-                <p className="text-center text-gray-500 text-xl">Supermercato non trovato</p>
+                <p className="text-center text-gray-500 text-xl">Supermarket not found</p>
             </div>
         );
     }

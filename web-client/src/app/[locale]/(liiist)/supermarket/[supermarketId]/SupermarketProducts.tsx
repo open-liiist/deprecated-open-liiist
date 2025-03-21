@@ -6,7 +6,7 @@ import Fuse from 'fuse.js';
 
 const PRODUCTS_PER_PAGE = 16;
 
-// Definizione delle opzioni di ordinamento
+// Define sort options
 type SortOption = 'DEFAULT' | 'DISCOUNT' | 'PRICE_DESC' | 'PRICE_ASC';
 
 export default function SupermarketProducts({ products }: { products: Product[] }) {
@@ -14,15 +14,15 @@ export default function SupermarketProducts({ products }: { products: Product[] 
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOption, setSortOption] = useState<SortOption>('DEFAULT');
 
-    // Inizializza Fuse.js
+    // Initialize Fuse.js for fuzzy search
     const fuse = useMemo(() => {
         return new Fuse(products, {
             keys: ['full_name', 'description'],
-            threshold: 0.4, // Regola la sensibilità della ricerca fuzzy
+            threshold: 0.4, // Adjust search sensitivity
         });
     }, [products]);
 
-    // Filtraggio e Ordinamento dei prodotti
+    // Filter and sort products
     const filteredAndSortedProducts = useMemo(() => {
         let filtered: Product[];
 
@@ -56,23 +56,23 @@ export default function SupermarketProducts({ products }: { products: Product[] 
         return filtered;
     }, [fuse, products, searchTerm, sortOption]);
 
-    // Calcolo prodotti della pagina corrente
+    // Calculate products for the current page
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const currentProducts = useMemo(() => {
         return filteredAndSortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
     }, [filteredAndSortedProducts, startIndex]);
 
-    // Numero totale di pagine
+    // Total number of pages
     const totalPages = Math.ceil(filteredAndSortedProducts.length / PRODUCTS_PER_PAGE);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1); // Resetta alla prima pagina su nuova ricerca
+        setCurrentPage(1); // Reset to first page on new search
     };
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSortOption(e.target.value as SortOption);
-        setCurrentPage(1); // Resetta alla prima pagina su nuovo ordinamento
+        setCurrentPage(1); // Reset to first page on new sort
     };
 
     const handleNextPage = () => {
@@ -95,22 +95,22 @@ export default function SupermarketProducts({ products }: { products: Product[] 
 
     return (
         <div className="max-w-5xl mx-auto space-y-4">
-            {/* Barra di ricerca e ordinamento */}
+            {/* Search and sort bar */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                {/* Barra di ricerca */}
+                {/* Search input */}
                 <div className="flex items-center flex-1">
                     <input
                         type="text"
-                        placeholder="Cerca prodotti..."
+                        placeholder="Search products..."
                         value={searchTerm}
                         onChange={handleSearchChange}
                         className="flex-1 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
 
-                {/* Ordinamento */}
+                {/* Sorting options */}
                 <div className="flex items-center space-x-2">
-                    <label htmlFor="sort" className="text-gray-700">Ordina per:</label>
+                    <label htmlFor="sort" className="text-gray-700">Sort by:</label>
                     <select
                         id="sort"
                         value={sortOption}
@@ -118,25 +118,25 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                         className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
                         <option value="DEFAULT">Default</option>
-                        <option value="DISCOUNT">Prodotti in sconto</option>
-                        <option value="PRICE_DESC">Prezzo: più caro</option>
-                        <option value="PRICE_ASC">Prezzo: meno caro</option>
+                        <option value="DISCOUNT">Discounted products</option>
+                        <option value="PRICE_DESC">Price: High to Low</option>
+                        <option value="PRICE_ASC">Price: Low to High</option>
                     </select>
                     <button
                         onClick={resetFilters}
                         className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                     >
-                        Azzera filtri
+                        Reset filters
                     </button>
                 </div>
             </div>
 
-            {/* Lista prodotti */}
+            {/* Product list */}
             {currentProducts.length === 0 ? (
-                <p className="text-gray-500">Nessun prodotto trovato.</p>
+                <p className="text-gray-500">No products found.</p>
             ) : (
                 <>
-                    <p className="text-gray-700">Trovati {filteredAndSortedProducts.length} prodotti.</p>
+                    <p className="text-gray-700">Found {filteredAndSortedProducts.length} products.</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         {currentProducts.map(product => (
                             <div key={product.id} className="bg-white rounded-lg shadow p-4 flex flex-col">
@@ -149,16 +149,16 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                                 <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                                 <div className="mt-auto">
                                     <p className="text-gray-800">
-                                        Prezzo: <span className="font-bold">€{product.current_price.toFixed(2)}</span>
+                                        Price: <span className="font-bold">€{product.current_price.toFixed(2)}</span>
                                     </p>
                                     {product.discount && (
                                         <p className="text-green-600">
-                                            Sconto: <span className="font-bold">{product.discount}%</span>
+                                            Discount: <span className="font-bold">{product.discount}%</span>
                                         </p>
                                     )}
                                     {product.price_for_kg && (
                                         <p className="text-gray-500">
-                                            Prezzo al kg: <span>€{product.price_for_kg.toFixed(2)}</span>
+                                            Price per kg: <span>€{product.price_for_kg.toFixed(2)}</span>
                                         </p>
                                     )}
                                 </div>
@@ -168,7 +168,7 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                 </>
             )}
 
-            {/* Paginazione */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex items-center justify-center space-x-4 mt-4">
                     <button
@@ -178,7 +178,7 @@ export default function SupermarketProducts({ products }: { products: Product[] 
                     >
                         Previous
                     </button>
-                    <span>Pagina {currentPage} di {totalPages}</span>
+                    <span>Page {currentPage} of {totalPages}</span>
                     <button
                         onClick={handleNextPage}
                         disabled={currentPage === totalPages}

@@ -47,20 +47,20 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         </div>
 
         {typeof quantity === "number" && (
-          <span className="text-sm text-gray-700 mt-1">
-            Quantità: {quantity}
-          </span>
+            <span className="text-sm text-gray-700 mt-1">
+            Quantity: {quantity}
+            </span>
         )}
 
         {external_url && (
-          <a
+            <a
             href={external_url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-blue-500 text-white text-sm px-3 py-1 rounded mt-3 hover:bg-blue-600 transition-colors w-fit"
-          >
-            Vedi Prodotto
-          </a>
+            >
+            See Product
+            </a>
         )}
       </div>
     </li>

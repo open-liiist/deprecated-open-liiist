@@ -1,5 +1,3 @@
-// search-service/src/handlers.rs
-
 use crate::models::{
     LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
     ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
@@ -17,13 +15,11 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use serde_json::{json}; // removed: Value
+use serde_json::{json};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-//use crate::utils::sanitize;
 
-
-/// Handler per la ricerca dei prodotti: Modalità Standard
+/// Handler for product search: Standard Mode
 pub async fn search_handler(
     State(app_state): State<Arc<AppState>>,
     Query(params): Query<SearchQuery>,
@@ -35,7 +31,7 @@ pub async fn search_handler(
     };
     tracing::info!("Constructed position: {:?}", position);
     
-    // 1. Recupera i prodotti "most similar" (ricerca fuzzy)
+    // 1. Retrieve "most similar" products (fuzzy search)
     let mut most_similar = match fetch_most_similar(&app_state, &params.query).await {
         Ok(products) => products,
         Err(e) => {
@@ -44,10 +40,10 @@ pub async fn search_handler(
         }
     };
 
-    // 2. Escludi gli ID già trovati dalla ricerca per il prezzo più basso
+    // 2. Exclude IDs already found from the lowest price search
     let exclude_ids: HashSet<String> = most_similar.iter().map(|p| p._id.clone()).collect();
 
-    // 3. Recupera i prodotti per il prezzo più basso
+    // 3. Retrieve products by lowest price
     let mut lowest_price = match fetch_lowest_price(&app_state, &params.query, &exclude_ids, &position).await {
         Ok(products) => products,
         Err(e) => {
@@ -56,17 +52,16 @@ pub async fn search_handler(
         }
     };
 
-    // 4. Se non ci sono risultati per il prezzo più basso, usa il più economico dai "most similar"
+    // 4. If no results for lowest price, use the cheapest from "most similar"
     if lowest_price.is_empty() && most_similar.len() > 1 {
         if let Some((_idx, min_product)) = most_similar.iter().enumerate().min_by(|(_, a), (_, b)| {
             a.price.partial_cmp(&b.price).unwrap_or(std::cmp::Ordering::Equal)
         }) {
             lowest_price.push(min_product.clone());
-            // Se desideri rimuovere l'elemento dai "most similar", ricorda che la variabile è mutabile.
         }
     }
 
-    // 5. Calcola la distanza per ogni prodotto nei "most similar"
+    // 5. Calculate distance for each product in "most similar"
     for product in &mut most_similar {
         product.distance = Some(haversine_distance(
             position.latitude,
@@ -76,7 +71,7 @@ pub async fn search_handler(
         ));
     }
 
-    // 6. Calcola la distanza per ogni prodotto in "lowest price"
+    // 6. Calculate distance for each product in "lowest price"
     for product in &mut lowest_price {
         product.distance = Some(haversine_distance(
             position.latitude,
@@ -86,7 +81,7 @@ pub async fn search_handler(
         ));
     }
 
-    // 7. Restituisci la risposta finale
+    // 7. Return the final response
     Ok((StatusCode::OK, Json(SearchResponse { most_similar, lowest_price })))
 }
 
@@ -140,122 +135,6 @@ pub async fn search_product_in_shop(
         Ok(Json(ProductInShopResponse { product: payload.product.clone(), shop: payload.shop.clone(), exists: false, details: None }))
     }
 }
-// pub async fn find_lowest_price(
-//     State(app_state): State<Arc<AppState>>,
-//     Json(payload): Json<ProductsLowestPriceRequest>,
-// ) -> Result<Json<Vec<LowestPriceResponse>>, (StatusCode, Json<serde_json::Value>)> {
-//     tracing::info!("find_lowest_price called with payload: {:?}", payload);
-
-//     let product_prices = match fetch_lowest_price_shops(&app_state, &payload.products, &payload.position).await {
-//         Ok(prices) => {
-//             tracing::info!("Fetched product prices from Elasticsearch successfully.");
-//             prices
-//         },
-//         Err(e) => {
-//             tracing::error!("Error fetching products from Elasticsearch: {:?}", e);
-//             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": "Internal server error"}))));
-//         }
-//     };
-
-//     tracing::debug!("Product prices fetched: {:?}", product_prices);
-
-//     // Costruisci la mappa: per ogni negozio, conserva tuple (ShopProduct, input_product)
-//     let mut shop_combinations: HashMap<String, Vec<(ShopProduct, String)>> = HashMap::new();
-//     for (input_product, product_list) in &product_prices {
-//         for product_result in product_list {
-//             let distance = haversine_distance(
-//                 payload.position.latitude,
-//                 payload.position.longitude,
-//                 product_result.localization.lat,
-//                 product_result.localization.lon,
-//             );
-//             let sp = ShopProduct {
-//                 shop: product_result.localization.grocery.clone(),
-//                 name: product_result.name.clone(),
-//                 description: product_result.description.clone(),
-//                 discount: product_result.discount,
-//                 price: product_result.price,
-//                 distance,
-//             };
-//             shop_combinations
-//                 .entry(product_result.localization.grocery.clone())
-//                 .or_insert_with(Vec::new)
-//                 .push((sp, input_product.clone()));
-//         }
-//     }
-//     tracing::info!("Shop combinations built: {:?}", shop_combinations);
-
-//     // Normalizza i termini richiesti
-//     let required_names: HashSet<String> = payload.products.iter().map(|p| sanitize(p)).collect();
-//     let required_count = required_names.len();
-//     tracing::debug!("Required products (sanitized): {:?} (count: {})", required_names, required_count);
-
-//     let mut results: Vec<LowestPriceResponse> = Vec::new();
-//     let mode = payload.mode.as_deref().unwrap_or("comodita");
-//     tracing::info!("Mode selected: {}", mode);
-
-//     match mode {
-//         "risparmio" => {
-//             tracing::warn!("La modalità 'risparmio' non è ancora implementata completamente.");
-//         },
-//         "comodita" => {
-//             tracing::info!("Processing in 'comodita' mode.");
-//             let mut best_option: Option<LowestPriceResponse> = None;
-//             for (shop_name, items) in &shop_combinations {
-//                 // Per ogni negozio, seleziona il miglior prodotto per ciascun termine di input
-//                 let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
-//                 for (sp, input_product) in items {
-//                     let key = sanitize(input_product);
-//                     if let Some(existing) = best_for_input.get(&key) {
-//                         if sp.price < existing.price {
-//                             best_for_input.insert(key, sp.clone());
-//                         }
-//                     } else {
-//                         best_for_input.insert(key, sp.clone());
-//                     }
-//                 }
-//                 // Se il negozio copre tutti i termini richiesti
-//                 if best_for_input.len() == required_count {
-//                     let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
-//                     //tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
-//                     tracing::debug!("Shop '{}' - best_for_input: {:?}", shop_name, best_for_input);
-//                     let selected_products: Vec<ShopProduct> = best_for_input.into_values().collect();
-//                     if let Some(ref mut current_best) = best_option {
-//                         if total_price < current_best.total_price {
-//                             *current_best = LowestPriceResponse {
-//                                 shop: shop_name.clone(),
-//                                 total_price,
-//                                 products: selected_products,
-//                             };
-//                         }
-//                     } else {
-//                         best_option = Some(LowestPriceResponse {
-//                             shop: shop_name.clone(),
-//                             total_price,
-//                             products: selected_products,
-//                         });
-//                     }
-//                 }
-//             }
-//             if let Some(best) = best_option {
-//                 results.push(best);
-//             } else {
-//                 tracing::warn!("No single shop covers all required products in 'comodita' mode.");
-//             }
-//         },
-//         _ => {
-//             tracing::warn!("Unknown mode '{}' received. Defaulting to 'comodita'.", mode);
-//         }
-//     }
-    
-//     if results.is_empty() {
-//         tracing::info!("No valid shop combinations found to cover all products.");
-//     } else {
-//         tracing::info!("Returning results: {:?}", results);
-//     }
-    
-//     Ok(Json(results))
-// }
 
 pub async fn find_lowest_price(
     State(app_state): State<Arc<AppState>>,
@@ -276,7 +155,7 @@ pub async fn find_lowest_price(
 
     tracing::debug!("Product prices fetched: {:?}", product_prices);
 
-    // Costruisci una mappa per ogni negozio: chiave = nome negozio, valore = Vec<(ShopProduct, input_product)>
+    // Build a map for each shop: key = shop name, value = Vec<(ShopProduct, input_product)>
     let mut shop_combinations: HashMap<String, Vec<(ShopProduct, String)>> = HashMap::new();
     for (input_product, product_list) in &product_prices {
         for product_result in product_list {
@@ -302,19 +181,19 @@ pub async fn find_lowest_price(
     }
     tracing::info!("Shop combinations built: {:?}", shop_combinations);
 
-    // Insieme dei termini richiesti (sanitizzati)
+    // Set of required terms (sanitized)
     let required_names: HashSet<String> = payload.products.iter().map(|p| sanitize(p)).collect();
     let required_count = required_names.len();
     tracing::debug!("Required products (sanitized): {:?} (count: {})", required_names, required_count);
 
-    // Due vettori per raccogliere i negozi che coprono tutti gli item e quelli parziali.
+    // Two vectors to collect shops that cover all items and partial ones.
     let mut full_coverage: Vec<LowestPriceExtended> = vec![];
     let mut partial_coverage: Vec<LowestPriceExtended> = vec![];
 
-    // Per ogni negozio in shop_combinations:
+    // For each shop in shop_combinations:
     for (shop_name, items) in shop_combinations {
         let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
-        // Per ogni tuple (ShopProduct, input_product) del negozio, scegli il match migliore (più economico)
+        // For each tuple (ShopProduct, input_product) of the shop, choose the best match (cheapest)
         for (sp, input_product) in items {
             let key = sanitize(&input_product);
             best_for_input
@@ -329,7 +208,7 @@ pub async fn find_lowest_price(
         let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
 
         if best_for_input.len() == required_count {
-            // Questo negozio copre TUTTI gli item richiesti
+            // This shop covers ALL required items
             full_coverage.push(LowestPriceExtended {
                 shop: shop_name.clone(),
                 total_price,
@@ -337,7 +216,7 @@ pub async fn find_lowest_price(
                 missing: vec![],
             });
         } else {
-            // Negozio parziale: calcola quali item mancano
+            // Partial shop: calculate which items are missing
             let found: HashSet<String> = best_for_input.keys().cloned().collect();
             let missing: Vec<String> = required_names.difference(&found).cloned().collect();
             partial_coverage.push(LowestPriceExtended {
@@ -349,11 +228,11 @@ pub async fn find_lowest_price(
         }
     }
 
-    // Determina il negozio "migliore" da restituire
+    // Determine the "best" shop to return
     let mut final_result: Vec<LowestPriceExtended> = vec![];
 
     if !full_coverage.is_empty() {
-        // Caso 1: esistono negozi che coprono tutti gli item: scegli quello con il prezzo totale minore
+        // Case1: there are shops that cover all items: choose the one with the lowest total price
         let best = full_coverage.into_iter().min_by(|a, b| {
             a.total_price
                 .partial_cmp(&b.total_price)
@@ -363,12 +242,12 @@ pub async fn find_lowest_price(
             final_result.push(best_shop);
         }
     } else if !partial_coverage.is_empty() {
-        // Caso 2: nessun negozio copre tutti gli item; scegli il negozio parziale migliore
-        // Criterio: numero di item trovati (maggiore è meglio), in caso di parità, prezzo totale minore.
+        // Case 2: No shop covers all items; choose the best "partial" shop
+        // Criteria: number of items found (more is better), in case of tie, lower total price.
         let best = partial_coverage.into_iter().max_by(|a, b| {
             let cmp_count = a.products.len().cmp(&b.products.len());
             if cmp_count == std::cmp::Ordering::Equal {
-                // Invertiamo l'ordine per il prezzo, perché minore è meglio
+                // Invert the order for price, because lower is better
                 b.total_price.partial_cmp(&a.total_price).unwrap_or(std::cmp::Ordering::Equal)
             } else {
                 cmp_count
@@ -426,4 +305,3 @@ pub async fn get_products_by_store(
     })?;
     Ok(Json(products))
 }
-

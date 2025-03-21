@@ -16,18 +16,18 @@ export class UserController {
 		const { id } = req.params;
 
 		try {
-			logger.info(`Getting user with id ${id}`);
+			logger.info(`Fetching user with ID: ${id}`);
 			const user = await UserRepository.findUserById(id);
 			if (!user) {
-				logger.error(`User with id ${id} not found`);
+				logger.error(`User with ID: ${id} was not found`);
 				next(ApiResponse.error('User not found'));
 				return;
 			}
 			const sanitizedUser = sanitizeUser(user);
-			logger.info(`Got user: ${JSON.stringify(sanitizedUser)}`);
+			logger.info(`Successfully retrieved user: ${JSON.stringify(sanitizedUser)}`);
 			res.status(200).json(ApiResponse.success('Got user', sanitizedUser));
 		} catch (err) {
-			logger.error(err);
+			logger.error(`Error retrieving user: ${err}`);
 			next(ApiResponse.error('Could not get user'));
 		}
 
