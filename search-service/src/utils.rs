@@ -1,4 +1,3 @@
-//search-service/src/utils.rs
 pub fn haversine_distance(
     lat1: f64,
     lon1: f64,
@@ -26,7 +25,7 @@ pub fn sanitize(input: &str) -> String {
         .join("_")
 }
 
-// Tests: the name is sanitized to remove special characters and spaces, and the result is returned in lowercase.
+// Tests: the "name" is sanitized to remove special characters and spaces, and the result is returned in lowercase.
 #[cfg(test)]
 mod tests {
     use super::*;

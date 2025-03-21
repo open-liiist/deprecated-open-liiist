@@ -1,4 +1,3 @@
-// search-service/src/search.rs
 use crate::models::{ProductResult, Position};
 use crate::AppState;
 use elasticsearch::SearchParts;

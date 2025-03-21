@@ -1,4 +1,3 @@
-// search-service/src/handlers.rs
 use crate::models::{
     LowestPriceResponse, ProductDB, ProductExistRequest, ProductExistResponse,
     ProductInShopRequest, ProductInShopResponse, ProductResult, ProductsLowestPriceRequest,
@@ -233,7 +232,7 @@ pub async fn find_lowest_price(
     let mut final_result: Vec<LowestPriceExtended> = vec![];
 
     if !full_coverage.is_empty() {
-        // Case 1: there are shops that cover all items: choose the one with the lowest total price
+        // Case1: there are shops that cover all items: choose the one with the lowest total price
         let best = full_coverage.into_iter().min_by(|a, b| {
             a.total_price
                 .partial_cmp(&b.total_price)
@@ -243,7 +242,7 @@ pub async fn find_lowest_price(
             final_result.push(best_shop);
         }
     } else if !partial_coverage.is_empty() {
-        // Case 2: no shop covers all items; choose the best partial shop
+        // Case 2: No shop covers all items; choose the best "partial" shop
         // Criteria: number of items found (more is better), in case of tie, lower total price.
         let best = partial_coverage.into_iter().max_by(|a, b| {
             let cmp_count = a.products.len().cmp(&b.products.len());
@@ -306,121 +305,3 @@ pub async fn get_products_by_store(
     })?;
     Ok(Json(products))
 }
-/* --- OUTDATED VERSION ---
-pub async fn find_lowest_price(
-    State(app_state): State<Arc<AppState>>,
-    Json(payload): Json<ProductsLowestPriceRequest>,
-) -> Result<Json<Vec<LowestPriceResponse>>, (StatusCode, Json<serde_json::Value>)> {
-    tracing::info!("find_lowest_price called with payload: {:?}", payload);
-
-    let product_prices = match fetch_lowest_price_shops(&app_state, &payload.products, &payload.position).await {
-        Ok(prices) => {
-            tracing::info!("Fetched product prices from Elasticsearch successfully.");
-            prices
-        },
-        Err(e) => {
-            tracing::error!("Error fetching products from Elasticsearch: {:?}", e);
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": "Internal server error"}))));
-        }
-    };
-
-    tracing::debug!("Product prices fetched: {:?}", product_prices);
-
-    // Build the map: for each shop, store tuples (ShopProduct, input_product)
-    let mut shop_combinations: HashMap<String, Vec<(ShopProduct, String)>> = HashMap::new();
-    for (input_product, product_list) in &product_prices {
-        for product_result in product_list {
-            let distance = haversine_distance(
-                payload.position.latitude,
-                payload.position.longitude,
-                product_result.localization.lat,
-                product_result.localization.lon,
-            );
-            let sp = ShopProduct {
-                shop: product_result.localization.grocery.clone(),
-                name: product_result.name.clone(),
-                description: product_result.description.clone(),
-                discount: product_result.discount,
-                price: product_result.price,
-                distance,
-            };
-            shop_combinations
-                .entry(product_result.localization.grocery.clone())
-                .or_insert_with(Vec::new)
-                .push((sp, input_product.clone()));
-        }
-    }
-    tracing::info!("Shop combinations built: {:?}", shop_combinations);
-
-    // Normalize the required terms
-    let required_names: HashSet<String> = payload.products.iter().map(|p| sanitize(p)).collect();
-    let required_count = required_names.len();
-    tracing::debug!("Required products (sanitized): {:?} (count: {})", required_names, required_count);
-
-    let mut results: Vec<LowestPriceResponse> = Vec::new();
-    let mode = payload.mode.as_deref().unwrap_or("comodita");
-    tracing::info!("Mode selected: {}", mode);
-
-    match mode {
-        "risparmio" => {
-            tracing::warn!("The 'savings' mode (mood: risparmio) is not yet fully implemented.");
-        },
-        "comodita" => {
-            tracing::info!("Processing in Convenience mode (mood: 'comodita')");
-            let mut best_option: Option<LowestPriceResponse> = None;
-            for (shop_name, items) in &shop_combinations {
-                // For each shop, select the best product for each input term
-                let mut best_for_input: HashMap<String, ShopProduct> = HashMap::new();
-                for (sp, input_product) in items {
-                    let key = sanitize(input_product);
-                    if let Some(existing) = best_for_input.get(&key) {
-                        if sp.price < existing.price {
-                            best_for_input.insert(key, sp.clone());
-                        }
-                    } else {
-                        best_for_input.insert(key, sp.clone());
-                    }
-                }
-                // If the shop covers all required terms
-                if best_for_input.len() == required_count {
-                    let total_price: f64 = best_for_input.values().map(|sp| sp.price).sum();
-                    //tracing::info!("Shop '{}' covers all required products with total price: {}", shop_name, total_price);
-                    tracing::debug!("Shop '{}' - best_for_input: {:?}", shop_name, best_for_input);
-                    let selected_products: Vec<ShopProduct> = best_for_input.into_values().collect();
-                    if let Some(ref mut current_best) = best_option {
-                        if total_price < current_best.total_price {
-                            *current_best = LowestPriceResponse {
-                                shop: shop_name.clone(),
-                                total_price,
-                                products: selected_products,
-                            };
-                        }
-                    } else {
-                        best_option = Some(LowestPriceResponse {
-                            shop: shop_name.clone(),
-                            total_price,
-                            products: selected_products,
-                        });
-                    }
-                }
-            }
-            if let Some(best) = best_option {
-                results.push(best);
-            } else {
-                tracing::warn!("No single shop covers all required products in 'comodita' mode.");
-            }
-        },
-        _ => {
-            tracing::warn!("Unknown mode '{}' received. Defaulting to 'comodita' mode.);
-        }
-    }
-    
-    if results.is_empty() {
-        tracing::info!("No valid shop combinations found to cover all products.");
-    } else {
-        tracing::info!("Returning results: {:?}", results);
-    }
-    
-    Ok(Json(results))
-}
-*/
