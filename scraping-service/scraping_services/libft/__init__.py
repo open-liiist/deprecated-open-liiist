@@ -9,13 +9,15 @@ from .libft_utility import (
 	update_env_with_dotenv,
 	to_float,
 	get_html_from_url,
+	extract_float_from_text,
+	write_list_of_dicts_to_csv,
+	read_csv_to_list_of_dicts,
 )
 
 # Import from send_data.py
 from .send_data import (
 	send_data_to_receiver,
 	create_store,
-	get_all_stores,
 	get_store_by_grocery_and_city,
 )
 
@@ -39,6 +41,7 @@ __all__ = [
 	"update_env_with_dotenv",
 	"to_float",
 	"get_html_from_url",
+	"extract_float_from_text",
 	"has_questo_indirizzo",
 	"has_superficie",
 	"has_phone_number",
@@ -47,4 +50,6 @@ __all__ = [
 	"create_store",
 	"get_all_stores",
 	"get_store_by_grocery_and_city",
+	"write_list_of_dicts_to_csv",
+	"read_csv_to_list_of_dicts",
 ]

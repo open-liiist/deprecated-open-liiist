@@ -4,9 +4,16 @@ import sys
 import ast
 import json
 import requests
-import pandas as pd
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from libft import to_float, create_store
+
+try:
+	from libft import create_store, to_float, write_list_of_dicts_to_csv
+except ImportError:
+	print("Error: libft module not found. Please ensure it's in your PYTHONPATH or in the same directory.")
+	sys.exit(1)
+
+# implementare una funzione che, data la stringa working_hours riesca ad renderla più leggibile 
 
 def parse_working_hours(wh_str: str) -> str:
     """
@@ -31,7 +38,6 @@ def scraping_shop():
 	}
 	data = {"user": user_data}
 	headers = {"Accept": "*/*"}
-	list_shop = []
 	response = requests.post(url, json=data, headers=headers)
 
 	if response.status_code != 200:
@@ -41,6 +47,7 @@ def scraping_shop():
 
 	shop_data = response.json()
 	shop_info = []
+	shop_list = []
 
 	for shop in shop_data:
 		info_need = shop.get("store")
@@ -56,14 +63,15 @@ def scraping_shop():
 				"city": info_need['city'],
 				"zip_code": postal_code,
 				"working_hours": (info_need['hours']),
-				"picks_up_in_shop": True,
+				"picks_up_in_shop": "True",
 				}
 			data = ast.literal_eval(f"{info_need['hours']}")
-			print("Parsed data:", data)
-			list_shop.append(shop_info)
-			# create_store(shop_info)
-	df = pd.DataFrame(list_shop)
-	df.to_csv('oasi_tigre_shop.csv', index=False)
+
+			if create_store(shop_info) is None:
+				shop_list.append(shop_info)
+			
+	if (shop_list):
+		write_list_of_dicts_to_csv(shop_list, "oasi_tigre_shop.csv")
 
 if __name__ == "__main__":
 	scraping_shop()

@@ -1,5 +1,7 @@
 import os
 import sys
+import re
+import csv
 import time
 import json
 import requests
@@ -148,3 +150,93 @@ def get_html_from_url(url, headers):
 		if response.status_code != 200:
 			print('Request failed:', response.status_code)
 			exit()
+
+def extract_float_from_text(text):
+	"""Extracts a float number from a string, handling various formats."""
+	if not text:
+		return None
+
+	match = re.search(r"[-+]?\d+(?:[.,]\d+)?", text)
+
+	if match:
+		number_str = match.group(0)
+		number_str = number_str.replace(",", ".")
+		try:
+			return float(number_str)
+		except ValueError:
+			print(f"Error converting to float: {number_str}")
+			return None
+	else:
+		return None
+	
+def write_list_of_dicts_to_csv(list_of_dicts, filename):
+	"""
+	Writes a list of dictionaries to a CSV file.  The keys of the first
+	dictionary in the list are used as the header row.  All dictionaries
+	in the list are assumed to have the same keys.
+
+	Args:
+		list_of_dicts: A list of dictionaries, where each dictionary
+					represents a row in the CSV.
+		filename: The name of the CSV file to create or overwrite.
+	"""
+
+	if not list_of_dicts:
+		print("Warning: List of dictionaries is empty. No CSV file will be written.")
+		return
+
+	try:
+		with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+			print(f"Writing to: {filename}")
+			writer = csv.writer(csvfile)
+
+			header = list(list_of_dicts[0].keys())
+			writer.writerow(header)
+
+			for row_dict in list_of_dicts:
+				row_data = [row_dict[key] for key in header]
+				writer.writerow(row_data)
+
+	except Exception as e:
+		print(f"An error occurred: {e}")
+
+def read_csv_to_list_of_dicts(filename):
+	"""
+	Reads data from a CSV file into a list of dictionaries.  The first
+	row of the CSV is assumed to be the header and becomes the keys
+	in each dictionary.
+
+	Args:
+		filename: The name of the CSV file to read.
+
+	Returns:
+		A list of dictionaries, or None if an error occurs. Returns an empty
+		list if the file has only a header row or is empty.
+	"""
+	data = []
+	try:
+		with open(filename, 'r', newline='', encoding='utf-8') as csvfile:
+			reader = csv.reader(csvfile)
+			header = next(reader)
+
+			for row in reader:
+				if len(row) != len(header):
+					print(f"Warning: Skipping row with inconsistent number of values: {row}")
+					continue
+
+				row_dict = {}
+				for i, value in enumerate(row):
+					row_dict[header[i]] = value
+				data.append(row_dict)
+
+	except FileNotFoundError:
+		print(f"Error: File '{filename}' not found.")
+		return None
+	except StopIteration:
+		print(f"Warning: File '{filename}' is empty or contains only a header.")
+		return []
+	except Exception as e:
+		print(f"An error occurred: {e}")
+		return None
+
+	return data
